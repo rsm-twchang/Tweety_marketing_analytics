@@ -1,0 +1,15 @@
+---
+title: "Tweety Chang"
+image: "pic.jpg"
+about:
+  template: jolla
+  links:
+    - icon: envelope
+      href: mailto:ctweety15@gmail.com
+    - icon: linkedin
+      href: https://www.linkedin.com/in/tweety-chang
+    - icon: github
+      href: https://github.com/rsm-twchang
+---
+
+Welcome to my website!
