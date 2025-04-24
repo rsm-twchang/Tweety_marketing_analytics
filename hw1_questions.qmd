@@ -234,7 +234,6 @@ Overall, these tests show that treatment and control groups were well-balanced a
 ## Experimental Results
 
 ### Charitable Contribution Made
-
 First, I analyze whether matched donations lead to an increased response rate of making a donation. 
 
 ### Barplot of Donation Rate (Treatment vs Control)
