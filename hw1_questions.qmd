@@ -1,7 +1,7 @@
 ---
 title: "A Replication of Karlan and List (2007)"
 author: "Tweety"
-date: Apr 22
+date: Apr 22, 2025
 callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 ---
 
@@ -629,5 +629,3 @@ Sample Size = 500: The distribution becomes clearly bell-shaped and narrower. Th
 Sample Size = 1000: The distribution is even tighter, with the average difference centered around the true effect. The null value (zero) is well into the tail, meaning that if this were real experimental data, the treatment effect would likely be statistically significant.
 
 These plots demonstrate both the Central Limit Theorem (distributions become normal as n increases) and the Law of Large Numbers (sample averages converge to true values). They also show how larger sample sizes increase the reliability of statistical estimates and reduce the likelihood of failing to detect real effects.
-
-
