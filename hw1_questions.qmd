@@ -311,8 +311,7 @@ The estimated coefficient on the treatment variable is 0.0868 (p = 0.002), indic
 The marginal effect of treatment is 0.0043, or 0.43 percentage points, meaning that being assigned to the treatment group increased the probability of donating by about 0.43 percentage points, on average. This result is statistically significant at the 1% level.
 
 The log-likelihood improved from -5035.4 (null model) to -5030.5, and the likelihood ratio test confirms that the treatment variable contributes meaningfully to the model (p = 0.0017).These results align with earlier linear probability model (OLS) and t-test findings, reinforcing the conclusion that matching offers increase the likelihood of giving, even if the effect is modest in size. The consistency across model types strengthens the evidence that behavioral nudges like matching can shift donation behavior in a measurable and statistically robust way.
----------
-
+------------------
 
 
 ## Differences between Match Rates
