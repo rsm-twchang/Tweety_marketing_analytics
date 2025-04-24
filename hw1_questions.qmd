@@ -314,7 +314,7 @@ The marginal effect of treatment is 0.0043, or 0.43 percentage points, meaning t
 The log-likelihood improved from -5035.4 (null model) to -5030.5, and the likelihood ratio test confirms that the treatment variable contributes meaningfully to the model (p = 0.0017).
 
 These results align with earlier linear probability model (OLS) and t-test findings, reinforcing the conclusion that matching offers increase the likelihood of giving, even if the effect is modest in size. The consistency across model types strengthens the evidence that behavioral nudges like matching can shift donation behavior in a measurable and statistically robust way.
----
+---------
 
 
 ## Differences between Match Rates
