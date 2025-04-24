@@ -310,7 +310,6 @@ To interpret the impact in real terms, we calculated the average marginal effect
 
 The model’s log-likelihood improved from −5035.4 to −5030.5, and the likelihood ratio test confirmed the treatment variable significantly improved model fit (p = 0.0017).
 
-These results are consistent with earlier t-test and linear regression findings and reinforce that even modest behavioral nudges like matching can meaningfully increase donor participation.
 ------
 
 
