@@ -267,7 +267,7 @@ This visual illustrates a modest but meaningful difference in response rates. Th
 
 While the absolute increase of around 0.4 percentage points may seem small, it represents a 22% relative increase in donation likelihood, a substantial behavioral shift from a simple intervention. This reinforces the broader conclusion that framing a donation as being matched can increase participation, even without changing the donation amount given.
 
-## Whether the difference in donation rates between treatment and control is statistically significant 
+### Whether the difference in donation rates between treatment and control is statistically significant 
 ```{python}
 # T-TEST 
 control = df[df['treatment'] == 0]['gave']
