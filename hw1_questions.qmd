@@ -121,10 +121,10 @@ print("Control group size:", df[df["treatment"] == 0].shape[0])
 summary = df.groupby("treatment")[["gave", "amount"]].agg(['mean', 'count']).round(4)
 summary
 ```
----
+------
 
 
-## Balance Test 
+# Balance Test 
 As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.
 
 ### T-Test and Linear Regression for Each Variable
@@ -508,7 +508,7 @@ In the treatment group, the average donation is slightly lower at $43.87, with a
 
 These visualizations reinforce the earlier statistical findings: although the treatment increased the number of people who gave, it did not significantly affect how much people gave, once they decided to donate.
 The similarity in shapes and overlapping means suggest that the match offer encouraged more people to participate, but didn’t influence the generosity of individual donors. This aligns with the idea that the treatment affects the extensive margin (whether people give), not the intensive margin (how much they give).
-
+------
 
 ## Simulation Experiment
 
@@ -517,8 +517,6 @@ As a reminder of how the t-statistic "works," in this section I use simulation t
 Suppose the true distribution of respondents who do not get a charitable donation match is Bernoulli with probability p=0.018 that a donation is made. 
 
 Further suppose that the true distribution of respondents who do get a charitable donation match of any size  is Bernoulli with probability p=0.022 that a donation is made.
----
-
 
 ### Simulating Donation Outcomes with Bernoulli Distributions
 ```{python}
