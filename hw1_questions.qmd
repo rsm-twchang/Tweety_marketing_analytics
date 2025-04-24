@@ -9,31 +9,46 @@ callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 ## Introduction
 
 Dean Karlan at Yale and John List at the University of Chicago conducted a field experiment to test the effectiveness of different fundraising letters. They sent out 50,000 fundraising letters to potential donors, randomly assigning each letter to one of three treatments: a standard letter, a matching grant letter, or a challenge grant letter. They published the results of this experiment in the _American Economic Review_ in 2007. The article and supporting data are available from the [AEA website](https://www.aeaweb.org/articles?id=10.1257/aer.97.5.1774) and from Innovations for Poverty Action as part of [Harvard's Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/27853&version=4.2).
+---
+
+
+## Objective
+
+The objective of this assignment is to replicate and interpret the findings from Karlan and List’s 2007 field experiment on charitable giving. Using the original dataset, I aim to explore how the presence and structure of a matching donation offer affects both the likelihood and amount of charitable contributions.
+
+This project involves:
+	•	Analyzing treatment effects using t-tests, regression models, and probit analysis
+	•	Comparing donation behavior across different match ratios and suggested ask levels
+	•	Conducting simulations to illustrate the Law of Large Numbers and the Central Limit Theorem
+	•	Presenting results in a clear, reproducible format using Quarto and Python
+
+The overall goal is to better understand the behavioral response to charitable incentives and how small changes in message framing can impact donor behavior.
+---
+
 
 ## Description of the Experiment
 
-In their 2007 paper published in the *American Economic Review*, Karlan and List conducted a large-scale natural field experiment to investigate how matching donations affect charitable giving. They sent over **50,000 direct mail solicitations** to previous donors of a U.S. nonprofit organization. Individuals were randomly assigned to either a **control group**, which received a standard fundraising appeal, or a **treatment group**, which received a matching donation offer.
+In their 2007 study published in the American Economic Review, Dean Karlan and John List conducted a large-scale natural field experiment to test the effectiveness of matching donations in a real-world fundraising campaign. Over 50,000 previous donors to a U.S. nonprofit were mailed fundraising letters and randomly assigned to one of two groups:
+	•	The control group received a standard fundraising letter with no special offer.
+	•	The treatment group received a similar letter but was offered a matching donation — meaning their contribution would be matched by another donor.
 
-Within the treatment group, participants were further randomized into subgroups based on:
-- **Match ratio**: $1:$1, $2:$1, or $3:$1
-- **Maximum match size**: $25,000, $50,000, $100,000, or unstated
-- **Suggested ask amount**: equal to, 1.25×, or 1.5× the highest previous contribution
+Within the treatment group, individuals were further randomized into subgroups based on:
+	•	Match ratio: $1:$1, $2:$1, or $3:$1
+	•	Maximum match amount: $25,000, $50,000, $100,000, or unstated
+	•	Suggested donation amount: equal to, 1.25×, or 1.5× the donor’s previous contribution
 
-The purpose of this experiment was to assess whether the size or presence of a match increases the likelihood or amount of giving. Randomization ensures that any observed differences in outcomes can be causally attributed to the treatment.
-
+The randomized design allows for a causal analysis of how these variations influence both the decision to donate and the amount given. This experiment provides a powerful example of how field experiments can be used to study economic behavior in natural settings
 ---
 
-## Data
+
+## Data Description
+We begin by loading the dataset provided by Karlan and List (2007), which contains detailed records from their fundraising field experiment.
 ```{python}
 import pandas as pd
 
 df = pd.read_stata("karlan_list_2007.dta")
 df.head()
 ```
-
-## Description
-
-We begin by loading and exploring the structure of the dataset. The dataset includes **50,083 observations** and **51 variables**, covering treatment assignments, donor demographics, giving behavior, and geographic information.
 
 :::: {.callout-note collapse="true"}
 ### Variable Definitions
@@ -106,12 +121,13 @@ print("Control group size:", df[df["treatment"] == 0].shape[0])
 summary = df.groupby("treatment")[["gave", "amount"]].agg(['mean', 'count']).round(4)
 summary
 ```
+---
 
-### Balance Test 
 
+## Balance Test 
 As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.
 
-### # T-Test and Linear Regression for Each Variable
+### T-Test and Linear Regression for Each Variable
 ```{python}
 from scipy.stats import ttest_ind
 import statsmodels.formula.api as smf
@@ -212,6 +228,8 @@ For each variable, we conducted both a t-test and a bivariate linear regression 
 • female: This variable had a slightly lower p-value of 0.079 and a treatment coefficient of −0.0075. While not statistically significant at the 5% level, it is closer to the threshold, suggesting a small imbalance that is worth noting, though likely not practically important.
 
 Overall, these tests show that treatment and control groups were well-balanced across observable characteristics prior to the intervention. These results validate the success of the randomization procedure, ensuring that post-treatment differences in outcomes can be interpreted as causal effects of the matching donation treatment. This approach follows the same logic as Table 1 in Karlan & List (2007), which is used to demonstrate the internal validity of their experimental design.
+---
+
 
 ## Experimental Results
 
@@ -249,7 +267,7 @@ This visual illustrates a modest but meaningful difference in response rates. Th
 
 While the absolute increase of around 0.4 percentage points may seem small, it represents a 22% relative increase in donation likelihood, a substantial behavioral shift from a simple intervention. This reinforces the broader conclusion that framing a donation as being matched can increase participation, even without changing the donation amount given.
 
-### # Whether the difference in donation rates between treatment and control is statistically significant 
+## Whether the difference in donation rates between treatment and control is statistically significant 
 ```{python}
 # T-TEST 
 control = df[df['treatment'] == 0]['gave']
@@ -296,6 +314,8 @@ The marginal effect of treatment is 0.0043, or 0.43 percentage points, meaning t
 The log-likelihood improved from -5035.4 (null model) to -5030.5, and the likelihood ratio test confirms that the treatment variable contributes meaningfully to the model (p = 0.0017).
 
 These results align with earlier linear probability model (OLS) and t-test findings, reinforcing the conclusion that matching offers increase the likelihood of giving, even if the effect is modest in size. The consistency across model types strengthens the evidence that behavioral nudges like matching can shift donation behavior in a measurable and statistically robust way.
+---
+
 
 ## Differences between Match Rates
 
@@ -393,6 +413,7 @@ The increase in donation rate from 1:1 to 2:1 was just 0.19 percentage points, a
 These differences are small in magnitude and not statistically significant, as confirmed by earlier t-tests and regression results. This suggests that offering a larger match ratio does not meaningfully boost participation compared to a simple 1:1 match.
 
 These findings support what Karlan & List (2007) described in their paper, that although fundraisers often believe larger match ratios will lead to more giving, the data show that the presence of a match matters more than the specific size. Once a match is introduced, increasing the match multiplier offers little to no additional benefit in terms of motivating donors to give.
+---
 
 
 ## Size of Charitable Contribution
@@ -488,6 +509,17 @@ In the treatment group, the average donation is slightly lower at $43.87, with a
 These visualizations reinforce the earlier statistical findings: although the treatment increased the number of people who gave, it did not significantly affect how much people gave, once they decided to donate.
 The similarity in shapes and overlapping means suggest that the match offer encouraged more people to participate, but didn’t influence the generosity of individual donors. This aligns with the idea that the treatment affects the extensive margin (whether people give), not the intensive margin (how much they give).
 
+
+## Simulation Experiment
+
+As a reminder of how the t-statistic "works," in this section I use simulation to demonstrate the Law of Large Numbers and the Central Limit Theorem.
+
+Suppose the true distribution of respondents who do not get a charitable donation match is Bernoulli with probability p=0.018 that a donation is made. 
+
+Further suppose that the true distribution of respondents who do get a charitable donation match of any size  is Bernoulli with probability p=0.022 that a donation is made.
+---
+
+
 ### Simulating Donation Outcomes with Bernoulli Distributions
 ```{python}
 import numpy as np
@@ -530,14 +562,7 @@ We simulate 10,000 experiments in which we draw samples of size 500 from a contr
 The resulting distribution of differences demonstrates the Central Limit Theorem: even though the underlying data are binary, the distribution of differences is approximately normal and centered near the true effect size (0.004).
 
 This also illustrates the Law of Large Numbers: with enough repetitions, the sample average of these differences converges to the expected value. The simulation confirms that the observed effect in our real data (≈ 0.0043) is consistent with what we’d expect if the true probabilities were 1.8% and 2.2%.
-
-## Simulation Experiment
-
-As a reminder of how the t-statistic "works," in this section I use simulation to demonstrate the Law of Large Numbers and the Central Limit Theorem.
-
-Suppose the true distribution of respondents who do not get a charitable donation match is Bernoulli with probability p=0.018 that a donation is made. 
-
-Further suppose that the true distribution of respondents who do get a charitable donation match of any size  is Bernoulli with probability p=0.022 that a donation is made.
+---
 
 ## Law of Large Numbers
 
@@ -572,6 +597,8 @@ This plot displays the cumulative average difference in donation amounts (treatm
 At the beginning, the average fluctuates due to the small number of observations. As more data are added, the line smooths out and stabilizes near the true treatment effect (shown by the red dashed line).
 
 This visually demonstrates the Law of Large Numbers: as the number of observations increases, the sample average converges to the true population difference, providing strong support that the observed treatment effect is consistent and not due to chance.
+---
+
 
 ## Central Limit Theorem
 
