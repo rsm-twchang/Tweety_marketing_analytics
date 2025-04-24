@@ -304,14 +304,14 @@ marginal_effects = probit_model.get_margeff(at='overall')
 print(marginal_effects.summary())
 ```
 
-We used a Probit regression to estimate the effect of being assigned to the treatment group (offered a matching donation) on the probability of making a charitable contribution. The model includes a single explanatory variable: treatment, where 1 indicates assignment to the treatment group and 0 to the control group.
+We used a Probit regression to estimate the effect of being assigned to the treatment group (offered a matching donation) on the likelihood of making a donation. The treatment coefficient was 0.0868 (p = 0.002), indicating a positive and statistically significant effect.
 
-The estimated coefficient on the treatment variable is 0.0868 (p = 0.002), indicating a positive and statistically significant effect on the latent propensity to donate. While probit coefficients are not directly interpretable in probability terms, we compute the average marginal effect to understand the real-world impact.
+To interpret the impact in real terms, we calculated the average marginal effect, which was 0.0043, meaning the treatment increased the probability of donating by 0.43 percentage points.
 
-The marginal effect of treatment is 0.0043, or 0.43 percentage points, meaning that being assigned to the treatment group increased the probability of donating by about 0.43 percentage points, on average. This result is statistically significant at the 1% level.
+The model’s log-likelihood improved from −5035.4 to −5030.5, and the likelihood ratio test confirmed the treatment variable significantly improved model fit (p = 0.0017).
 
-The log-likelihood improved from -5035.4 (null model) to -5030.5, and the likelihood ratio test confirms that the treatment variable contributes meaningfully to the model (p = 0.0017).These results align with earlier linear probability model (OLS) and t-test findings, reinforcing the conclusion that matching offers increase the likelihood of giving, even if the effect is modest in size. The consistency across model types strengthens the evidence that behavioral nudges like matching can shift donation behavior in a measurable and statistically robust way.
-------------------
+These results are consistent with earlier t-test and linear regression findings and reinforce that even modest behavioral nudges like matching can meaningfully increase donor participation.
+------
 
 
 ## Differences between Match Rates
