@@ -10,8 +10,8 @@ website:
         text: About
       - href: resume.qmd
         text: Resume
-      - href: hw1_questions.html
-        text: HW1
+      - href:  hw1_questions.qmd
+        text: A/B Testing
 
 
 format:
