@@ -157,26 +157,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#description-of-the-experiment" id="toc-description-of-the-experiment" class="nav-link" data-scroll-target="#description-of-the-experiment">Description of the Experiment</a></li>
-  <li><a href="#data-overview" id="toc-data-overview" class="nav-link" data-scroll-target="#data-overview">Data Overview</a></li>
-  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a>
   <ul class="collapse">
-  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#balance-test" id="toc-balance-test" class="nav-link" data-scroll-target="#balance-test">Balance Test</a></li>
+  <li><a href="#t-test-and-linear-regression-for-each-variable" id="toc-t-test-and-linear-regression-for-each-variable" class="nav-link" data-scroll-target="#t-test-and-linear-regression-for-each-variable"># T-Test and Linear Regression for Each Variable</a></li>
+  <li><a href="#t-test-and-regression-for-mrm2" id="toc-t-test-and-regression-for-mrm2" class="nav-link" data-scroll-target="#t-test-and-regression-for-mrm2">T-Test and Regression for mrm2</a></li>
+  <li><a href="#repeat-for-more-variables" id="toc-repeat-for-more-variables" class="nav-link" data-scroll-target="#repeat-for-more-variables">Repeat for More Variables</a></li>
   </ul></li>
   <li><a href="#experimental-results" id="toc-experimental-results" class="nav-link" data-scroll-target="#experimental-results">Experimental Results</a>
   <ul class="collapse">
   <li><a href="#charitable-contribution-made" id="toc-charitable-contribution-made" class="nav-link" data-scroll-target="#charitable-contribution-made">Charitable Contribution Made</a></li>
-  </ul></li>
   <li><a href="#barplot-of-donation-rate-treatment-vs-control" id="toc-barplot-of-donation-rate-treatment-vs-control" class="nav-link" data-scroll-target="#barplot-of-donation-rate-treatment-vs-control">Barplot of Donation Rate (Treatment vs Control)</a></li>
-  <li><a href="#probit-regression" id="toc-probit-regression" class="nav-link" data-scroll-target="#probit-regression">Probit Regression</a>
-  <ul class="collapse">
-  <li><a href="#differences-between-match-rates" id="toc-differences-between-match-rates" class="nav-link" data-scroll-target="#differences-between-match-rates">Differences between Match Rates</a></li>
-  <li><a href="#size-of-charitable-contribution" id="toc-size-of-charitable-contribution" class="nav-link" data-scroll-target="#size-of-charitable-contribution">Size of Charitable Contribution</a></li>
-  <li><a href="#simulation-experiment" id="toc-simulation-experiment" class="nav-link" data-scroll-target="#simulation-experiment">Simulation Experiment</a>
-  <ul class="collapse">
-  <li><a href="#law-of-large-numbers" id="toc-law-of-large-numbers" class="nav-link" data-scroll-target="#law-of-large-numbers">Law of Large Numbers</a></li>
-  <li><a href="#central-limit-theorem" id="toc-central-limit-theorem" class="nav-link" data-scroll-target="#central-limit-theorem">Central Limit Theorem</a></li>
+  <li><a href="#whether-the-difference-in-donation-rates-between-treatment-and-control-is-statistically-significant" id="toc-whether-the-difference-in-donation-rates-between-treatment-and-control-is-statistically-significant" class="nav-link" data-scroll-target="#whether-the-difference-in-donation-rates-between-treatment-and-control-is-statistically-significant"># Whether the difference in donation rates between treatment and control is statistically significant</a></li>
+  <li><a href="#probit-regression" id="toc-probit-regression" class="nav-link" data-scroll-target="#probit-regression">Probit Regression</a></li>
   </ul></li>
+  <li><a href="#differences-between-match-rates" id="toc-differences-between-match-rates" class="nav-link" data-scroll-target="#differences-between-match-rates">Differences between Match Rates</a>
+  <ul class="collapse">
+  <li><a href="#different-match-ratios-11-vs-21-vs-31-lead-to-different-donation-rates" id="toc-different-match-ratios-11-vs-21-vs-31-lead-to-different-donation-rates" class="nav-link" data-scroll-target="#different-match-ratios-11-vs-21-vs-31-lead-to-different-donation-rates">Different match ratios (1:1 vs 2:1 vs 3:1) lead to different donation rates</a></li>
+  <li><a href="#whether-match-ratio-affects-donation-behavior" id="toc-whether-match-ratio-affects-donation-behavior" class="nav-link" data-scroll-target="#whether-match-ratio-affects-donation-behavior">Whether match ratio affects donation behavior</a></li>
+  <li><a href="#differences-in-donation-response-rates-between-match-ratios" id="toc-differences-in-donation-response-rates-between-match-ratios" class="nav-link" data-scroll-target="#differences-in-donation-response-rates-between-match-ratios">Differences in donation response rates between match ratios</a></li>
+  </ul></li>
+  <li><a href="#size-of-charitable-contribution" id="toc-size-of-charitable-contribution" class="nav-link" data-scroll-target="#size-of-charitable-contribution">Size of Charitable Contribution</a>
+  <ul class="collapse">
+  <li><a href="#treatment-affected-how-much-people-donated" id="toc-treatment-affected-how-much-people-donated" class="nav-link" data-scroll-target="#treatment-affected-how-much-people-donated">Treatment affected how much people donated</a></li>
+  <li><a href="#treatment-changed-how-much-they-gave" id="toc-treatment-changed-how-much-they-gave" class="nav-link" data-scroll-target="#treatment-changed-how-much-they-gave">Treatment changed how much they gave</a></li>
+  <li><a href="#donation-amounts-among-donors-by-group" id="toc-donation-amounts-among-donors-by-group" class="nav-link" data-scroll-target="#donation-amounts-among-donors-by-group">Donation Amounts Among Donors by Group</a></li>
+  <li><a href="#simulating-donation-outcomes-with-bernoulli-distributions" id="toc-simulating-donation-outcomes-with-bernoulli-distributions" class="nav-link" data-scroll-target="#simulating-donation-outcomes-with-bernoulli-distributions">Simulating Donation Outcomes with Bernoulli Distributions</a></li>
+  </ul></li>
+  <li><a href="#simulation-experiment" id="toc-simulation-experiment" class="nav-link" data-scroll-target="#simulation-experiment">Simulation Experiment</a></li>
+  <li><a href="#law-of-large-numbers" id="toc-law-of-large-numbers" class="nav-link" data-scroll-target="#law-of-large-numbers">Law of Large Numbers</a>
+  <ul class="collapse">
+  <li><a href="#simulate-and-plot-cumulative-average-of-differences" id="toc-simulate-and-plot-cumulative-average-of-differences" class="nav-link" data-scroll-target="#simulate-and-plot-cumulative-average-of-differences">Simulate and Plot Cumulative Average of Differences</a></li>
+  </ul></li>
+  <li><a href="#central-limit-theorem" id="toc-central-limit-theorem" class="nav-link" data-scroll-target="#central-limit-theorem">Central Limit Theorem</a>
+  <ul class="collapse">
+  <li><a href="#simulation-histograms-sample-sizes-50-200-500-1000" id="toc-simulation-histograms-sample-sizes-50-200-500-1000" class="nav-link" data-scroll-target="#simulation-histograms-sample-sizes-50-200-500-1000">Simulation Histograms (Sample Sizes 50, 200, 500, 1000)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -226,13 +242,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The purpose of this experiment was to assess whether the size or presence of a match increases the likelihood or amount of giving. Randomization ensures that any observed differences in outcomes can be causally attributed to the treatment.</p>
 <hr>
 </section>
-<section id="data-overview" class="level2">
-<h2 class="anchored" data-anchor-id="data-overview">Data Overview</h2>
-<p>We begin by loading and exploring the structure of the dataset. The dataset includes <strong>50,083 observations</strong> and <strong>51 variables</strong>, covering treatment assignments, donor demographics, giving behavior, and geographic information.</p>
-</section>
 <section id="data" class="level2">
 <h2 class="anchored" data-anchor-id="data">Data</h2>
-<div id="a0577052" class="cell" data-execution_count="1">
+<div id="fb15c342" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_stata(<span class="st">"karlan_list_2007.dta"</span>)</span>
@@ -396,8 +408,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="description" class="level3">
-<h3 class="anchored" data-anchor-id="description">Description</h3>
+</section>
+<section id="description" class="level2">
+<h2 class="anchored" data-anchor-id="description">Description</h2>
+<p>We begin by loading and exploring the structure of the dataset. The dataset includes <strong>50,083 observations</strong> and <strong>51 variables</strong>, covering treatment assignments, donor demographics, giving behavior, and geographic information.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -631,7 +645,7 @@ Variable Definitions
 </div>
 </div>
 </div>
-<div id="efdedc67" class="cell" data-execution_count="2">
+<div id="c9324df0" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic treatment/control breakdown</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Unique match ratios:"</span>, df[<span class="st">"ratio"</span>].unique())</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Treatment group size:"</span>, df[df[<span class="st">"treatment"</span>] <span class="op">==</span> <span class="dv">1</span>].shape[<span class="dv">0</span>])</span>
@@ -643,7 +657,7 @@ Treatment group size: 33396
 Control group size: 16687</code></pre>
 </div>
 </div>
-<div id="0fca9242" class="cell" data-execution_count="3">
+<div id="5512ce79" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics: mean donation rate and average donation by group</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> df.groupby(<span class="st">"treatment"</span>)[[<span class="st">"gave"</span>, <span class="st">"amount"</span>]].agg([<span class="st">'mean'</span>, <span class="st">'count'</span>]).<span class="bu">round</span>(<span class="dv">4</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -694,17 +708,13 @@ Control group size: 16687</code></pre>
 </div>
 </div>
 </div>
-</section>
 <section id="balance-test" class="level3">
 <h3 class="anchored" data-anchor-id="balance-test">Balance Test</h3>
 <p>As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.</p>
 </section>
-</section>
-<section id="experimental-results" class="level2">
-<h2 class="anchored" data-anchor-id="experimental-results">Experimental Results</h2>
-<section id="charitable-contribution-made" class="level3">
-<h3 class="anchored" data-anchor-id="charitable-contribution-made">Charitable Contribution Made</h3>
-<div id="a7e0c3a3" class="cell" data-execution_count="4">
+<section id="t-test-and-linear-regression-for-each-variable" class="level3">
+<h3 class="anchored" data-anchor-id="t-test-and-linear-regression-for-each-variable"># T-Test and Linear Regression for Each Variable</h3>
+<div id="1fef944f" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -766,8 +776,10 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 <p>• female (gender)</p>
 <p>In all cases, the p-values from both methods exceeded 0.05, indicating that none of the differences were statistically significant. This means the treatment and control groups were well-balanced across these characteristics, just as Table 1 in Karlan &amp; List (2007) demonstrates.</p>
 <p>This validation is crucial for the study’s internal validity, it confirms that differences in outcomes can be attributed to the treatment, not to pre-existing differences in donor behavior or demographics.</p>
-<p>from scipy.stats import ttest_ind import statsmodels.api as sm import statsmodels.formula.api as smf</p>
-<div id="59a8e2a1" class="cell" data-execution_count="5">
+</section>
+<section id="t-test-and-regression-for-mrm2" class="level3">
+<h3 class="anchored" data-anchor-id="t-test-and-regression-for-mrm2">T-Test and Regression for mrm2</h3>
+<div id="99675fd0" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop NA for mrm2</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>balance_df <span class="op">=</span> df[[<span class="st">'treatment'</span>, <span class="st">'mrm2'</span>]].dropna()</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -793,7 +805,10 @@ treatment      0.0137      0.115      0.119      0.905      -0.211       0.238
 <p>A t-test comparing the mean mrm2 between groups yielded a t-statistic of 0.120 and a p-value of 0.9049, indicating no statistically significant difference between the groups.</p>
 <p>We also ran a linear regression of mrm2 on the treatment indicator. The estimated coefficient on treatment was 0.0137, with a p-value of 0.905 and a 95% confidence interval ranging from −0.211 to 0.238. These results confirm the same conclusion: the treatment group and control group had nearly identical values for this variable prior to the intervention.</p>
 <p>This finding supports the integrity of the random assignment in the experiment. Since there are no significant differences in months since last donation, we can be confident that any observed differences in donation behavior after treatment are not due to baseline imbalances. This type of balance check is crucial for ensuring the internal validity of experimental results and mirrors the intent of Table 1 in Karlan &amp; List (2007).</p>
-<div id="54e6f5b4" class="cell" data-execution_count="6">
+</section>
+<section id="repeat-for-more-variables" class="level3">
+<h3 class="anchored" data-anchor-id="repeat-for-more-variables">Repeat for More Variables</h3>
+<div id="3bd3330d" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_balance_test(var):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    subset <span class="op">=</span> df[[<span class="st">'treatment'</span>, var]].dropna()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -856,12 +871,17 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 <p>• freq: The p-value was 0.912 and the treatment coefficient was −0.0120, indicating complete balance in the number of prior donations.</p>
 <p>• female: This variable had a slightly lower p-value of 0.079 and a treatment coefficient of −0.0075. While not statistically significant at the 5% level, it is closer to the threshold, suggesting a small imbalance that is worth noting, though likely not practically important.</p>
 <p>Overall, these tests show that treatment and control groups were well-balanced across observable characteristics prior to the intervention. These results validate the success of the randomization procedure, ensuring that post-treatment differences in outcomes can be interpreted as causal effects of the matching donation treatment. This approach follows the same logic as Table 1 in Karlan &amp; List (2007), which is used to demonstrate the internal validity of their experimental design.</p>
+</section>
+</section>
+<section id="experimental-results" class="level2">
+<h2 class="anchored" data-anchor-id="experimental-results">Experimental Results</h2>
+<section id="charitable-contribution-made" class="level3">
+<h3 class="anchored" data-anchor-id="charitable-contribution-made">Charitable Contribution Made</h3>
 <p>First, I analyze whether matched donations lead to an increased response rate of making a donation.</p>
 </section>
-</section>
-<section id="barplot-of-donation-rate-treatment-vs-control" class="level1">
-<h1>Barplot of Donation Rate (Treatment vs Control)</h1>
-<div id="bf73b972" class="cell" data-execution_count="7">
+<section id="barplot-of-donation-rate-treatment-vs-control" class="level3">
+<h3 class="anchored" data-anchor-id="barplot-of-donation-rate-treatment-vs-control">Barplot of Donation Rate (Treatment vs Control)</h3>
+<div id="1891bb81" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -891,8 +911,10 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 <p>• The treatment group had a slightly higher donation rate of approximately 2.2%</p>
 <p>This visual illustrates a modest but meaningful difference in response rates. The treatment group was more likely to donate, consistent with the results from the t-test and regression analysis, both of which showed that this difference is statistically significant at the 1% level.</p>
 <p>While the absolute increase of around 0.4 percentage points may seem small, it represents a 22% relative increase in donation likelihood, a substantial behavioral shift from a simple intervention. This reinforces the broader conclusion that framing a donation as being matched can increase participation, even without changing the donation amount given.</p>
-<p>from scipy.stats import ttest_ind import statsmodels.formula.api as smf</p>
-<div id="2c015e5a" class="cell" data-execution_count="8">
+</section>
+<section id="whether-the-difference-in-donation-rates-between-treatment-and-control-is-statistically-significant" class="level3">
+<h3 class="anchored" data-anchor-id="whether-the-difference-in-donation-rates-between-treatment-and-control-is-statistically-significant"># Whether the difference in donation rates between treatment and control is statistically significant</h3>
+<div id="89f4745d" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># T-</span><span class="al">TEST</span><span class="co"> </span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>control <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">0</span>][<span class="st">'gave'</span>]</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>treatment <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'gave'</span>]</span>
@@ -917,9 +939,9 @@ treatment      0.0042      0.001      3.101      0.002       0.002       0.007
 <p>The intercept of the model is 0.0179, which represents the average donation rate in the control group (1.79%). The treatment effect raises this to approximately 2.21%, closely matching the observed values in the raw data.</p>
 <p>These results confirm that the difference in donation rates between the treatment and control groups is not due to random chance. The findings suggest that even a small behavioral nudge.For example being told a donation will be matched, can have a statistically significant impact on charitable behavior. While the absolute increase is modest, the result is highly robust and consistent across methods.</p>
 </section>
-<section id="probit-regression" class="level1">
-<h1>Probit Regression</h1>
-<div id="cf613a5c" class="cell" data-execution_count="9">
+<section id="probit-regression" class="level3">
+<h3 class="anchored" data-anchor-id="probit-regression">Probit Regression</h3>
+<div id="44d99643" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>probit_df <span class="op">=</span> df[[<span class="st">'gave'</span>, <span class="st">'treatment'</span>]].dropna()</span>
@@ -942,7 +964,7 @@ Dep. Variable:                   gave   No. Observations:                50083
 Model:                         Probit   Df Residuals:                    50081
 Method:                           MLE   Df Model:                            1
 Date:                Wed, 23 Apr 2025   Pseudo R-squ.:               0.0009783
-Time:                        22:42:40   Log-Likelihood:                -5030.5
+Time:                        23:03:24   Log-Likelihood:                -5030.5
 converged:                       True   LL-Null:                       -5035.4
 Covariance Type:            nonrobust   LLR p-value:                  0.001696
 ==============================================================================
@@ -968,10 +990,14 @@ treatment      0.0043      0.001      3.104      0.002       0.002       0.007
 <p>The marginal effect of treatment is 0.0043, or 0.43 percentage points, meaning that being assigned to the treatment group increased the probability of donating by about 0.43 percentage points, on average. This result is statistically significant at the 1% level.</p>
 <p>The log-likelihood improved from -5035.4 (null model) to -5030.5, and the likelihood ratio test confirms that the treatment variable contributes meaningfully to the model (p = 0.0017).</p>
 <p>These results align with earlier linear probability model (OLS) and t-test findings, reinforcing the conclusion that matching offers increase the likelihood of giving, even if the effect is modest in size. The consistency across model types strengthens the evidence that behavioral nudges like matching can shift donation behavior in a measurable and statistically robust way.</p>
-<section id="differences-between-match-rates" class="level3">
-<h3 class="anchored" data-anchor-id="differences-between-match-rates">Differences between Match Rates</h3>
+</section>
+</section>
+<section id="differences-between-match-rates" class="level2">
+<h2 class="anchored" data-anchor-id="differences-between-match-rates">Differences between Match Rates</h2>
 <p>Next, I assess the effectiveness of different sizes of matched donations on the response rate.</p>
-<div id="dbb62127" class="cell" data-execution_count="10">
+<section id="different-match-ratios-11-vs-21-vs-31-lead-to-different-donation-rates" class="level3">
+<h3 class="anchored" data-anchor-id="different-match-ratios-11-vs-21-vs-31-lead-to-different-donation-rates">Different match ratios (1:1 vs 2:1 vs 3:1) lead to different donation rates</h3>
+<div id="5f9a6ac2" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>treat_only <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
@@ -999,7 +1025,10 @@ p-value (3:1 vs 1:1): 0.3101</code></pre>
 <p>These p-values are well above 0.05, indicating that the differences are not statistically significant. In other words, we cannot conclude that higher match ratios led to meaningfully higher response rates.</p>
 <p>These findings support the interpretation in Karlan &amp; List (2007): although larger match ratios may look more appealing, they do not result in a significantly greater number of donors. The 1:1 match appears to be just as effective as the more generous 2:1 and 3:1 offers.</p>
 <p>This suggests that the presence of a match offer matters more than the generosity of the match ratio, which has important practical implications for fundraisers aiming to design cost-effective campaigns.</p>
-<div id="38d8d65a" class="cell" data-execution_count="11">
+</section>
+<section id="whether-match-ratio-affects-donation-behavior" class="level3">
+<h3 class="anchored" data-anchor-id="whether-match-ratio-affects-donation-behavior">Whether match ratio affects donation behavior</h3>
+<div id="27a0eef7" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>treat_df <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
@@ -1029,7 +1058,10 @@ ratio3         0.0020      0.002      1.008      0.313      -0.002       0.006
 </ol>
 <p>These results suggest that larger match ratios (2:1 or 3:1) do not lead to a statistically meaningful increase in donation rates compared to the 1:1 match. The 95% confidence intervals for both ratio2 and ratio3 include zero, reinforcing that the observed differences could easily be due to chance.</p>
 <p>This finding supports what Karlan &amp; List (2007) concluded: the presence of a match offer increases donation rates, but increasing the match ratio beyond 1:1 does not substantially improve effectiveness. For fundraisers, this implies that a simple match offer may be just as effective as a more generous one, and likely more cost-efficient.</p>
-<div id="50076a95" class="cell" data-execution_count="12">
+</section>
+<section id="differences-in-donation-response-rates-between-match-ratios" class="level3">
+<h3 class="anchored" data-anchor-id="differences-in-donation-response-rates-between-match-ratios">Differences in donation response rates between match ratios</h3>
+<div id="3315eeaf" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>treat_df <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert ratio to numeric</span></span>
@@ -1064,10 +1096,13 @@ Difference (3:1 vs 2:1): 0.0001</code></pre>
 <p>These differences are small in magnitude and not statistically significant, as confirmed by earlier t-tests and regression results. This suggests that offering a larger match ratio does not meaningfully boost participation compared to a simple 1:1 match.</p>
 <p>These findings support what Karlan &amp; List (2007) described in their paper, that although fundraisers often believe larger match ratios will lead to more giving, the data show that the presence of a match matters more than the specific size. Once a match is introduced, increasing the match multiplier offers little to no additional benefit in terms of motivating donors to give.</p>
 </section>
-<section id="size-of-charitable-contribution" class="level3">
-<h3 class="anchored" data-anchor-id="size-of-charitable-contribution">Size of Charitable Contribution</h3>
+</section>
+<section id="size-of-charitable-contribution" class="level2">
+<h2 class="anchored" data-anchor-id="size-of-charitable-contribution">Size of Charitable Contribution</h2>
 <p>In this subsection, I analyze the effect of the size of matched donation on the size of the charitable contribution.</p>
-<div id="ecb93d14" class="cell" data-execution_count="13">
+<section id="treatment-affected-how-much-people-donated" class="level3">
+<h3 class="anchored" data-anchor-id="treatment-affected-how-much-people-donated">Treatment affected how much people donated</h3>
+<div id="e29f6868" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data</span></span>
@@ -1094,7 +1129,10 @@ treatment      0.1536      0.083      1.861      0.063      -0.008       0.315
 <p>A t-test comparing donation amounts between treatment and control donors produced a non-significant result (t = -0.585, p = 0.5590). This indicates no statistically meaningful difference in average donation size between the two groups.</p>
 <p>The regression analysis confirms this. The estimated treatment effect is −$1.67, meaning that donors in the treatment group gave slightly less on average than those in the control group. However, the p-value of 0.561 is far from any conventional threshold for significance, and the confidence interval (−$7.31 to +$3.97) includes zero, suggesting we cannot rule out the possibility that the true difference is zero.</p>
 <p>These findings imply that while the treatment was effective in increasing the number of people who donated (extensive margin), it had no measurable impact on how much people gave once they decided to contribute (intensive margin).</p>
-<div id="3cf21fde" class="cell" data-execution_count="14">
+</section>
+<section id="treatment-changed-how-much-they-gave" class="level3">
+<h3 class="anchored" data-anchor-id="treatment-changed-how-much-they-gave">Treatment changed how much they gave</h3>
+<div id="bede7a4b" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to donors only (gave == 1)</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>donors_only <span class="op">=</span> df[df[<span class="st">'gave'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># T-</span><span class="al">TEST</span><span class="co"> </span></span>
@@ -1121,7 +1159,10 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>The control group gave an average of $45.54, while the treatment group gave slightly less, but the difference could easily be due to random variation.</p>
 <p>It’s important to note that this regression does not have a clear causal interpretation, because we’re conditioning on a post-treatment outcome (gave == 1). The treatment likely influenced who chose to donate, and that selection can bias the estimate of how much people give, conditional on donating.</p>
 <p>In summary, the treatment increased the number of donors, but not the average amount given by those who donated.</p>
-<div id="16d39983" class="cell" data-execution_count="15">
+</section>
+<section id="donation-amounts-among-donors-by-group" class="level3">
+<h3 class="anchored" data-anchor-id="donation-amounts-among-donors-by-group">Donation Amounts Among Donors by Group</h3>
+<div id="2ac05506" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to donors only</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>donors <span class="op">=</span> df[df[<span class="st">'gave'</span>] <span class="op">==</span> <span class="dv">1</span>]</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Split by group</span></span>
@@ -1161,7 +1202,10 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>In the control group, the average donation is $45.54, and most donations cluster below $100, though a few large gifts extend beyond $250.</p>
 <p>In the treatment group, the average donation is slightly lower at $43.87, with a very similar distribution shape. Most donations are small, and the long right tail reflects a few large contributions.</p>
 <p>These visualizations reinforce the earlier statistical findings: although the treatment increased the number of people who gave, it did not significantly affect how much people gave, once they decided to donate. The similarity in shapes and overlapping means suggest that the match offer encouraged more people to participate, but didn’t influence the generosity of individual donors. This aligns with the idea that the treatment affects the extensive margin (whether people give), not the intensive margin (how much they give).</p>
-<div id="e852f637" class="cell" data-execution_count="16">
+</section>
+<section id="simulating-donation-outcomes-with-bernoulli-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="simulating-donation-outcomes-with-bernoulli-distributions">Simulating Donation Outcomes with Bernoulli Distributions</h3>
+<div id="a3a65c99" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set simulation parameters</span></span>
@@ -1207,14 +1251,18 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>The resulting distribution of differences demonstrates the Central Limit Theorem: even though the underlying data are binary, the distribution of differences is approximately normal and centered near the true effect size (0.004).</p>
 <p>This also illustrates the Law of Large Numbers: with enough repetitions, the sample average of these differences converges to the expected value. The simulation confirms that the observed effect in our real data (≈ 0.0043) is consistent with what we’d expect if the true probabilities were 1.8% and 2.2%.</p>
 </section>
+</section>
 <section id="simulation-experiment" class="level2">
 <h2 class="anchored" data-anchor-id="simulation-experiment">Simulation Experiment</h2>
 <p>As a reminder of how the t-statistic “works,” in this section I use simulation to demonstrate the Law of Large Numbers and the Central Limit Theorem.</p>
 <p>Suppose the true distribution of respondents who do not get a charitable donation match is Bernoulli with probability p=0.018 that a donation is made.</p>
 <p>Further suppose that the true distribution of respondents who do get a charitable donation match of any size is Bernoulli with probability p=0.022 that a donation is made.</p>
-<section id="law-of-large-numbers" class="level3">
-<h3 class="anchored" data-anchor-id="law-of-large-numbers">Law of Large Numbers</h3>
-<div id="4f6f89a1" class="cell" data-execution_count="17">
+</section>
+<section id="law-of-large-numbers" class="level2">
+<h2 class="anchored" data-anchor-id="law-of-large-numbers">Law of Large Numbers</h2>
+<section id="simulate-and-plot-cumulative-average-of-differences" class="level3">
+<h3 class="anchored" data-anchor-id="simulate-and-plot-cumulative-average-of-differences">Simulate and Plot Cumulative Average of Differences</h3>
+<div id="daeeea66" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample real data without replacement</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>df_shuffled <span class="op">=</span> df[[<span class="st">'treatment'</span>, <span class="st">'amount'</span>]].sample(frac<span class="op">=</span><span class="dv">1</span>, random_state<span class="op">=</span><span class="dv">42</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1249,9 +1297,12 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>At the beginning, the average fluctuates due to the small number of observations. As more data are added, the line smooths out and stabilizes near the true treatment effect (shown by the red dashed line).</p>
 <p>This visually demonstrates the Law of Large Numbers: as the number of observations increases, the sample average converges to the true population difference, providing strong support that the observed treatment effect is consistent and not due to chance.</p>
 </section>
-<section id="central-limit-theorem" class="level3">
-<h3 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h3>
-<div id="d5594501" class="cell" data-execution_count="18">
+</section>
+<section id="central-limit-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h2>
+<section id="simulation-histograms-sample-sizes-50-200-500-1000" class="level3">
+<h3 class="anchored" data-anchor-id="simulation-histograms-sample-sizes-50-200-500-1000">Simulation Histograms (Sample Sizes 50, 200, 500, 1000)</h3>
+<div id="bc5bbd9b" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1309,7 +1360,6 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>These plots demonstrate both the Central Limit Theorem (distributions become normal as n increases) and the Law of Large Numbers (sample averages converge to true values). They also show how larger sample sizes increase the reliability of statistical estimates and reduce the likelihood of failing to detect real effects.</p>
 
 
-</section>
 </section>
 </section>
 

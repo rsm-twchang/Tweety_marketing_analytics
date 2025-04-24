@@ -23,10 +23,6 @@ The purpose of this experiment was to assess whether the size or presence of a m
 
 ---
 
-## Data Overview
-
-We begin by loading and exploring the structure of the dataset. The dataset includes **50,083 observations** and **51 variables**, covering treatment assignments, donor demographics, giving behavior, and geographic information.
-
 ## Data
 ```{python}
 import pandas as pd
@@ -35,7 +31,9 @@ df = pd.read_stata("karlan_list_2007.dta")
 df.head()
 ```
 
-### Description
+## Description
+
+We begin by loading and exploring the structure of the dataset. The dataset includes **50,083 observations** and **51 variables**, covering treatment assignments, donor demographics, giving behavior, and geographic information.
 
 :::: {.callout-note collapse="true"}
 ### Variable Definitions
@@ -113,12 +111,7 @@ summary
 
 As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.
 
-
-## Experimental Results
-
-### Charitable Contribution Made
-
-
+### # T-Test and Linear Regression for Each Variable
 ```{python}
 from scipy.stats import ttest_ind
 import statsmodels.formula.api as smf
@@ -155,10 +148,7 @@ In all cases, the p-values from both methods exceeded 0.05, indicating that none
 
 This validation is crucial for the study’s internal validity, it confirms that differences in outcomes can be attributed to the treatment, not to pre-existing differences in donor behavior or demographics.
 
-from scipy.stats import ttest_ind
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
-
+### T-Test and Regression for mrm2
 ```{python}
 # Drop NA for mrm2
 balance_df = df[['treatment', 'mrm2']].dropna()
@@ -172,6 +162,7 @@ print(f"T-test for mrm2: t = {t_stat:.3f}, p = {p_val:.4f}")
 model = smf.ols('mrm2 ~ treatment', data=balance_df).fit()
 print(model.summary().tables[1])  # Show only coefficient table
 ```
+
 To assess whether the treatment and control groups were statistically different before the intervention, we performed a balance test on the variable mrm2, which measures the number of months since the last donation.
 
 A t-test comparing the mean mrm2 between groups yielded a t-statistic of 0.120 and a p-value of 0.9049, indicating no statistically significant difference between the groups.
@@ -180,6 +171,7 @@ We also ran a linear regression of mrm2 on the treatment indicator. The estimate
 
 This finding supports the integrity of the random assignment in the experiment. Since there are no significant differences in months since last donation, we can be confident that any observed differences in donation behavior after treatment are not due to baseline imbalances. This type of balance check is crucial for ensuring the internal validity of experimental results and mirrors the intent of Table 1 in Karlan & List (2007).
 
+### Repeat for More Variables
 ```{python}
 def run_balance_test(var):
     subset = df[['treatment', var]].dropna()
@@ -221,9 +213,13 @@ For each variable, we conducted both a t-test and a bivariate linear regression 
 
 Overall, these tests show that treatment and control groups were well-balanced across observable characteristics prior to the intervention. These results validate the success of the randomization procedure, ensuring that post-treatment differences in outcomes can be interpreted as causal effects of the matching donation treatment. This approach follows the same logic as Table 1 in Karlan & List (2007), which is used to demonstrate the internal validity of their experimental design.
 
+## Experimental Results
+
+### Charitable Contribution Made
+
 First, I analyze whether matched donations lead to an increased response rate of making a donation. 
 
-# Barplot of Donation Rate (Treatment vs Control)
+### Barplot of Donation Rate (Treatment vs Control)
 ```{python}
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -253,9 +249,7 @@ This visual illustrates a modest but meaningful difference in response rates. Th
 
 While the absolute increase of around 0.4 percentage points may seem small, it represents a 22% relative increase in donation likelihood, a substantial behavioral shift from a simple intervention. This reinforces the broader conclusion that framing a donation as being matched can increase participation, even without changing the donation amount given.
 
-from scipy.stats import ttest_ind
-import statsmodels.formula.api as smf
-
+### # Whether the difference in donation rates between treatment and control is statistically significant 
 ```{python}
 # T-TEST 
 control = df[df['treatment'] == 0]['gave']
@@ -277,7 +271,7 @@ The intercept of the model is 0.0179, which represents the average donation rate
 
 These results confirm that the difference in donation rates between the treatment and control groups is not due to random chance. The findings suggest that even a small behavioral nudge.For example being told a donation will be matched, can have a statistically significant impact on charitable behavior. While the absolute increase is modest, the result is highly robust and consistent across methods.
 
-# Probit Regression
+### Probit Regression
 ```{python}
 import statsmodels.api as sm
 # Prepare the data
@@ -303,12 +297,12 @@ The log-likelihood improved from -5035.4 (null model) to -5030.5, and the likeli
 
 These results align with earlier linear probability model (OLS) and t-test findings, reinforcing the conclusion that matching offers increase the likelihood of giving, even if the effect is modest in size. The consistency across model types strengthens the evidence that behavioral nudges like matching can shift donation behavior in a measurable and statistically robust way.
 
-### Differences between Match Rates
+## Differences between Match Rates
 
 Next, I assess the effectiveness of different sizes of matched donations on the response rate.
 
+### Different match ratios (1:1 vs 2:1 vs 3:1) lead to different donation rates
 ```{python}
-
 from scipy.stats import ttest_ind
 # Filter treatment group only
 treat_only = df[df['treatment'] == 1].copy()
@@ -325,6 +319,7 @@ _, pval_13 = ttest_ind(gave_r1, gave_r3, equal_var=False)
 print(f"p-value (2:1 vs 1:1): {pval_12:.4f}")
 print(f"p-value (3:1 vs 1:1): {pval_13:.4f}")
 ```
+
 We tested whether offering larger match ratios (2:1 or 3:1) influenced donation rates compared to a standard 1:1 match, using a series of t-tests.
 
 The results showed:
@@ -339,7 +334,7 @@ These findings support the interpretation in Karlan & List (2007): although larg
 
 This suggests that the presence of a match offer matters more than the generosity of the match ratio, which has important practical implications for fundraisers aiming to design cost-effective campaigns.
 
-
+### Whether match ratio affects donation behavior
 ```{python}
 import statsmodels.formula.api as smf
 # Filter treatment group only
@@ -367,6 +362,7 @@ These results suggest that larger match ratios (2:1 or 3:1) do not lead to a sta
 
 This finding supports what Karlan & List (2007) concluded: the presence of a match offer increases donation rates, but increasing the match ratio beyond 1:1 does not substantially improve effectiveness. For fundraisers, this implies that a simple match offer may be just as effective as a more generous one, and likely more cost-efficient.
 
+### Differences in donation response rates between match ratios
 ```{python}
 # Filter treatment group only
 treat_df = df[df['treatment'] == 1].copy()
@@ -399,10 +395,11 @@ These differences are small in magnitude and not statistically significant, as c
 These findings support what Karlan & List (2007) described in their paper, that although fundraisers often believe larger match ratios will lead to more giving, the data show that the presence of a match matters more than the specific size. Once a match is introduced, increasing the match multiplier offers little to no additional benefit in terms of motivating donors to give.
 
 
-### Size of Charitable Contribution
+## Size of Charitable Contribution
 
 In this subsection, I analyze the effect of the size of matched donation on the size of the charitable contribution.
 
+### Treatment affected how much people donated 
 ```{python}
 from scipy.stats import ttest_ind
 import statsmodels.formula.api as smf
@@ -417,6 +414,7 @@ print(f"T-test result: t = {t_stat:.3f}, p = {p_val:.4f}")
 model = smf.ols('amount ~ treatment', data=df).fit()
 print(model.summary().tables[1])
 ```
+
 We analyzed whether individuals in the treatment group gave more or less than those in the control group among those who donated. This isolates the intensive margin of behavior, how generous donors were, as opposed to whether they chose to give at all.
 
 A t-test comparing donation amounts between treatment and control donors produced a non-significant result (t = -0.585, p = 0.5590). This indicates no statistically meaningful difference in average donation size between the two groups.
@@ -425,6 +423,7 @@ The regression analysis confirms this. The estimated treatment effect is −$1.6
 
 These findings imply that while the treatment was effective in increasing the number of people who donated (extensive margin), it had no measurable impact on how much people gave once they decided to contribute (intensive margin).
 
+### Treatment changed how much they gave
 ```{python}
 # Subset to donors only (gave == 1)
 donors_only = df[df['gave'] == 1].copy()
@@ -449,6 +448,7 @@ It’s important to note that this regression does not have a clear causal inter
 
 In summary, the treatment increased the number of donors, but not the average amount given by those who donated.
 
+### Donation Amounts Among Donors by Group
 ```{python}
 # Filter to donors only
 donors = df[df['gave'] == 1]
@@ -488,6 +488,7 @@ In the treatment group, the average donation is slightly lower at $43.87, with a
 These visualizations reinforce the earlier statistical findings: although the treatment increased the number of people who gave, it did not significantly affect how much people gave, once they decided to donate.
 The similarity in shapes and overlapping means suggest that the match offer encouraged more people to participate, but didn’t influence the generosity of individual donors. This aligns with the idea that the treatment affects the extensive margin (whether people give), not the intensive margin (how much they give).
 
+### Simulating Donation Outcomes with Bernoulli Distributions
 ```{python}
 import numpy as np
 
@@ -523,12 +524,12 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 ```
+
 We simulate 10,000 experiments in which we draw samples of size 500 from a control group (p = 0.018) and a treatment group (p = 0.022), both assumed to follow Bernoulli distributions. In each iteration, we calculate the difference in donation rates between the two groups.
 
 The resulting distribution of differences demonstrates the Central Limit Theorem: even though the underlying data are binary, the distribution of differences is approximately normal and centered near the true effect size (0.004).
 
 This also illustrates the Law of Large Numbers: with enough repetitions, the sample average of these differences converges to the expected value. The simulation confirms that the observed effect in our real data (≈ 0.0043) is consistent with what we’d expect if the true probabilities were 1.8% and 2.2%.
-
 
 ## Simulation Experiment
 
@@ -538,8 +539,9 @@ Suppose the true distribution of respondents who do not get a charitable donatio
 
 Further suppose that the true distribution of respondents who do get a charitable donation match of any size  is Bernoulli with probability p=0.022 that a donation is made.
 
-### Law of Large Numbers
+## Law of Large Numbers
 
+### Simulate and Plot Cumulative Average of Differences
 ```{python}
 # Sample real data without replacement
 df_shuffled = df[['treatment', 'amount']].sample(frac=1, random_state=42).reset_index(drop=True)
@@ -571,8 +573,9 @@ At the beginning, the average fluctuates due to the small number of observations
 
 This visually demonstrates the Law of Large Numbers: as the number of observations increases, the sample average converges to the true population difference, providing strong support that the observed treatment effect is consistent and not due to chance.
 
-### Central Limit Theorem
+## Central Limit Theorem
 
+### Simulation Histograms (Sample Sizes 50, 200, 500, 1000)
 ```{python}
 import numpy as np
 import matplotlib.pyplot as plt
