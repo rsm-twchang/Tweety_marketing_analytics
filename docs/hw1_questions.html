@@ -228,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="data" class="level2">
 <h2 class="anchored" data-anchor-id="data">Data</h2>
-<div id="9a2146fd" class="cell" data-execution_count="1">
+<div id="9a6655ce" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_stata(<span class="st">"karlan_list_2007.dta"</span>)</span>
@@ -627,7 +627,7 @@ Variable Definitions
 </div>
 </div>
 </div>
-<div id="c36a5b2f" class="cell" data-execution_count="2">
+<div id="2c9b4b56" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic treatment/control breakdown</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Unique match ratios:"</span>, df[<span class="st">"ratio"</span>].unique())</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Treatment group size:"</span>, df[df[<span class="st">"treatment"</span>] <span class="op">==</span> <span class="dv">1</span>].shape[<span class="dv">0</span>])</span>
@@ -639,7 +639,7 @@ Treatment group size: 33396
 Control group size: 16687</code></pre>
 </div>
 </div>
-<div id="459c1257" class="cell" data-execution_count="3">
+<div id="ffdc3f92" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics: mean donation rate and average donation by group</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> df.groupby(<span class="st">"treatment"</span>)[[<span class="st">"gave"</span>, <span class="st">"amount"</span>]].agg([<span class="st">'mean'</span>, <span class="st">'count'</span>]).<span class="bu">round</span>(<span class="dv">4</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -700,7 +700,7 @@ Control group size: 16687</code></pre>
 <h2 class="anchored" data-anchor-id="experimental-results">Experimental Results</h2>
 <section id="charitable-contribution-made" class="level3">
 <h3 class="anchored" data-anchor-id="charitable-contribution-made">Charitable Contribution Made</h3>
-<div id="6014893c" class="cell" data-execution_count="4">
+<div id="9b49bfc1" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -763,7 +763,7 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 <p>In all cases, the p-values from both methods exceeded 0.05, indicating that none of the differences were statistically significant. This means the treatment and control groups were well-balanced across these characteristics, just as Table 1 in Karlan &amp; List (2007) demonstrates.</p>
 <p>This validation is crucial for the study’s internal validity, it confirms that differences in outcomes can be attributed to the treatment, not to pre-existing differences in donor behavior or demographics.</p>
 <p>from scipy.stats import ttest_ind import statsmodels.api as sm import statsmodels.formula.api as smf</p>
-<div id="2e919bbf" class="cell" data-execution_count="5">
+<div id="13665c0e" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop NA for mrm2</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>balance_df <span class="op">=</span> df[[<span class="st">'treatment'</span>, <span class="st">'mrm2'</span>]].dropna()</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -789,7 +789,7 @@ treatment      0.0137      0.115      0.119      0.905      -0.211       0.238
 <p>A t-test comparing the mean mrm2 between groups yielded a t-statistic of 0.120 and a p-value of 0.9049, indicating no statistically significant difference between the groups.</p>
 <p>We also ran a linear regression of mrm2 on the treatment indicator. The estimated coefficient on treatment was 0.0137, with a p-value of 0.905 and a 95% confidence interval ranging from −0.211 to 0.238. These results confirm the same conclusion: the treatment group and control group had nearly identical values for this variable prior to the intervention.</p>
 <p>This finding supports the integrity of the random assignment in the experiment. Since there are no significant differences in months since last donation, we can be confident that any observed differences in donation behavior after treatment are not due to baseline imbalances. This type of balance check is crucial for ensuring the internal validity of experimental results and mirrors the intent of Table 1 in Karlan &amp; List (2007).</p>
-<div id="751ce298" class="cell" data-execution_count="6">
+<div id="481f7cdb" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_balance_test(var):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    subset <span class="op">=</span> df[[<span class="st">'treatment'</span>, var]].dropna()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -857,7 +857,7 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 </section>
 <section id="barplot-of-donation-rate-treatment-vs-control" class="level1">
 <h1>Barplot of Donation Rate (Treatment vs Control)</h1>
-<div id="01752b05" class="cell" data-execution_count="7">
+<div id="76cbba80" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -888,7 +888,7 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 <p>This visual illustrates a modest but meaningful difference in response rates. The treatment group was more likely to donate, consistent with the results from the t-test and regression analysis, both of which showed that this difference is statistically significant at the 1% level.</p>
 <p>While the absolute increase of around 0.4 percentage points may seem small, it represents a 22% relative increase in donation likelihood, a substantial behavioral shift from a simple intervention. This reinforces the broader conclusion that framing a donation as being matched can increase participation, even without changing the donation amount given.</p>
 <p>from scipy.stats import ttest_ind import statsmodels.formula.api as smf</p>
-<div id="65e22b43" class="cell" data-execution_count="8">
+<div id="9129da53" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># T-</span><span class="al">TEST</span><span class="co"> </span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>control <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">0</span>][<span class="st">'gave'</span>]</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>treatment <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'gave'</span>]</span>
@@ -915,7 +915,7 @@ treatment      0.0042      0.001      3.101      0.002       0.002       0.007
 </section>
 <section id="probit-regression" class="level1">
 <h1>Probit Regression</h1>
-<div id="3d2d5f16" class="cell" data-execution_count="9">
+<div id="13a3a596" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>probit_df <span class="op">=</span> df[[<span class="st">'gave'</span>, <span class="st">'treatment'</span>]].dropna()</span>
@@ -938,7 +938,7 @@ Dep. Variable:                   gave   No. Observations:                50083
 Model:                         Probit   Df Residuals:                    50081
 Method:                           MLE   Df Model:                            1
 Date:                Wed, 23 Apr 2025   Pseudo R-squ.:               0.0009783
-Time:                        19:49:48   Log-Likelihood:                -5030.5
+Time:                        19:56:34   Log-Likelihood:                -5030.5
 converged:                       True   LL-Null:                       -5035.4
 Covariance Type:            nonrobust   LLR p-value:                  0.001696
 ==============================================================================
@@ -967,7 +967,7 @@ treatment      0.0043      0.001      3.104      0.002       0.002       0.007
 <section id="differences-between-match-rates" class="level3">
 <h3 class="anchored" data-anchor-id="differences-between-match-rates">Differences between Match Rates</h3>
 <p>Next, I assess the effectiveness of different sizes of matched donations on the response rate.</p>
-<div id="97658deb" class="cell" data-execution_count="10">
+<div id="eebc28a0" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>treat_only <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
@@ -995,7 +995,7 @@ p-value (3:1 vs 1:1): 0.3101</code></pre>
 <p>These p-values are well above 0.05, indicating that the differences are not statistically significant. In other words, we cannot conclude that higher match ratios led to meaningfully higher response rates.</p>
 <p>These findings support the interpretation in Karlan &amp; List (2007): although larger match ratios may look more appealing, they do not result in a significantly greater number of donors. The 1:1 match appears to be just as effective as the more generous 2:1 and 3:1 offers.</p>
 <p>This suggests that the presence of a match offer matters more than the generosity of the match ratio, which has important practical implications for fundraisers aiming to design cost-effective campaigns.</p>
-<div id="2eb11515" class="cell" data-execution_count="11">
+<div id="41a90e2b" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>treat_df <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
@@ -1025,7 +1025,7 @@ ratio3         0.0020      0.002      1.008      0.313      -0.002       0.006
 </ol>
 <p>These results suggest that larger match ratios (2:1 or 3:1) do not lead to a statistically meaningful increase in donation rates compared to the 1:1 match. The 95% confidence intervals for both ratio2 and ratio3 include zero, reinforcing that the observed differences could easily be due to chance.</p>
 <p>This finding supports what Karlan &amp; List (2007) concluded: the presence of a match offer increases donation rates, but increasing the match ratio beyond 1:1 does not substantially improve effectiveness. For fundraisers, this implies that a simple match offer may be just as effective as a more generous one, and likely more cost-efficient.</p>
-<div id="4932c96b" class="cell" data-execution_count="12">
+<div id="ad8a1a17" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>treat_df <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert ratio to numeric</span></span>
@@ -1063,7 +1063,7 @@ Difference (3:1 vs 2:1): 0.0001</code></pre>
 <section id="size-of-charitable-contribution" class="level3">
 <h3 class="anchored" data-anchor-id="size-of-charitable-contribution">Size of Charitable Contribution</h3>
 <p>In this subsection, I analyze the effect of the size of matched donation on the size of the charitable contribution.</p>
-<div id="558ff6e2" class="cell" data-execution_count="13">
+<div id="2572fdda" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data</span></span>
@@ -1090,7 +1090,7 @@ treatment      0.1536      0.083      1.861      0.063      -0.008       0.315
 <p>A t-test comparing donation amounts between treatment and control donors produced a non-significant result (t = -0.585, p = 0.5590). This indicates no statistically meaningful difference in average donation size between the two groups.</p>
 <p>The regression analysis confirms this. The estimated treatment effect is −$1.67, meaning that donors in the treatment group gave slightly less on average than those in the control group. However, the p-value of 0.561 is far from any conventional threshold for significance, and the confidence interval (−$7.31 to +$3.97) includes zero, suggesting we cannot rule out the possibility that the true difference is zero.</p>
 <p>These findings imply that while the treatment was effective in increasing the number of people who donated (extensive margin), it had no measurable impact on how much people gave once they decided to contribute (intensive margin).</p>
-<div id="dd87d83b" class="cell" data-execution_count="14">
+<div id="d5436210" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to donors only (gave == 1)</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>donors_only <span class="op">=</span> df[df[<span class="st">'gave'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># T-</span><span class="al">TEST</span><span class="co"> </span></span>
@@ -1117,7 +1117,7 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>The control group gave an average of $45.54, while the treatment group gave slightly less, but the difference could easily be due to random variation.</p>
 <p>It’s important to note that this regression does not have a clear causal interpretation, because we’re conditioning on a post-treatment outcome (gave == 1). The treatment likely influenced who chose to donate, and that selection can bias the estimate of how much people give, conditional on donating.</p>
 <p>In summary, the treatment increased the number of donors, but not the average amount given by those who donated.</p>
-<div id="501a098a" class="cell" data-execution_count="15">
+<div id="cd5123a0" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to donors only</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>donors <span class="op">=</span> df[df[<span class="st">'gave'</span>] <span class="op">==</span> <span class="dv">1</span>]</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Split by group</span></span>
@@ -1157,7 +1157,7 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>In the control group, the average donation is $45.54, and most donations cluster below $100, though a few large gifts extend beyond $250.</p>
 <p>In the treatment group, the average donation is slightly lower at $43.87, with a very similar distribution shape. Most donations are small, and the long right tail reflects a few large contributions.</p>
 <p>These visualizations reinforce the earlier statistical findings: although the treatment increased the number of people who gave, it did not significantly affect how much people gave, once they decided to donate. The similarity in shapes and overlapping means suggest that the match offer encouraged more people to participate, but didn’t influence the generosity of individual donors. This aligns with the idea that the treatment affects the extensive margin (whether people give), not the intensive margin (how much they give).</p>
-<div id="b8e7d5d7" class="cell" data-execution_count="16">
+<div id="4ead3abe" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set simulation parameters</span></span>
@@ -1210,7 +1210,7 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>Further suppose that the true distribution of respondents who do get a charitable donation match of any size is Bernoulli with probability p=0.022 that a donation is made.</p>
 <section id="law-of-large-numbers" class="level3">
 <h3 class="anchored" data-anchor-id="law-of-large-numbers">Law of Large Numbers</h3>
-<div id="1e52e1a4" class="cell" data-execution_count="17">
+<div id="e8ed4a9a" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample real data without replacement</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>df_shuffled <span class="op">=</span> df[[<span class="st">'treatment'</span>, <span class="st">'amount'</span>]].sample(frac<span class="op">=</span><span class="dv">1</span>, random_state<span class="op">=</span><span class="dv">42</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1247,7 +1247,7 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 </section>
 <section id="central-limit-theorem" class="level3">
 <h3 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h3>
-<div id="c047bbd9" class="cell" data-execution_count="18">
+<div id="6421196f" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
