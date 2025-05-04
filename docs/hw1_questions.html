@@ -259,7 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="data-description" class="level2">
 <h2 class="anchored" data-anchor-id="data-description">Data Description</h2>
 <p>We begin by loading the dataset provided by Karlan and List (2007), which contains detailed records from their fundraising field experiment.</p>
-<div id="9bebe7c3" class="cell" data-execution_count="1">
+<div id="db7afd0d" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_stata(<span class="st">"karlan_list_2007.dta"</span>)</span>
@@ -656,7 +656,7 @@ Variable Definitions
 </div>
 </div>
 </div>
-<div id="72eca7d8" class="cell" data-execution_count="2">
+<div id="639f370b" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic treatment/control breakdown</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Unique match ratios:"</span>, df[<span class="st">"ratio"</span>].unique())</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Treatment group size:"</span>, df[df[<span class="st">"treatment"</span>] <span class="op">==</span> <span class="dv">1</span>].shape[<span class="dv">0</span>])</span>
@@ -668,7 +668,7 @@ Treatment group size: 33396
 Control group size: 16687</code></pre>
 </div>
 </div>
-<div id="9d9ae1fa" class="cell" data-execution_count="3">
+<div id="1936af71" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics: mean donation rate and average donation by group</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> df.groupby(<span class="st">"treatment"</span>)[[<span class="st">"gave"</span>, <span class="st">"amount"</span>]].agg([<span class="st">'mean'</span>, <span class="st">'count'</span>]).<span class="bu">round</span>(<span class="dv">4</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -726,7 +726,7 @@ Control group size: 16687</code></pre>
 <p>As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.</p>
 <section id="t-test-and-linear-regression-for-each-variable" class="level3">
 <h3 class="anchored" data-anchor-id="t-test-and-linear-regression-for-each-variable">T-Test and Linear Regression for Each Variable</h3>
-<div id="e881c336" class="cell" data-execution_count="4">
+<div id="5e5bf8aa" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -791,7 +791,7 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 </section>
 <section id="t-test-and-regression-for-mrm2" class="level3">
 <h3 class="anchored" data-anchor-id="t-test-and-regression-for-mrm2">T-Test and Regression for mrm2</h3>
-<div id="709d3801" class="cell" data-execution_count="5">
+<div id="69222946" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop NA for mrm2</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>balance_df <span class="op">=</span> df[[<span class="st">'treatment'</span>, <span class="st">'mrm2'</span>]].dropna()</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -820,7 +820,7 @@ treatment      0.0137      0.115      0.119      0.905      -0.211       0.238
 </section>
 <section id="repeat-for-more-variables" class="level3">
 <h3 class="anchored" data-anchor-id="repeat-for-more-variables">Repeat for More Variables</h3>
-<div id="a657b8c0" class="cell" data-execution_count="6">
+<div id="cdea07ca" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_balance_test(var):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    subset <span class="op">=</span> df[[<span class="st">'treatment'</span>, var]].dropna()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -894,7 +894,7 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 </section>
 <section id="barplot-of-donation-rate-treatment-vs-control" class="level3">
 <h3 class="anchored" data-anchor-id="barplot-of-donation-rate-treatment-vs-control">Barplot of Donation Rate (Treatment vs Control)</h3>
-<div id="405fc5cc" class="cell" data-execution_count="7">
+<div id="be21b204" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -927,7 +927,7 @@ treatment     -0.0075      0.004     -1.758      0.079      -0.016       0.001
 </section>
 <section id="treatment-effect-on-donation-rates" class="level3">
 <h3 class="anchored" data-anchor-id="treatment-effect-on-donation-rates">Treatment Effect on Donation Rates</h3>
-<div id="3bde57c3" class="cell" data-execution_count="8">
+<div id="030ddd17" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># T-</span><span class="al">TEST</span><span class="co"> </span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>control <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">0</span>][<span class="st">'gave'</span>]</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>treatment <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'gave'</span>]</span>
@@ -954,7 +954,7 @@ treatment      0.0042      0.001      3.101      0.002       0.002       0.007
 </section>
 <section id="probit-regression" class="level3">
 <h3 class="anchored" data-anchor-id="probit-regression">Probit Regression</h3>
-<div id="bb468077" class="cell" data-execution_count="9">
+<div id="98b4a84f" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>probit_df <span class="op">=</span> df[[<span class="st">'gave'</span>, <span class="st">'treatment'</span>]].dropna()</span>
@@ -977,7 +977,7 @@ Dep. Variable:                   gave   No. Observations:                50083
 Model:                         Probit   Df Residuals:                    50081
 Method:                           MLE   Df Model:                            1
 Date:                Sun, 04 May 2025   Pseudo R-squ.:               0.0009783
-Time:                        15:23:47   Log-Likelihood:                -5030.5
+Time:                        15:31:25   Log-Likelihood:                -5030.5
 converged:                       True   LL-Null:                       -5035.4
 Covariance Type:            nonrobust   LLR p-value:                  0.001696
 ==============================================================================
@@ -1009,7 +1009,7 @@ treatment      0.0043      0.001      3.104      0.002       0.002       0.007
 <p>Next, I assess the effectiveness of different sizes of matched donations on the response rate.</p>
 <section id="different-match-ratios-11-vs-21-vs-31-lead-to-different-donation-rates" class="level3">
 <h3 class="anchored" data-anchor-id="different-match-ratios-11-vs-21-vs-31-lead-to-different-donation-rates">Different match ratios (1:1 vs 2:1 vs 3:1) lead to different donation rates</h3>
-<div id="344f90b1" class="cell" data-execution_count="10">
+<div id="521570ff" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>treat_only <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
@@ -1040,7 +1040,7 @@ p-value (3:1 vs 1:1): 0.3101</code></pre>
 </section>
 <section id="whether-match-ratio-affects-donation-behavior" class="level3">
 <h3 class="anchored" data-anchor-id="whether-match-ratio-affects-donation-behavior">Whether match ratio affects donation behavior</h3>
-<div id="b20065a0" class="cell" data-execution_count="11">
+<div id="0506a232" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>treat_df <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
@@ -1073,7 +1073,7 @@ ratio3         0.0020      0.002      1.008      0.313      -0.002       0.006
 </section>
 <section id="differences-in-donation-response-rates-between-match-ratios" class="level3">
 <h3 class="anchored" data-anchor-id="differences-in-donation-response-rates-between-match-ratios">Differences in donation response rates between match ratios</h3>
-<div id="4c36ea48" class="cell" data-execution_count="12">
+<div id="35bc2d69" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter treatment group only</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>treat_df <span class="op">=</span> df[df[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert ratio to numeric</span></span>
@@ -1115,7 +1115,7 @@ Difference (3:1 vs 2:1): 0.0001</code></pre>
 <p>In this subsection, I analyze the effect of the size of matched donation on the size of the charitable contribution.</p>
 <section id="treatment-affected-how-much-people-donated" class="level3">
 <h3 class="anchored" data-anchor-id="treatment-affected-how-much-people-donated">Treatment affected how much people donated</h3>
-<div id="8323d73b" class="cell" data-execution_count="13">
+<div id="d2f3db42" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data</span></span>
@@ -1145,7 +1145,7 @@ treatment      0.1536      0.083      1.861      0.063      -0.008       0.315
 </section>
 <section id="treatment-changed-how-much-they-gave" class="level3">
 <h3 class="anchored" data-anchor-id="treatment-changed-how-much-they-gave">Treatment changed how much they gave</h3>
-<div id="41164c46" class="cell" data-execution_count="14">
+<div id="f5b015bb" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to donors only (gave == 1)</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>donors_only <span class="op">=</span> df[df[<span class="st">'gave'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># T-</span><span class="al">TEST</span><span class="co"> </span></span>
@@ -1175,7 +1175,7 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 </section>
 <section id="donation-amounts-among-donors-by-group" class="level3">
 <h3 class="anchored" data-anchor-id="donation-amounts-among-donors-by-group">Donation Amounts Among Donors by Group</h3>
-<div id="ac6012e0" class="cell" data-execution_count="15">
+<div id="40e204d2" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to donors only</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>donors <span class="op">=</span> df[df[<span class="st">'gave'</span>] <span class="op">==</span> <span class="dv">1</span>]</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Split by group</span></span>
@@ -1224,7 +1224,7 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <p>Further suppose that the true distribution of respondents who do get a charitable donation match of any size is Bernoulli with probability p=0.022 that a donation is made.</p>
 <section id="simulating-donation-outcomes-with-bernoulli-distributions" class="level3">
 <h3 class="anchored" data-anchor-id="simulating-donation-outcomes-with-bernoulli-distributions">Simulating Donation Outcomes with Bernoulli Distributions</h3>
-<div id="8537e078" class="cell" data-execution_count="16">
+<div id="90542333" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set simulation parameters</span></span>
@@ -1276,7 +1276,7 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <h2 class="anchored" data-anchor-id="law-of-large-numbers">Law of Large Numbers</h2>
 <section id="simulate-and-plot-cumulative-average-of-differences" class="level3">
 <h3 class="anchored" data-anchor-id="simulate-and-plot-cumulative-average-of-differences">Simulate and Plot Cumulative Average of Differences</h3>
-<div id="03e8f6f0" class="cell" data-execution_count="17">
+<div id="c5abc5f6" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample real data without replacement</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>df_shuffled <span class="op">=</span> df[[<span class="st">'treatment'</span>, <span class="st">'amount'</span>]].sample(frac<span class="op">=</span><span class="dv">1</span>, random_state<span class="op">=</span><span class="dv">42</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1317,7 +1317,7 @@ treatment     -1.6684      2.872     -0.581      0.561      -7.305       3.968
 <h2 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h2>
 <section id="simulation-histograms-sample-sizes-50-200-500-1000" class="level3">
 <h3 class="anchored" data-anchor-id="simulation-histograms-sample-sizes-50-200-500-1000">Simulation Histograms (Sample Sizes 50, 200, 500, 1000)</h3>
-<div id="4d900cef" class="cell" data-execution_count="18">
+<div id="8c0c63c2" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
