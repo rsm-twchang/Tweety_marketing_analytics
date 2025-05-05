@@ -13,6 +13,7 @@ callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 Blueprinty is a small firm that makes software for developing blueprints specifically for submitting patent applications to the US patent office. Their marketing team would like to make the claim that patent applicants using Blueprinty's software are more successful in getting their patent applications approved. Ideal data to study such an effect might include the success rate of patent applications before using Blueprinty's software and after using it. Unfortunately, such data is not available. 
 
 However, Blueprinty has collected data on 1,500 mature (non-startup) engineering firms. The data include each firm's number of patents awarded over the last 5 years, regional location, age since incorporation, and whether or not the firm uses Blueprinty's software. The marketing team would like to use this data to make the claim that firms using Blueprinty's software are more successful in getting their patent applications approved.
+
 ------
 
 
@@ -27,7 +28,6 @@ import seaborn as sns
 df = pd.read_csv('blueprinty.csv')
 
 # Check structure of the data
-df.info()
 df.head()
 ```
 
@@ -57,6 +57,7 @@ When comparing group means, firms that use Blueprinty’s software have an avera
 However, this visual and descriptive comparison alone is not enough to establish a causal relationship. Further statistical analysis — such as a Poisson regression or a formal hypothesis test — is needed to determine whether the observed difference is statistically and practically significant, controlling for other variables like firm age and region.
 
 Blueprinty customers are not selected at random. It may be important to account for systematic differences in the age and regional location of customers vs non-customers.
+
 ------
 
 ```{python}
@@ -75,43 +76,22 @@ region_counts
 
 ### Estimation of Simple Poisson Model
 
-Since our outcome variable of interest can only be small integer values per a set unit of time, we can use a Poisson density to model the number of patents awarded to each engineering firm over the last 5 years. We start by estimating a simple Poisson model via Maximum Likelihood.
+We are interested in modeling the number of patents awarded to each engineering firm over a fixed 5-year period. Since this outcome is a non-negative count variable, the Poisson distribution is a natural choice. It is well-suited for modeling events that occur independently and randomly over time or space.
 
-We assume that the observed counts Y_1, Y_2, \ldots, Y_n are independent and follow a Poisson distribution with rate parameter \lambda. That is, for each observation i, we have:
-
-Y_i \sim \text{Poisson}(\lambda)
+We begin by estimating a simple Poisson model using Maximum Likelihood Estimation (MLE). Let:
+Y \sim \text{Poisson}(\lambda) where \lambda is the expected number of patents for a firm.
 
 The probability mass function of the Poisson distribution is:
+f(Y \mid \lambda) = \frac{e^{-\lambda} \lambda^Y}{Y!}
 
-f(Y_i \mid \lambda) = \frac{e^{-\lambda} \lambda^{Y_i}}{Y_i!}
+Given n independent observations y_1, y_2, \ldots, y_n, the log-likelihood function is:
 
-Given this, the likelihood function for the full dataset is the product of the individual probabilities:
+$$
+\ell(\lambda \mid y_1, \ldots, y_n) = -n\lambda + \left( \sum_{i=1}^n y_i \right) \log \lambda - \sum_{i=1}^n \log(y_i!)
+$$
 
-L(\lambda \mid y_1, \ldots, y_n) = \prod_{i=1}^{n} \frac{e^{-\lambda} \lambda^{y_i}}{y_i!}
+This expression captures the likelihood of observing the data as a function of \lambda, which we estimate by maximizing \ell(\lambda).
 
-To simplify computation, we typically work with the log-likelihood function, which is the natural logarithm of the likelihood:
-
-\ell(\lambda \mid y_1, \ldots, y_n) = \log L(\lambda) = \sum_{i=1}^{n} \left( -\lambda + y_i \log \lambda - \log(y_i!) \right)
-
-This simplifies to:
-
-\ell(\lambda) = -n\lambda + \left( \sum_{i=1}^{n} y_i \right) \log \lambda - \sum_{i=1}^{n} \log(y_i!)
-
-This expression represents the log-likelihood of a Poisson model with a constant rate \lambda across all observations. It is the objective function we maximize when estimating \lambda using maximum likelihood estimation (MLE).
-
-In practice, especially in modeling contexts such as Poisson regression, the rate parameter \lambda is not assumed to be constant. Instead, we allow it to vary by observation as a function of explanatory variables:
-
-\lambda_i = \exp(X_i^\top \beta)
-
-where X_i is the feature vector for the i-th observation, and \beta is the vector of coefficients to be estimated. In this case, the likelihood becomes:
-
-L(\beta \mid y_1, \ldots, y_n, X) = \prod_{i=1}^{n} \frac{e^{-\lambda_i} \lambda_i^{y_i}}{y_i!} = \prod_{i=1}^{n} \frac{e^{-\exp(X_i^\top \beta)} \left(\exp(X_i^\top \beta)\right)^{y_i}}{y_i!}
-
-And the corresponding log-likelihood function is:
-
-\ell(\beta) = \sum_{i=1}^{n} \left( -\exp(X_i^\top \beta) + y_i X_i^\top \beta - \log(y_i!) \right)
-
-This is the form we use to estimate \beta in Poisson regression via maximum likelihood.
 ```{python}
 from scipy.special import gammaln  
 
@@ -163,27 +143,37 @@ plt.tight_layout()
 plt.show()
 ```
 
-To find the maximum likelihood estimate (MLE) of \lambda for a Poisson distribution, we begin with the log-likelihood function for n independent observations Y_1, \ldots, Y_n:
+To estimate the Poisson rate parameter \lambda, we use Maximum Likelihood Estimation (MLE). The log-likelihood function for a sample y_1, y_2, \ldots, y_n drawn independently from a Poisson distribution is:
 
-\ell(\lambda) = -n\lambda + \left( \sum_{i=1}^n y_i \right) \log \lambda - \sum_{i=1}^n \log(y_i!)
+$$
+\ell(\lambda) = -n\lambda + \left(\sum_{i=1}^n y_i\right) \log \lambda - \sum_{i=1}^n \log(y_i!)
+$$
 
-To maximize this function, we take its derivative with respect to \lambda and set it equal to zero:
+To find the value of \lambda that maximizes this likelihood, we take the first derivative with respect to \lambda:
 
-\frac{\partial \ell}{\partial \lambda} = -n + \frac{1}{\lambda} \sum_{i=1}^n y_i
+$$
+\frac{\partial \ell}{\partial \lambda} = -n + \frac{\sum_{i=1}^n y_i}{\lambda}
+$$
 
-Setting the derivative equal to zero gives the first-order condition:
+Setting the derivative equal to zero gives the critical point:
 
+$$
 -n + \frac{\sum_{i=1}^n y_i}{\lambda} = 0
+$$
 
-Solving for \lambda yields:
+Solving for \lambda, we obtain:
 
-\lambda = \frac{\sum_{i=1}^n y_i}{n} = \overline{y}
+$$
+\lambda = \frac{\sum_{i=1}^n y_i}{n}
+$$
 
-Thus, the MLE of \lambda is simply the sample mean of the observed data:
+Thus, the maximum likelihood estimator (MLE) for \lambda is the sample mean, \overline{y}:
 
+$$
 \lambda_{\text{MLE}} = \overline{y}
+$$
 
-This result aligns perfectly with our understanding of the Poisson distribution, where the mean and variance are both equal to \lambda. It reinforces the intuitive idea that the average number of observed events is the best estimate for the true event rate.
+This result aligns with our intuition: in a Poisson distribution, the mean and variance are both equal to \lambda, so the best estimate for the average rate of occurrence is the observed average in the data.
 
 ```{python}
 from scipy.optimize import minimize
