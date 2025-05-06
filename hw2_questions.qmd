@@ -16,6 +16,12 @@ However, Blueprinty has collected data on 1,500 mature (non-startup) engineering
 
 
 ### Data
+```{python}
+#| warning: false
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+```
 
 ```{python}
 import pandas as pd
@@ -198,8 +204,8 @@ print(f"The MLE of lambda is: {lambda_mle:.4f}")
 ### Estimation of Poisson Regression Model
 
 Next, we extend our simple Poisson model to a Poisson Regression Model such that $Y_i = \text{Poisson}(\lambda_i)$ where $\lambda_i = \exp(X_i'\beta)$. The interpretation is that the success rate of patent awards is not constant across all firms ($\lambda$) but rather is a function of firm characteristics $X_i$. Specifically, we will use the covariates age, age squared, region, and whether the firm is a customer of Blueprinty.
+
 ```{python}
-#| echo: false
 def poisson_regression_neg_loglikelihood(beta, Y, X):
     """
     Computes the negative log-likelihood for Poisson regression.
@@ -303,7 +309,7 @@ This implies that, holding age and region constant, Blueprinty customers are exp
 
 _todo: What do you conclude about the effect of Blueprinty's software on patent success? Because the beta coefficients are not directly interpretable, it may help to create two fake datasets: X_0 and X_1 where X_0 is the X data but with iscustomer=0 for every observation and X_1 is the X data but with iscustomer=1 for every observation. Then, use X_0 and your fitted model to get the vector of predicted number of patents (y_pred_0) for every firm in the dataset, and use X_1 to get Y_pred_1 for every firm. Then subtract y_pred_1 minus y_pred_0 and take the average of that vector of differences. The Poisson regression results offer meaningful insights into what drives patent success among engineering firms.
 
- Most notably, the use of Blueprinty’s software is positively and significantly associated with patent counts. The estimated coefficient of 0.1181 (p = 0.0024) for iscustomer suggests that, controlling for firm characteristics, Blueprinty users achieve a statistically significant increase in patent activity. Firm age and its squared term indicate a nonlinear relationship, suggesting that innovation tends to rise with age before tapering off, a common lifecycle pattern. Regional effects also appear, with firms in the Northeast outperforming others, reinforcing that geographic factors influence innovation outcomes. These insights not only support Blueprinty’s marketing claims but also offer strategic direction for customer targeting.
+Most notably, the use of Blueprinty’s software is positively and significantly associated with patent counts. The estimated coefficient of 0.1181 (p = 0.0024) for iscustomer suggests that, controlling for firm characteristics, Blueprinty users achieve a statistically significant increase in patent activity. Firm age and its squared term indicate a nonlinear relationship, suggesting that innovation tends to rise with age before tapering off, a common lifecycle pattern. Regional effects also appear, with firms in the Northeast outperforming others, reinforcing that geographic factors influence innovation outcomes. These insights not only support Blueprinty’s marketing claims but also offer strategic direction for customer targeting.
 
 
 ## AirBnB Case Study
@@ -333,6 +339,7 @@ AirBnB is a popular platform for booking short-term rentals. In March 2017, stud
 
 ### Data
 ```{python}
+#| echo: false
 airbnb_data = pd.read_csv("airbnb.csv")
 missing_values = airbnb_data.isna().sum()
 missing_values
