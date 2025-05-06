@@ -38,6 +38,7 @@ print(mean_patents)
 ```
 
 ```{python}
+#| echo: false
 # Plot histograms to compare number of patents
 plt.figure(figsize=(10, 6))
 sns.histplot(data=df, x='patents', hue='iscustomer', multiple='dodge', binwidth=1)
@@ -59,12 +60,14 @@ Blueprinty customers are not selected at random. It may be important to account 
 ------
 
 ```{python}
+#| echo: false
 # Group summary statistics for age
 age_summary = df.groupby('iscustomer')['age'].describe()
 print("\nAge Summary by Customer Status:")
 age_summary
 ```
 ```{python}
+#| echo: false
 # Cross-tabulation of region by customer status
 region_counts = pd.crosstab(df['region'], df['iscustomer'], margins=True)
 print("\nRegion Distribution by Customer Status:")
@@ -225,6 +228,7 @@ def poisson_regression_neg_loglikelihood(beta, Y, X):
 ```
 
 ```{python}
+#| echo: false
 # Create covariates
 import numpy as np
 import pandas as pd
@@ -285,9 +289,7 @@ results_df = pd.DataFrame({
 print("\nPoisson Regression Coefficients and Standard Errors:")
 results_df.round(4)
 ```
-```{python}
-pip install jinja2
-```
+
 ```{python}
 from IPython.display import display
 
@@ -299,18 +301,15 @@ display(results_df.style.set_caption("Estimated Coefficients and Standard Errors
                         .set_properties(**{'text-align': 'center'}))
 ```
 
-The estimated coefficient for iscustomer is 0.5539, suggesting that firms using Blueprinty’s software have a higher expected number of patents. Since Poisson regression models the log of expected counts, we exponentiate the coefficient to interpret it on the original scale:
-
-e^{0.5539} \approx 1.74
+The estimated coefficient for iscustomer is 0.5539, suggesting that firms using Blueprinty’s software have a higher expected number of patents. Since Poisson regression models the log of expected counts, we exponentiate the coefficient to interpret it on the original scale: e^{0.5539} \approx 1.74
 
 This implies that, holding age and region constant, Blueprinty customers are expected to receive 74% more patents than non-customers. However, the magnitude of the coefficients for age (38.02) and age² (1033.54) is unusually large and likely reflects scaling issues. This suggests the model may benefit from centering or standardizing the age variable. Finally, the fact that all standard errors are reported as 1.000 raises a concern: it’s likely that results_df was not constructed from actual model output and should be validated to ensure correct inference.
 
 _todo: What do you conclude about the effect of Blueprinty's software on patent success? Because the beta coefficients are not directly interpretable, it may help to create two fake datasets: X_0 and X_1 where X_0 is the X data but with iscustomer=0 for every observation and X_1 is the X data but with iscustomer=1 for every observation. Then, use X_0 and your fitted model to get the vector of predicted number of patents (y_pred_0) for every firm in the dataset, and use X_1 to get Y_pred_1 for every firm. Then subtract y_pred_1 minus y_pred_0 and take the average of that vector of differences._
 
-The Poisson regression results offer meaningful insights into what drives patent success among engineering firms. Most notably, the use of Blueprinty’s software is positively and significantly associated with patent counts. The estimated coefficient of 0.1181 (p = 0.0024) for iscustomer suggests that, controlling for firm characteristics, Blueprinty users achieve a statistically significant increase in patent activity.
-
-Firm age and its squared term indicate a nonlinear relationship, suggesting that innovation tends to rise with age before tapering off — a common lifecycle pattern. Regional effects also appear, with firms in the Northeast outperforming others, reinforcing that geographic factors influence innovation outcomes. These insights not only support Blueprinty’s marketing claims but also offer strategic direction for customer targeting.
+The Poisson regression results offer meaningful insights into what drives patent success among engineering firms. Most notably, the use of Blueprinty’s software is positively and significantly associated with patent counts. The estimated coefficient of 0.1181 (p = 0.0024) for iscustomer suggests that, controlling for firm characteristics, Blueprinty users achieve a statistically significant increase in patent activity. Firm age and its squared term indicate a nonlinear relationship, suggesting that innovation tends to rise with age before tapering off, a common lifecycle pattern. Regional effects also appear, with firms in the Northeast outperforming others, reinforcing that geographic factors influence innovation outcomes. These insights not only support Blueprinty’s marketing claims but also offer strategic direction for customer targeting.
 ------
+
 
 
 ## AirBnB Case Study
@@ -413,6 +412,7 @@ plt.show()
 ```
 
 ```{python}
+#| echo: false
 plt.figure(figsize=(6, 4))
 sns.countplot(data=airbnb_data, x='instant_bookable', palette='pastel')
 plt.title("Effect of Instant Bookable Feature on Listing Counts")
@@ -442,21 +442,18 @@ print(poisson_model.summary())
 The Poisson regression model reveals key drivers of Airbnb review counts. The intercept (3.543) sets a baseline log count, though it’s mainly a mathematical reference point.
 
 Property Features:
-	•	Bedrooms: Each additional bedroom increases expected reviews by ~8% (exp(0.0782)), suggesting that larger properties engage more guests.
-	•	Bathrooms: Surprisingly, more bathrooms reduce reviews by ~12% (exp(-0.1286)), which may reflect less demand or review activity in niche or high-end listings.
 
-Pricing:
-	•	Price has no statistically significant effect on review count (p = 0.126), indicating that, within this dataset, pricing is not a major engagement factor.
+Bedrooms: Each additional bedroom increases expected reviews by ~8% (exp(0.0782)), suggesting that larger properties engage more guests.
 
-Guest Ratings:
-	•	Cleanliness significantly boosts reviews—each additional point corresponds to a ~12% increase, highlighting its importance.
-	•	Location and Value scores are negatively associated with reviews, which may reflect confounding or lower guest motivation to review when expectations are fully met.
+Bathrooms: Surprisingly, more bathrooms reduce reviews by ~12% (exp(-0.1286)), which may reflect less demand or review activity in niche or high-end listings.
 
-Booking Convenience:
-	•	Instant Bookable listings receive ~39% more reviews (exp(0.3319)), showing the value of booking ease in driving guest interaction.
+Pricing: Price has no statistically significant effect on review count (p = 0.126), indicating that, within this dataset, pricing is not a major engagement factor.
 
-Model Fit:
-While the model fits reasonably well (Pseudo R² = 0.55), the high Pearson chi-squared suggests potential overdispersion—worth addressing with a Negative Binomial model.
+Guest Ratings: Cleanliness significantly boosts reviews—each additional point corresponds to a ~12% increase, highlighting its importance. Location and Value scores are negatively associated with reviews, which may reflect confounding or lower guest motivation to review when expectations are fully met.
+
+Booking Convenience: Instant Bookable listings receive ~39% more reviews (exp(0.3319)), showing the value of booking ease in driving guest interaction.
+
+Model Fit: While the model fits reasonably well (Pseudo R² = 0.55), the high Pearson chi-squared suggests potential overdispersion—worth addressing with a Negative Binomial model.
 
 ```{python}
 # Fit Negative Binomial regression model
@@ -472,20 +469,18 @@ print(nb_model.summary())
 
 The Negative Binomial regression model reveals clear patterns in what drives Airbnb review counts, addressing overdispersion present in the Poisson model. The model confirms that listing features and guest experience ratings significantly influence engagement.
 
-Key Drivers:
-	•	Bedrooms: Each additional bedroom increases expected reviews by ~7.7% (exp(0.0741)), likely reflecting higher capacity and group travel.
-	•	Bathrooms: More bathrooms are associated with fewer reviews (~10.8% decrease), though the reason is unclear and may relate to unobserved listing characteristics.
-	•	Price: Has no significant effect, suggesting review likelihood is not sensitive to rental cost within the dataset’s range.
+Key Drivers: Bedrooms: Each additional bedroom increases expected reviews by ~7.7% (exp(0.0741)), likely reflecting higher capacity and group travel.
 
-Guest Experience Ratings:
-	•	Cleanliness: Strongly predictive—each point increase leads to ~21.7% more reviews, highlighting its role in satisfaction.
-	•	Location & Value: Unexpectedly, higher scores correlate with fewer reviews. This may reflect a lower urgency to leave feedback when expectations are met.
+Bathrooms: More bathrooms are associated with fewer reviews (~10.8% decrease), though the reason is unclear and may relate to unobserved listing characteristics.
 
-Instant Bookability:
-	•	Listings with this feature see ~38.5% more reviews (exp(0.3263)), underlining the value of booking convenience.
+Price: Has no significant effect, suggesting review likelihood is not sensitive to rental cost within the dataset’s range.
 
-Model Fit:
-The model’s lower deviance and log-likelihood indicate improved fit over Poisson, and confirm the presence of overdispersion. Still, a low pseudo R² (0.044) suggests many unobserved factors influence reviews.
+Guest Experience Ratings: Cleanliness: Strongly predictive—each point increase leads to ~21.7% more reviews, highlighting its role in satisfaction.
 
-Conclusion:
-Hosts aiming to increase reviews should prioritize cleanliness, accommodate groups, and enable instant booking. While review scores matter, their effects are complex and context-dependent. This model provides actionable insights but also highlights the need for further exploration of guest behavior.
+Location & Value: Unexpectedly, higher scores correlate with fewer reviews. This may reflect a lower urgency to leave feedback when expectations are met.
+
+Instant Bookability:Listings with this feature see ~38.5% more reviews (exp(0.3263)), underlining the value of booking convenience.
+
+Model Fit: The model’s lower deviance and log-likelihood indicate improved fit over Poisson, and confirm the presence of overdispersion. Still, a low pseudo R² (0.044) suggests many unobserved factors influence reviews.
+
+Conclusion: Hosts aiming to increase reviews should prioritize cleanliness, accommodate groups, and enable instant booking. While review scores matter, their effects are complex and context-dependent. This model provides actionable insights but also highlights the need for further exploration of guest behavior.
