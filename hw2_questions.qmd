@@ -291,7 +291,10 @@ results_df = pd.DataFrame({
 print("\nPoisson Regression Coefficients and Standard Errors:")
 results_df.round(4)
 ```
-
+```{python}
+#| echo: false
+import statsmodels.api as sm
+```
 ```{python}
 from IPython.display import display
 
@@ -307,10 +310,67 @@ The estimated coefficient for iscustomer is 0.5539, suggesting that firms using 
 
 This implies that, holding age and region constant, Blueprinty customers are expected to receive 74% more patents than non-customers. However, the magnitude of the coefficients for age (38.02) and age² (1033.54) is unusually large and likely reflects scaling issues. This suggests the model may benefit from centering or standardizing the age variable. Finally, the fact that all standard errors are reported as 1.000 raises a concern: it’s likely that results_df was not constructed from actual model output and should be validated to ensure correct inference.
 
-_todo: What do you conclude about the effect of Blueprinty's software on patent success? Because the beta coefficients are not directly interpretable, it may help to create two fake datasets: X_0 and X_1 where X_0 is the X data but with iscustomer=0 for every observation and X_1 is the X data but with iscustomer=1 for every observation. Then, use X_0 and your fitted model to get the vector of predicted number of patents (y_pred_0) for every firm in the dataset, and use X_1 to get Y_pred_1 for every firm. Then subtract y_pred_1 minus y_pred_0 and take the average of that vector of differences. The Poisson regression results offer meaningful insights into what drives patent success among engineering firms.
+```{python}
+#| echo: false
+# Assuming 'df' is your original DataFrame
+df['age_squared'] = df['age'] ** 2
 
-Most notably, the use of Blueprinty’s software is positively and significantly associated with patent counts. The estimated coefficient of 0.1181 (p = 0.0024) for iscustomer suggests that, controlling for firm characteristics, Blueprinty users achieve a statistically significant increase in patent activity. Firm age and its squared term indicate a nonlinear relationship, suggesting that innovation tends to rise with age before tapering off, a common lifecycle pattern. Regional effects also appear, with firms in the Northeast outperforming others, reinforcing that geographic factors influence innovation outcomes. These insights not only support Blueprinty’s marketing claims but also offer strategic direction for customer targeting.
+# Create dummy variables for region (drop one to avoid multicollinearity)
+X = df[['age', 'age_squared', 'region', 'iscustomer']]
+X = pd.get_dummies(X, columns=['region'], drop_first=True)
 
+# Ensure 'iscustomer' is numeric (0/1)
+X['iscustomer'] = X['iscustomer'].astype(int)
+
+# Add intercept
+X = sm.add_constant(X)
+
+# Define target
+Y = df['patents']
+```
+```{python}
+#| echo: false
+# Convert boolean dummy columns to integers (0/1)
+for col in X.select_dtypes(include='bool').columns:
+    X[col] = X[col].astype(int)
+
+# Now fit the model
+model = sm.GLM(Y, X, family=sm.families.Poisson()).fit()
+print(model.summary())
+```
+
+The Poisson regression results provide strong evidence that using Blueprinty’s software is associated with increased patenting activity among engineering firms. Firms that use the software are expected to produce approximately 23% more patents over a five-year period, even after accounting for firm age and regional location. This finding supports the claim that Blueprinty’s software contributes positively to patent success.
+
+```{python}
+#| echo: false
+
+import pandas as pd
+
+# Extract coefficient summary from the fitted Poisson model
+summary_table = model.summary2().tables[1]
+
+# Optionally round and rename columns
+summary_table = model.summary2().tables[1]
+summary_table = summary_table.rename(columns={
+    "Coef.": "Estimate",
+    "Std.Err.": "Std. Error",
+    "z": "z value",
+    "P>|z|": "Pr(>|z|)"
+}).round(4)
+
+from IPython.display import display, HTML
+display(HTML(summary_table.to_html(index=True)))
+```
+
+The Poisson regression analysis provides clear evidence that the use of Blueprinty’s software is significantly associated with higher patent output among engineering firms. The coefficient for iscustomer (0.2076, p < 0.001) suggests that firms using Blueprinty’s tools are expected to produce approximately 23% more patents, holding other factors constant. This finding offers strong empirical support for the claim that Blueprinty’s software contributes to improved patenting outcomes.
+
+Firm age is also an important predictor. The positive coefficient for age and the negative coefficient for age squared indicate a nonlinear relationship: patent activity increases as firms mature but eventually slows down—reflecting a typical lifecycle pattern of innovation intensity.
+
+In contrast, the analysis finds no statistically significant differences across regions, suggesting that regional location does not meaningfully influence patent success once firm-level factors are considered.
+
+
+### Conclusion
+Overall, these findings reinforce the value of Blueprinty’s software as a meaningful contributor to patent productivity. At the same time, they highlight the role of firm maturity in shaping innovation outcomes. While regional variation appears limited, the analysis underscores the importance of targeting firms at the right stage of development and aligning product value with their innovation capacity. These insights can guide Blueprinty’s strategic messaging and outreach efforts, particularly when engaging established firms seeking to strengthen their patent portfolios.
 
 ## AirBnB Case Study
 
@@ -482,4 +542,8 @@ Instant Bookability:Listings with this feature see ~38.5% more reviews (exp(0.32
 
 Model Fit: The model’s lower deviance and log-likelihood indicate improved fit over Poisson, and confirm the presence of overdispersion. Still, a low pseudo R² (0.044) suggests many unobserved factors influence reviews.
 
-Conclusion: Hosts aiming to increase reviews should prioritize cleanliness, accommodate groups, and enable instant booking. While review scores matter, their effects are complex and context-dependent. This model provides actionable insights but also highlights the need for further exploration of guest behavior.
+### Conclusion
+
+In conclusion, this analysis provides actionable insights for Airbnb hosts seeking to increase guest reviews. Practical features—such as offering more bedrooms and enabling instant booking—are associated with higher review counts, likely due to their appeal to larger groups and convenience-focused travelers. Cleanliness stands out as the most influential factor, reinforcing its critical role in guest satisfaction and review likelihood.
+
+While review scores for location and value also play a role, their effects are more nuanced and may reflect complex guest expectations. These findings suggest that while enhancing key amenities is important, understanding guest behavior remains an area for further exploration. Overall, hosts can benefit by focusing on what matters most: delivering clean, accessible, and well-equipped stays that encourage positive engagement.

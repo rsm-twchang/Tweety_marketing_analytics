@@ -10,10 +10,10 @@ website:
         text: About
       - href: resume.qmd
         text: Resume
-      - href:  hw1_questions.qmd
+      - href: hw1_questions.qmd
         text: A/B Testing
       - href: hw2_questions.qmd
-        text: Poisson Regression
+        text: MLE
 
 
 format:
