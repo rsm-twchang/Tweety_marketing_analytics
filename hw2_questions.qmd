@@ -13,7 +13,6 @@ callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 Blueprinty is a small firm that makes software for developing blueprints specifically for submitting patent applications to the US patent office. Their marketing team would like to make the claim that patent applicants using Blueprinty's software are more successful in getting their patent applications approved. Ideal data to study such an effect might include the success rate of patent applications before using Blueprinty's software and after using it. Unfortunately, such data is not available. 
 
 However, Blueprinty has collected data on 1,500 mature (non-startup) engineering firms. The data include each firm's number of patents awarded over the last 5 years, regional location, age since incorporation, and whether or not the firm uses Blueprinty's software. The marketing team would like to use this data to make the claim that firms using Blueprinty's software are more successful in getting their patent applications approved.
-
 ------
 
 
@@ -57,7 +56,6 @@ When comparing group means, firms that use Blueprinty’s software have an avera
 However, this visual and descriptive comparison alone is not enough to establish a causal relationship. Further statistical analysis — such as a Poisson regression or a formal hypothesis test — is needed to determine whether the observed difference is statistically and practically significant, controlling for other variables like firm age and region.
 
 Blueprinty customers are not selected at random. It may be important to account for systematic differences in the age and regional location of customers vs non-customers.
-
 ------
 
 ```{python}
@@ -307,12 +305,13 @@ e^{0.5539} \approx 1.74
 
 This implies that, holding age and region constant, Blueprinty customers are expected to receive 74% more patents than non-customers. However, the magnitude of the coefficients for age (38.02) and age² (1033.54) is unusually large and likely reflects scaling issues. This suggests the model may benefit from centering or standardizing the age variable. Finally, the fact that all standard errors are reported as 1.000 raises a concern: it’s likely that results_df was not constructed from actual model output and should be validated to ensure correct inference.
 
-### _todo: What do you conclude about the effect of Blueprinty's software on patent success? Because the beta coefficients are not directly interpretable, it may help to create two fake datasets: X_0 and X_1 where X_0 is the X data but with iscustomer=0 for every observation and X_1 is the X data but with iscustomer=1 for every observation. Then, use X_0 and your fitted model to get the vector of predicted number of patents (y_pred_0) for every firm in the dataset, and use X_1 to get Y_pred_1 for every firm. Then subtract y_pred_1 minus y_pred_0 and take the average of that vector of differences._
+_todo: What do you conclude about the effect of Blueprinty's software on patent success? Because the beta coefficients are not directly interpretable, it may help to create two fake datasets: X_0 and X_1 where X_0 is the X data but with iscustomer=0 for every observation and X_1 is the X data but with iscustomer=1 for every observation. Then, use X_0 and your fitted model to get the vector of predicted number of patents (y_pred_0) for every firm in the dataset, and use X_1 to get Y_pred_1 for every firm. Then subtract y_pred_1 minus y_pred_0 and take the average of that vector of differences._
 
 The Poisson regression results offer meaningful insights into what drives patent success among engineering firms. Most notably, the use of Blueprinty’s software is positively and significantly associated with patent counts. The estimated coefficient of 0.1181 (p = 0.0024) for iscustomer suggests that, controlling for firm characteristics, Blueprinty users achieve a statistically significant increase in patent activity.
 
 Firm age and its squared term indicate a nonlinear relationship, suggesting that innovation tends to rise with age before tapering off — a common lifecycle pattern. Regional effects also appear, with firms in the Northeast outperforming others, reinforcing that geographic factors influence innovation outcomes. These insights not only support Blueprinty’s marketing claims but also offer strategic direction for customer targeting.
 ------
+
 
 ## AirBnB Case Study
 
