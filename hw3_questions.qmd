@@ -285,41 +285,47 @@ Posterior standard deviations closely match the MLE standard errors (within ±0.
 
 ```{python}
 #| echo: false
-#| fig-cap: "Trace plot for brand_N"
+#| fig-cap: "Posterior Histogram for brand_N"
+#| fig-align: "center"
 
 import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
+param_index = 0
 param_name = "brand_N"
-samples = posterior_samples[:, 0]
+samples = posterior_samples[:, param_index]
 
-# Trace plot
-plt.subplot(2, 1, 1)
-plt.plot(samples, linewidth=0.6)
-plt.axhline(np.mean(samples), color='red', linestyle='--')
-plt.title("Trace Plot for brand_N")
-plt.xlabel("Iteration")
-plt.ylabel("Sampled Value")
-plt.grid(True, linestyle="--", alpha=0.5)
-plt.show()
-```
-
-The trace plot for brand_N shows stable fluctuations around a consistent mean with no signs of divergence or drift, indicating good mixing and convergence.
-
-```{python}
-#| echo: false
-#| fig-cap: "Histogram for brand_N"
-
-# Histogram
-plt.subplot(1, 2, 2)
-plt.hist(samples, bins=30, density=True, alpha=0.7)
+plt.figure(figsize=(6, 4))
+sns.histplot(samples, bins=30, kde=True, stat="density", color="steelblue", alpha=0.7)
 plt.axvline(np.mean(samples), color='red', linestyle='--', linewidth=1)
 plt.title(f"Posterior Histogram: {param_name}")
 plt.xlabel("Value")
 plt.ylabel("Density")
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.tight_layout()
 plt.show()
 ```
 
-The histogram shows a symmetric, bell-shaped posterior centered around 0.95, suggesting a well-identified parameter with moderate uncertainty.
+The posterior histogram is approximately normal and centered near 0.95. The distribution is symmetric and unimodal, with most density between 0.75 and 1.15. This indicates a well-identified parameter with low uncertainty.
+
+```{python}
+#| echo: false
+#| fig-cap: "Trace Plot for brand_N"
+#| fig-align: "center"
+
+plt.figure(figsize=(6, 4))
+plt.plot(samples, linewidth=0.6)
+plt.axhline(np.mean(samples), color='red', linestyle='--', linewidth=1)
+plt.title(f"Trace Plot: {param_name}")
+plt.xlabel("Iteration")
+plt.ylabel("Sampled Value")
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.tight_layout()
+plt.show()
+```
+
+The trace plot shows consistent sampling around a stable mean with no visible drift or trends. The values fluctuate tightly across the 10,000 post-burn-in iterations, suggesting good mixing and convergence of the Metropolis-Hastings sampler.
 
 ::::{.callout-note collapse="true"}
 ```{python}
@@ -332,8 +338,6 @@ comparison_df = pd.concat([bayes_summary, mle_summary], axis=1)
 comparison_df
 ```
 ::::
-
-## Comparison of MLE and Bayesian Estimates
 
 The Bayesian posterior means closely align with the MLE point estimates across all four parameters. Differences are minimal:
 
