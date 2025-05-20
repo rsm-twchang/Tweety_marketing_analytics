@@ -318,7 +318,6 @@ plt.ylabel("Density")
 plt.show()
 ```
 
-
 The histogram shows a symmetric, bell-shaped posterior centered around 0.95, suggesting a well-identified parameter with moderate uncertainty.
 
 ::::{.callout-note collapse="true"}
