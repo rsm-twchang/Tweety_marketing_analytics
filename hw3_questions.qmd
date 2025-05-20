@@ -2,6 +2,7 @@
 title: "Multinomial Logit Model"
 author: "Tweety"
 date: 2025-05-20
+callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 ---
 
 This assignment expores two methods for estimating the MNL model: (1) via Maximum Likelihood, and (2) via a Bayesian approach using a Metropolis-Hastings MCMC algorithm. 
@@ -356,10 +357,7 @@ The direction and magnitude of all estimates are reasonable. Consumers dislike a
 To simulate or estimate a multi-level MNL model, we must account for individual differences in preferences. Unlike the standard MNL model, which assumes a single set of coefficients shared by all respondents, a hierarchical model allows each respondent to have their own set of parameters.
 
 - **Key changes:**
-Instead of using one fixed β, assign each respondent a personal βₖ drawn from a population distribution:  
-  \[
-  \beta_i \sim \mathcal{N}(\mu, \Sigma)
-  \]
+Instead of using one fixed β, assign each respondent a personal βₖ drawn from a population distribution:  \[ \beta_i \sim \mathcal{N}(\mu, \Sigma) \]
 
 - **Estimation:**  
   Estimate both the respondent-level βᵢs and the population-level parameters (μ, Σ). This requires hierarchical modeling techniques, often implemented via Bayesian MCMC or mixed logit estimation.
