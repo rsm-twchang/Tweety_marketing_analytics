@@ -132,12 +132,14 @@ print(f"The simulated dataset contains {rows} rows and {cols} columns "
 # Peek at Data 
 print(conjoint_data.head())
 ```
+:::
 
 
 ## 3. Preparing the Data for Estimation
 
 The "hard part" of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer $i$, covariate $k$, and product $j$) instead of the typical 2 dimensions for cross-sectional regression models (consumer $i$ and covariate $k$). The fact that each task for each respondent has the same number of alternatives (3) helps.  In addition, we need to convert the categorical variables for brand and ads into binary variables.
 
+:::: {.callout-note collapse="true"}
 ```{python}
 # | echo: false
 
@@ -154,11 +156,13 @@ df["task_id"] = (df["resp"] - 1) * 10 + (df["task"] - 1)
 
 print(df.head())
 ```
+::::
 
 Each task_id represents a choice task with three alternatives. For example, task_id = 0 (resp = 1, task = 1) includes three options from brands N, H, and P, all with ads and different prices. The first row (brand = N, price = 28) has choice = 1, indicating it was selected. Dummy variables for brand and ad presence are created, with Hulu and ad-free as baselines. The data is now formatted for model estimation.
 
 ## 4. Estimation via Maximum Likelihood
 
+:::: {.callout-note collapse="true"}
 ```{python}
 # Define the log-likelihood function for MNL
 def mnl_log_likelihood(beta, X, y, groups):
@@ -181,9 +185,7 @@ def mnl_log_likelihood(beta, X, y, groups):
     ll = np.sum(y * log_probs)
 
     return -ll 
-```
 
-```{python}
 from scipy.optimize import minimize
 
 # Prepare inputs
@@ -238,11 +240,18 @@ mle_summary = pd.DataFrame({
     "CI Upper 95%": ci_upper
 }, index=["brand_N", "brand_P", "ad_yes", "price"])
 ```
+::::
 
-The MNL log-likelihood function was implemented and optimized using scipy.optimize. The model converged successfully, producing MLEs for all four parameters. Standard errors were computed from the inverse Hessian, and 95% confidence intervals were constructed for each estimate. The results are ready for interpretation or further analysis.
+The maximum likelihood estimation converged successfully using the BFGS algorithm. The model required 13 iterations and 90 function evaluations. All four parameters were estimated with high precision, as indicated by relatively small standard errors. The log-likelihood value at convergence was 879.86.
+	•	brand_N and brand_P have positive coefficients, confirming that consumers prefer Netflix and Prime over the baseline (Hulu).
+	•	The negative coefficient for ad_yes shows that consumers are less likely to choose an option with ads.
+	•	The negative price coefficient reflects standard price sensitivity higher prices reduce utility.
+
+All 95% confidence intervals exclude zero, supporting the statistical significance of each effect.
 
 ## 5. Estimation via Bayesian Methods
 
+::::{.callout-note collapse="true"}
 ```{python}
 proposal_sd = np.array([0.05, 0.05, 0.05, 0.005])
 
@@ -301,7 +310,11 @@ posterior_summary_opt = pd.DataFrame({
 
 posterior_summary_opt
 ```
+::::
 
+The Bayesian estimation using Metropolis-Hastings produced stable posterior estimates. All four parameters have posterior means consistent with prior expectations and previous MLE results. Consumers show stronger preference for Netflix over Prime, dislike ads, and are price-sensitive. The negative value for price confirms that higher prices reduce utility. Posterior standard deviations are small, indicating precise estimates. The 95% credible intervals do not cross zero, supporting the significance of all effects.
+
+::::{.callout-note collapse="true"}
 ```{python}
 import matplotlib.pyplot as plt
 
@@ -309,27 +322,36 @@ param_index = 0
 param_name = "brand_N"
 samples = posterior_samples_opt[:, param_index]
 
-# Plot trace
-plt.figure(figsize=(12, 5))
-plt.subplot(1, 2, 1)
-plt.plot(samples, linewidth=0.7)
-plt.title(f"Trace Plot: {param_name}")
+# Trace plot
+plt.subplot(2, 1, 1)
+plt.plot(samples, linewidth=0.6)
+plt.axhline(np.mean(samples), color='red', linestyle='--')
+plt.title("Trace Plot for brand_N")
 plt.xlabel("Iteration")
-plt.ylabel("Value")
+plt.ylabel("Sampled Value")
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.show()
+```
+::::
 
+The trace plot for brand_N shows stable fluctuations around a consistent mean with no signs of divergence or drift, indicating good mixing and convergence.
+
+::::{.callout-note collapse="true"}
+```{python}
 # Histogram
 plt.subplot(1, 2, 2)
 plt.hist(samples, bins=30, density=True, alpha=0.7)
+plt.axvline(np.mean(samples), color='red', linestyle='--', linewidth=1)
 plt.title(f"Posterior Histogram: {param_name}")
 plt.xlabel("Value")
 plt.ylabel("Density")
-
-plt.tight_layout()
 plt.show()
 ```
+::::
 
-The trace plot for brand_N shows stable fluctuations around a consistent mean with no signs of divergence or drift, indicating good mixing and convergence. The histogram shows a symmetric, bell-shaped posterior centered around 0.95, suggesting a well-identified parameter with moderate uncertainty.
+The histogram shows a symmetric, bell-shaped posterior centered around 0.95, suggesting a well-identified parameter with moderate uncertainty.
 
+::::{.callout-note collapse="true"}
 ```{python}
 bayes_summary = posterior_summary_opt.copy()
 bayes_summary.columns = ["Bayes Mean", "Bayes Std. Dev.", "Bayes CI Lower", "Bayes CI Upper"]
@@ -340,6 +362,7 @@ comparison_df = pd.concat([bayes_summary, mle_summary], axis=1)
 
 comparison_df
 ```
+::::
 
 The Bayesian and MLE results are nearly identical across all four parameters. Posterior means closely match MLE estimates, and the standard deviations and 95% intervals are similar. Both methods indicate strong positive effects for brand_N and brand_P, a negative effect for ads, and a precise negative effect for price. 
 
