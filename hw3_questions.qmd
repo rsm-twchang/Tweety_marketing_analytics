@@ -162,90 +162,60 @@ Each task_id represents a choice task with three alternatives. For example, task
 
 :::: {.callout-note collapse="true"}
 ```{python}
-# Define the log-likelihood function for MNL
-def mnl_log_likelihood(beta, X, y, groups):
-
-    # Linear utility
-    v = X @ beta
-
-    # Exponentiated utility
-    exp_v = np.exp(v)
-
-    # Group-wise denominator sums
-    denom = np.zeros_like(v)
-    unique_tasks = np.unique(groups)
-    for t in unique_tasks:
-        idx = (groups == t)
-        denom[idx] = np.sum(exp_v[idx])
-
-    # Compute log-likelihood
-    log_probs = v - np.log(denom)
-    ll = np.sum(y * log_probs)
-
-    return -ll 
-
+import numpy as np
+import pandas as pd
 from scipy.optimize import minimize
 
-# Prepare inputs
 X = df[["brand_N", "brand_P", "ad_yes", "price"]].values
 y = df["choice"].values
 groups = df["task_id"].values
 
-# Define the log-likelihood function
-def mnl_log_likelihood(beta, X, y, groups):
+# MNL log-likelihood
+def mnl_log_likelihood(beta, X, y, task_ids):
     v = X @ beta
     exp_v = np.exp(v)
-
-    denom = np.zeros_like(v)
-    for t in np.unique(groups):
-        idx = (groups == t)
-        denom[idx] = np.sum(exp_v[idx])
-
+    df_v = pd.DataFrame({"task_id": task_ids, "exp_v": exp_v})
+    denom = df_v.groupby("task_id")["exp_v"].transform("sum").values
     log_probs = v - np.log(denom)
-    ll = np.sum(y * log_probs)
+    return -np.sum(y * log_probs)
 
-    return -ll
-
-# Initial guess for beta
+# MLE estimation
 beta_init = np.zeros(X.shape[1])
-
-# Optimize
 result = minimize(
     mnl_log_likelihood,
     beta_init,
     args=(X, y, groups),
-    method='BFGS',
-    options={'disp': True}
+    method="BFGS"
 )
-
-# Extract MLEs
 beta_hat = result.x
-
-# Compute standard errors from Hessian inverse
-hessian_inv = result.hess_inv
-se = np.sqrt(np.diag(hessian_inv))
-
-# Compute 95% confidence intervals
-z = 1.96  # for 95% CI
+se = np.sqrt(np.diag(result.hess_inv))
+z = 1.96
 ci_lower = beta_hat - z * se
 ci_upper = beta_hat + z * se
 
-# Summarize results
+# MLE results
 mle_summary = pd.DataFrame({
-    "Coefficient": beta_hat,
+    "MLE Coefficient": beta_hat,
     "Std. Error": se,
-    "CI Lower 95%": ci_lower,
-    "CI Upper 95%": ci_upper
+    "95% CI Lower": ci_lower,
+    "95% CI Upper": ci_upper
 }, index=["brand_N", "brand_P", "ad_yes", "price"])
 ```
 ::::
 
-The maximum likelihood estimation converged successfully using the BFGS algorithm. The model required 13 iterations and 90 function evaluations. All four parameters were estimated with high precision, as indicated by relatively small standard errors. The log-likelihood value at convergence was 879.86.
-	•	brand_N and brand_P have positive coefficients, confirming that consumers prefer Netflix and Prime over the baseline (Hulu).
-	•	The negative coefficient for ad_yes shows that consumers are less likely to choose an option with ads.
-	•	The negative price coefficient reflects standard price sensitivity higher prices reduce utility.
+```{python}
+mle_summary
+```
 
-All 95% confidence intervals exclude zero, supporting the statistical significance of each effect.
+The MLE estimates are:
+
+- **brand_N**: 0.94  
+- **brand_P**: 0.50  
+- **ad_yes**: -0.73  
+- **price**: -0.099  
+
+Standard errors range from 0.006 to 0.12, and all 95% confidence intervals exclude zero. The model converged successfully and parameters were estimated with high precision.
+
 
 ## 5. Estimation via Bayesian Methods
 
@@ -253,30 +223,22 @@ All 95% confidence intervals exclude zero, supporting the statistical significan
 ```{python}
 proposal_sd = np.array([0.05, 0.05, 0.05, 0.005])
 
-# Optimized log-likelihood with pandas groupby to speed up MCMC
-def fast_log_likelihood(beta, X, y, task_ids):
+# Log-prior: N(0, 5^2) for binary vars, N(0, 1^2) for price
+def log_prior(beta):
+    return -0.5 * (np.sum(beta[:3]**2 / 25) + beta[3]**2)
+
+# Log-posterior: log-likelihood + log-prior
+def log_posterior(beta, X, y, task_ids):
     v = X @ beta
     exp_v = np.exp(v)
-    df_ll = pd.DataFrame({
-        'task_id': task_ids,
-        'v': v,
-        'exp_v': exp_v,
-        'y': y
-    })
+    df_v = pd.DataFrame({"task_id": task_ids, "exp_v": exp_v, "v": v, "y": y})
+    denom = df_v.groupby("task_id")["exp_v"].transform("sum").values
+    log_probs = v - np.log(denom)
+    ll = np.sum(y * log_probs)
+    return ll + log_prior(beta)
 
-    # Compute sum of exp(v) per task
-    denom_map = df_ll.groupby('task_id')["exp_v"].transform("sum")
-    log_probs = df_ll["v"] - np.log(denom_map)
-    ll = np.sum(df_ll["y"] * log_probs)
-
-    return ll
-
-# Replace log-posterior to use optimized version
-def log_posterior(beta, X, y, task_ids):
-    return fast_log_likelihood(beta, X, y, task_ids)
-
-# Rerun MCMC with optimized log-likelihood
-def optimized_metropolis_sampler(X, y, task_ids, n_iter=11000, burn_in=1000):
+# MCMC sampler
+def metropolis_sampler(X, y, task_ids, n_iter=11000, burn_in=1000):
     n_params = X.shape[1]
     samples = np.zeros((n_iter, n_params))
     beta_current = np.zeros(n_params)
@@ -285,40 +247,49 @@ def optimized_metropolis_sampler(X, y, task_ids, n_iter=11000, burn_in=1000):
     for i in range(1, n_iter):
         beta_proposal = beta_current + np.random.normal(0, proposal_sd)
         log_post_proposal = log_posterior(beta_proposal, X, y, task_ids)
-
         log_accept_ratio = log_post_proposal - log_post_current
+
         if np.log(np.random.rand()) < log_accept_ratio:
             beta_current = beta_proposal
             log_post_current = log_post_proposal
 
-        samples[i, :] = beta_current
+        samples[i] = beta_current
 
     return samples[burn_in:]
 
-# Run the optimized sampler
-posterior_samples_opt = optimized_metropolis_sampler(X, y, groups)
+# Run sampler and summarize
+posterior_samples = metropolis_sampler(X, y, groups)
 
-# Summarize posterior
-posterior_summary_opt = pd.DataFrame({
-    "Posterior Mean": posterior_samples_opt.mean(axis=0),
-    "Posterior Std": posterior_samples_opt.std(axis=0),
-    "2.5% CI": np.percentile(posterior_samples_opt, 2.5, axis=0),
-    "97.5% CI": np.percentile(posterior_samples_opt, 97.5, axis=0)
+posterior_summary = pd.DataFrame({
+    "Posterior Mean": posterior_samples.mean(axis=0),
+    "Posterior Std": posterior_samples.std(axis=0),
+    "95% CI Lower": np.percentile(posterior_samples, 2.5, axis=0),
+    "95% CI Upper": np.percentile(posterior_samples, 97.5, axis=0)
 }, index=["brand_N", "brand_P", "ad_yes", "price"])
-
-posterior_summary_opt
 ```
 ::::
 
-The Bayesian estimation using Metropolis-Hastings produced stable posterior estimates. All four parameters have posterior means consistent with prior expectations and previous MLE results. Consumers show stronger preference for Netflix over Prime, dislike ads, and are price-sensitive. The negative value for price confirms that higher prices reduce utility. Posterior standard deviations are small, indicating precise estimates. The 95% credible intervals do not cross zero, supporting the significance of all effects.
+```{python}
+posterior_summary
+```
+
+The posterior means are:
+
+- **brand_N**: 0.95  
+- **brand_P**: 0.50  
+- **ad_yes**: -0.74  
+- **price**: -0.100  
+
+Posterior standard deviations closely match the MLE standard errors (within ±0.001). The 95% credible intervals are nearly identical to the MLE confidence intervals. These results reflect strong agreement between the two methods given the large sample size and weakly informative priors.
 
 ```{python}
 #| echo: false
+#| fig-cap: "Trace plot for brand_N"
+
 import matplotlib.pyplot as plt
 
-param_index = 0
 param_name = "brand_N"
-samples = posterior_samples_opt[:, param_index]
+samples = posterior_samples[:, 0]
 
 # Trace plot
 plt.subplot(2, 1, 1)
@@ -335,6 +306,8 @@ The trace plot for brand_N shows stable fluctuations around a consistent mean wi
 
 ```{python}
 #| echo: false
+#| fig-cap: "Histogram for brand_N"
+
 # Histogram
 plt.subplot(1, 2, 2)
 plt.hist(samples, bins=30, density=True, alpha=0.7)
@@ -345,22 +318,31 @@ plt.ylabel("Density")
 plt.show()
 ```
 
+
 The histogram shows a symmetric, bell-shaped posterior centered around 0.95, suggesting a well-identified parameter with moderate uncertainty.
 
 ::::{.callout-note collapse="true"}
 ```{python}
-bayes_summary = posterior_summary_opt.copy()
+bayes_summary = posterior_summary.copy()
 bayes_summary.columns = ["Bayes Mean", "Bayes Std. Dev.", "Bayes CI Lower", "Bayes CI Upper"]
 
 mle_summary.columns = ["MLE Mean", "MLE Std. Error", "MLE CI Lower", "MLE CI Upper"]
 
 comparison_df = pd.concat([bayes_summary, mle_summary], axis=1)
-
 comparison_df
 ```
 ::::
 
-The Bayesian and MLE results are nearly identical across all four parameters. Posterior means closely match MLE estimates, and the standard deviations and 95% intervals are similar. Both methods indicate strong positive effects for brand_N and brand_P, a negative effect for ads, and a precise negative effect for price. 
+## Comparison of MLE and Bayesian Estimates
+
+The Bayesian posterior means closely align with the MLE point estimates across all four parameters. Differences are minimal:
+
+- **brand_N**: Posterior mean is 0.95; MLE is 0.94. Both intervals fully overlap.
+- **brand_P**: Posterior mean is 0.51 vs. MLE of 0.50.
+- **ad_yes**: Both methods estimate the effect around -0.73, with nearly identical uncertainty.
+- **price**: Posterior mean is -0.0997; MLE is -0.0995, with near-identical intervals.
+
+Posterior standard deviations match MLE standard errors within 0.002 across all parameters. Given the large sample and weak priors, the Bayesian and MLE results are functionally equivalent and reinforce the same conclusions: consumers prefer Netflix and Prime, dislike ads, and are price sensitive.
 
 ## 6. Discussion
 
