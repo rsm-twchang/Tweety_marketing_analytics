@@ -61,8 +61,12 @@ where the variables are binary indicators and $\varepsilon$ is Type 1 Extreme Va
 The following code provides the simulation of the conjoint data.
 
 :::: {.callout-note collapse="true"}
-## Simulating the Data
 ```{python}
+#| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
+
 import numpy as np
 import pandas as pd
 from itertools import product
