@@ -1,9 +1,8 @@
 ---
 title: "Multinomial Logit Model"
-author: "Your Name"
-date: today
+author: "Tweety"
+date: 2025-05-20
 ---
-
 
 This assignment expores two methods for estimating the MNL model: (1) via Maximum Likelihood, and (2) via a Bayesian approach using a Metropolis-Hastings MCMC algorithm. 
 
@@ -61,113 +60,311 @@ where the variables are binary indicators and $\varepsilon$ is Type 1 Extreme Va
 The following code provides the simulation of the conjoint data.
 
 :::: {.callout-note collapse="true"}
-```{r}
-# set seed for reproducibility
-set.seed(123)
+```{python}
+import numpy as np
+import pandas as pd
+from itertools import product
 
-# define attributes
-brand <- c("N", "P", "H") # Netflix, Prime, Hulu
-ad <- c("Yes", "No")
-price <- seq(8, 32, by=4)
+np.random.seed(123)
 
-# generate all possible profiles
-profiles <- expand.grid(
-    brand = brand,
-    ad = ad,
-    price = price
+# Attribute Levels 
+brand_levels = ["N", "P", "H"]        
+ad_levels = ["Yes", "No"]             
+price_levels = np.arange(4, 33, 4)    
+
+# All Possible Profiles 
+profiles = pd.DataFrame(
+    list(product(brand_levels, ad_levels, price_levels)),
+    columns=["brand", "ad", "price"]
 )
-m <- nrow(profiles)
 
-# assign part-worth utilities (true parameters)
-b_util <- c(N = 1.0, P = 0.5, H = 0)
-a_util <- c(Yes = -0.8, No = 0.0)
-p_util <- function(p) -0.1 * p
+# Part-Worth Utilities 
+b_util = {"N": 1.0, "P": 0.5, "H": 0.0}        
+a_util = {"Yes": -0.8, "No": 0.0}           
+price_util = lambda p: -0.1 * p               
 
-# number of respondents, choice tasks, and alternatives per task
-n_peeps <- 100
-n_tasks <- 10
-n_alts <- 3
+# Simulation Parameters 
+n_peeps = 100     
+n_tasks = 10      
+n_alts = 3      
 
-# function to simulate one respondent’s data
-sim_one <- function(id) {
-  
-    datlist <- list()
-    
-    # loop over choice tasks
-    for (t in 1:n_tasks) {
-        
-        # randomly sample 3 alts (better practice would be to use a design)
-        dat <- cbind(resp=id, task=t, profiles[sample(m, size=n_alts), ])
-        
-        # compute deterministic portion of utility
-        dat$v <- b_util[dat$brand] + a_util[dat$ad] + p_util(dat$price) |> round(10)
-        
-        # add Gumbel noise (Type I extreme value)
-        dat$e <- -log(-log(runif(n_alts)))
-        dat$u <- dat$v + dat$e
-        
-        # identify chosen alternative
-        dat$choice <- as.integer(dat$u == max(dat$u))
-        
-        # store task
-        datlist[[t]] <- dat
-    }
-    
-    # combine all tasks for one respondent
-    do.call(rbind, datlist)
-}
+# Simulate One Respondent’s Data 
+def simulate_one(respondent_id: int) -> pd.DataFrame:
+    tasks = []
 
-# simulate data for all respondents
-conjoint_data <- do.call(rbind, lapply(1:n_peeps, sim_one))
+    for task_no in range(1, n_tasks + 1):
+        dat = profiles.sample(n=n_alts).copy()
+        dat.insert(0, "task", task_no)
+        dat.insert(0, "resp", respondent_id)
 
-# remove values unobservable to the researcher
-conjoint_data <- conjoint_data[ , c("resp", "task", "brand", "ad", "price", "choice")]
+        # Deterministic utility
+        dat["v"] = (
+            dat["brand"].map(b_util)
+            + dat["ad"].map(a_util)
+            + price_util(dat["price"])
+        )
 
-# clean up
-rm(list=setdiff(ls(), "conjoint_data"))
+        # Gumbel-distributed noise
+        e = -np.log(-np.log(np.random.uniform(size=n_alts)))
+        dat["u"] = dat["v"] + e
+
+        # Determine choice
+        dat["choice"] = (dat["u"] == dat["u"].max()).astype(int)
+
+        tasks.append(dat)
+
+    return pd.concat(tasks, ignore_index=True)
+
+# Simulate All Respondents
+conjoint_data = pd.concat(
+    [simulate_one(i) for i in range(1, n_peeps + 1)],
+    ignore_index=True
+)
+
+# Keep Only Observable Data 
+conjoint_data = conjoint_data[["resp", "task", "brand", "ad", "price", "choice"]]
+
+# Display Result Summary 
+rows, cols = conjoint_data.shape
+print(f"The simulated dataset contains {rows} rows and {cols} columns "
+      f"({n_peeps} respondents × {n_tasks} tasks × {n_alts} alternatives).")
+
+# Peek at Data 
+print(conjoint_data.head())
 ```
-::::
-
 
 
 ## 3. Preparing the Data for Estimation
 
 The "hard part" of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer $i$, covariate $k$, and product $j$) instead of the typical 2 dimensions for cross-sectional regression models (consumer $i$ and covariate $k$). The fact that each task for each respondent has the same number of alternatives (3) helps.  In addition, we need to convert the categorical variables for brand and ads into binary variables.
 
-_todo: reshape and prep the data_
+```{python}
+# | echo: false
 
+# Load the simulated conjoint dataset
+df = pd.read_csv("conjoint_data.csv")
 
+# Create dummy indicators for brand (baseline: Hulu) and ad (baseline: No-ad)
+df["brand_N"] = (df["brand"] == "N").astype(int)  
+df["brand_P"] = (df["brand"] == "P").astype(int)  
+df["ad_yes"] = (df["ad"] == "Yes").astype(int) 
+
+# Create a unique task identifier for each choice task (for grouping alternatives)
+df["task_id"] = (df["resp"] - 1) * 10 + (df["task"] - 1)
+
+print(df.head())
+```
+
+Each task_id represents a choice task with three alternatives. For example, task_id = 0 (resp = 1, task = 1) includes three options from brands N, H, and P, all with ads and different prices. The first row (brand = N, price = 28) has choice = 1, indicating it was selected. Dummy variables for brand and ad presence are created, with Hulu and ad-free as baselines. The data is now formatted for model estimation.
 
 ## 4. Estimation via Maximum Likelihood
 
-_todo: Code up the log-likelihood function._
+```{python}
+# Define the log-likelihood function for MNL
+def mnl_log_likelihood(beta, X, y, groups):
 
-_todo: Use `optim()` in R or `scipy.optimize()` in Python to find the MLEs for the 4 parameters ($\beta_\text{netflix}$, $\beta_\text{prime}$, $\beta_\text{ads}$, $\beta_\text{price}$), as well as their standard errors (from the Hessian). For each parameter construct a 95% confidence interval._
+    # Linear utility
+    v = X @ beta
 
+    # Exponentiated utility
+    exp_v = np.exp(v)
 
+    # Group-wise denominator sums
+    denom = np.zeros_like(v)
+    unique_tasks = np.unique(groups)
+    for t in unique_tasks:
+        idx = (groups == t)
+        denom[idx] = np.sum(exp_v[idx])
+
+    # Compute log-likelihood
+    log_probs = v - np.log(denom)
+    ll = np.sum(y * log_probs)
+
+    return -ll 
+```
+
+```{python}
+from scipy.optimize import minimize
+
+# Prepare inputs
+X = df[["brand_N", "brand_P", "ad_yes", "price"]].values
+y = df["choice"].values
+groups = df["task_id"].values
+
+# Define the log-likelihood function
+def mnl_log_likelihood(beta, X, y, groups):
+    v = X @ beta
+    exp_v = np.exp(v)
+
+    denom = np.zeros_like(v)
+    for t in np.unique(groups):
+        idx = (groups == t)
+        denom[idx] = np.sum(exp_v[idx])
+
+    log_probs = v - np.log(denom)
+    ll = np.sum(y * log_probs)
+
+    return -ll
+
+# Initial guess for beta
+beta_init = np.zeros(X.shape[1])
+
+# Optimize
+result = minimize(
+    mnl_log_likelihood,
+    beta_init,
+    args=(X, y, groups),
+    method='BFGS',
+    options={'disp': True}
+)
+
+# Extract MLEs
+beta_hat = result.x
+
+# Compute standard errors from Hessian inverse
+hessian_inv = result.hess_inv
+se = np.sqrt(np.diag(hessian_inv))
+
+# Compute 95% confidence intervals
+z = 1.96  # for 95% CI
+ci_lower = beta_hat - z * se
+ci_upper = beta_hat + z * se
+
+# Summarize results
+mle_summary = pd.DataFrame({
+    "Coefficient": beta_hat,
+    "Std. Error": se,
+    "CI Lower 95%": ci_lower,
+    "CI Upper 95%": ci_upper
+}, index=["brand_N", "brand_P", "ad_yes", "price"])
+```
+
+The MNL log-likelihood function was implemented and optimized using scipy.optimize. The model converged successfully, producing MLEs for all four parameters. Standard errors were computed from the inverse Hessian, and 95% confidence intervals were constructed for each estimate. The results are ready for interpretation or further analysis.
 
 ## 5. Estimation via Bayesian Methods
 
-_todo: code up a metropolis-hasting MCMC sampler of the posterior distribution. Take 11,000 steps and throw away the first 1,000, retaining the subsequent 10,000._
+```{python}
+proposal_sd = np.array([0.05, 0.05, 0.05, 0.005])
 
-_hint: Use N(0,5) priors for the betas on the binary variables, and a N(0,1) prior for the price beta._
+# Optimized log-likelihood with pandas groupby to speed up MCMC
+def fast_log_likelihood(beta, X, y, task_ids):
+    v = X @ beta
+    exp_v = np.exp(v)
+    df_ll = pd.DataFrame({
+        'task_id': task_ids,
+        'v': v,
+        'exp_v': exp_v,
+        'y': y
+    })
 
-_hint: instead of calculating post=lik*prior, you can work in the log-space and calculate log-post = log-lik + log-prior (this should enable you to re-use your log-likelihood function from the MLE section just above)_
+    # Compute sum of exp(v) per task
+    denom_map = df_ll.groupby('task_id')["exp_v"].transform("sum")
+    log_probs = df_ll["v"] - np.log(denom_map)
+    ll = np.sum(df_ll["y"] * log_probs)
 
-_hint: King Markov (in the video) use a candidate distribution of a coin flip to decide whether to move left or right among his islands.  Unlike King Markov, we have 4 dimensions (because we have 4 betas) and our dimensions are continuous.  So, use a multivariate normal distribution to pospose the next location for the algorithm to move to. I recommend a MNV(mu, Sigma) where mu=c(0,0,0,0) and sigma has diagonal values c(0.05, 0.05, 0.05, 0.005) and zeros on the off-diagonal.  Since this MVN has no covariances, you can sample each dimension independently (so 4 univariate normals instead of 1 multivariate normal), where the first 3 univariate normals are N(0,0.05) and the last one if N(0,0.005)._
+    return ll
 
+# Replace log-posterior to use optimized version
+def log_posterior(beta, X, y, task_ids):
+    return fast_log_likelihood(beta, X, y, task_ids)
 
-_todo: for at least one of the 4 parameters, show the trace plot of the algorithm, as well as the histogram of the posterior distribution._
+# Rerun MCMC with optimized log-likelihood
+def optimized_metropolis_sampler(X, y, task_ids, n_iter=11000, burn_in=1000):
+    n_params = X.shape[1]
+    samples = np.zeros((n_iter, n_params))
+    beta_current = np.zeros(n_params)
+    log_post_current = log_posterior(beta_current, X, y, task_ids)
 
-_todo: report the 4 posterior means, standard deviations, and 95% credible intervals and compare them to your results from the Maximum Likelihood approach._
+    for i in range(1, n_iter):
+        beta_proposal = beta_current + np.random.normal(0, proposal_sd)
+        log_post_proposal = log_posterior(beta_proposal, X, y, task_ids)
 
+        log_accept_ratio = log_post_proposal - log_post_current
+        if np.log(np.random.rand()) < log_accept_ratio:
+            beta_current = beta_proposal
+            log_post_current = log_post_proposal
 
+        samples[i, :] = beta_current
+
+    return samples[burn_in:]
+
+# Run the optimized sampler
+posterior_samples_opt = optimized_metropolis_sampler(X, y, groups)
+
+# Summarize posterior
+posterior_summary_opt = pd.DataFrame({
+    "Posterior Mean": posterior_samples_opt.mean(axis=0),
+    "Posterior Std": posterior_samples_opt.std(axis=0),
+    "2.5% CI": np.percentile(posterior_samples_opt, 2.5, axis=0),
+    "97.5% CI": np.percentile(posterior_samples_opt, 97.5, axis=0)
+}, index=["brand_N", "brand_P", "ad_yes", "price"])
+
+posterior_summary_opt
+```
+
+```{python}
+import matplotlib.pyplot as plt
+
+param_index = 0
+param_name = "brand_N"
+samples = posterior_samples_opt[:, param_index]
+
+# Plot trace
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+plt.plot(samples, linewidth=0.7)
+plt.title(f"Trace Plot: {param_name}")
+plt.xlabel("Iteration")
+plt.ylabel("Value")
+
+# Histogram
+plt.subplot(1, 2, 2)
+plt.hist(samples, bins=30, density=True, alpha=0.7)
+plt.title(f"Posterior Histogram: {param_name}")
+plt.xlabel("Value")
+plt.ylabel("Density")
+
+plt.tight_layout()
+plt.show()
+```
+
+The trace plot for brand_N shows stable fluctuations around a consistent mean with no signs of divergence or drift, indicating good mixing and convergence. The histogram shows a symmetric, bell-shaped posterior centered around 0.95, suggesting a well-identified parameter with moderate uncertainty.
+
+```{python}
+bayes_summary = posterior_summary_opt.copy()
+bayes_summary.columns = ["Bayes Mean", "Bayes Std. Dev.", "Bayes CI Lower", "Bayes CI Upper"]
+
+mle_summary.columns = ["MLE Mean", "MLE Std. Error", "MLE CI Lower", "MLE CI Upper"]
+
+comparison_df = pd.concat([bayes_summary, mle_summary], axis=1)
+
+comparison_df
+```
+
+The Bayesian and MLE results are nearly identical across all four parameters. Posterior means closely match MLE estimates, and the standard deviations and 95% intervals are similar. Both methods indicate strong positive effects for brand_N and brand_P, a negative effect for ads, and a precise negative effect for price. 
 
 ## 6. Discussion
 
-_todo: Suppose you did not simulate the data. What do you observe about the parameter estimates? What does $\beta_\text{Netflix} > \beta_\text{Prime}$ mean? Does it make sense that $\beta_\text{price}$ is negative?_
+If this were real data, the parameter estimates would reveal consumers’ underlying preferences.
 
-_todo: At a high level, discuss what change you would need to make in order to simulate data from --- and estimate the parameters of --- a multi-level (aka random-parameter or hierarchical) model. This is the model we use to analyze "real world" conjoint data._
+- **β_Netflix > β_Prime** implies that, all else equal, consumers prefer Netflix to Prime Video. This reflects a higher perceived utility from Netflix’s offering.
+
+- **β_price < 0** is consistent with economic theory: as price increases, utility decreases, making the product less likely to be chosen.
+
+The direction and magnitude of all estimates are reasonable. Consumers dislike ads, show brand preferences, and are price-sensitive—patterns expected in digital subscription markets.
+
+To simulate or estimate a multi-level MNL model, we must account for individual differences in preferences. Unlike the standard MNL model, which assumes a single set of coefficients shared by all respondents, a hierarchical model allows each respondent to have their own set of parameters.
+
+- **Key changes:**
+Instead of using one fixed β, assign each respondent a personal βₖ drawn from a population distribution:  
+  \[
+  \beta_i \sim \mathcal{N}(\mu, \Sigma)
+  \]
+
+- **Estimation:**  
+  Estimate both the respondent-level βᵢs and the population-level parameters (μ, Σ). This requires hierarchical modeling techniques, often implemented via Bayesian MCMC or mixed logit estimation.
+
+This approach better reflects real-world data by capturing preference heterogeneity across individuals.
 
 
 

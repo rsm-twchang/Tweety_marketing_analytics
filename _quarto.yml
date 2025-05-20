@@ -14,6 +14,8 @@ website:
         text: A/B Testing
       - href: hw2_questions.qmd
         text: MLE
+      - href: hw3_questions.qmd
+        text: MNL & Conjoint  
 
 
 format:
