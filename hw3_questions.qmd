@@ -139,7 +139,6 @@ print(conjoint_data.head())
 
 The "hard part" of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer $i$, covariate $k$, and product $j$) instead of the typical 2 dimensions for cross-sectional regression models (consumer $i$ and covariate $k$). The fact that each task for each respondent has the same number of alternatives (3) helps.  In addition, we need to convert the categorical variables for brand and ads into binary variables.
 
-:::: {.callout-note collapse="true"}
 ```{python}
 # | echo: false
 
@@ -156,7 +155,6 @@ df["task_id"] = (df["resp"] - 1) * 10 + (df["task"] - 1)
 
 print(df.head())
 ```
-::::
 
 Each task_id represents a choice task with three alternatives. For example, task_id = 0 (resp = 1, task = 1) includes three options from brands N, H, and P, all with ads and different prices. The first row (brand = N, price = 28) has choice = 1, indicating it was selected. Dummy variables for brand and ad presence are created, with Hulu and ad-free as baselines. The data is now formatted for model estimation.
 
@@ -314,8 +312,8 @@ posterior_summary_opt
 
 The Bayesian estimation using Metropolis-Hastings produced stable posterior estimates. All four parameters have posterior means consistent with prior expectations and previous MLE results. Consumers show stronger preference for Netflix over Prime, dislike ads, and are price-sensitive. The negative value for price confirms that higher prices reduce utility. Posterior standard deviations are small, indicating precise estimates. The 95% credible intervals do not cross zero, supporting the significance of all effects.
 
-::::{.callout-note collapse="true"}
 ```{python}
+#| echo: false
 import matplotlib.pyplot as plt
 
 param_index = 0
@@ -332,12 +330,11 @@ plt.ylabel("Sampled Value")
 plt.grid(True, linestyle="--", alpha=0.5)
 plt.show()
 ```
-::::
 
 The trace plot for brand_N shows stable fluctuations around a consistent mean with no signs of divergence or drift, indicating good mixing and convergence.
 
-::::{.callout-note collapse="true"}
 ```{python}
+#| echo: false
 # Histogram
 plt.subplot(1, 2, 2)
 plt.hist(samples, bins=30, density=True, alpha=0.7)
@@ -347,7 +344,6 @@ plt.xlabel("Value")
 plt.ylabel("Density")
 plt.show()
 ```
-::::
 
 The histogram shows a symmetric, bell-shaped posterior centered around 0.95, suggesting a well-identified parameter with moderate uncertainty.
 
