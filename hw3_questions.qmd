@@ -133,7 +133,7 @@ print(f"The simulated dataset contains {rows} rows and {cols} columns "
 # Peek at Data 
 print(conjoint_data.head())
 ```
-:::
+::::
 
 
 ## 3. Preparing the Data for Estimation
@@ -142,7 +142,6 @@ The "hard part" of the MNL likelihood function is organizing the data, as we nee
 
 ```{python}
 # | echo: false
-
 # Load the simulated conjoint dataset
 df = pd.read_csv("conjoint_data.csv")
 
@@ -335,9 +334,12 @@ bayes_summary.columns = ["Bayes Mean", "Bayes Std. Dev.", "Bayes CI Lower", "Bay
 mle_summary.columns = ["MLE Mean", "MLE Std. Error", "MLE CI Lower", "MLE CI Upper"]
 
 comparison_df = pd.concat([bayes_summary, mle_summary], axis=1)
-comparison_df
 ```
 ::::
+
+```{python}
+comparison_df
+```
 
 The Bayesian posterior means closely align with the MLE point estimates across all four parameters. Differences are minimal:
 
