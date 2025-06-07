@@ -1,669 +1,396 @@
 ---
 title: "Key Drivers Analysis"
+format: html
 author: "Tweety"
-date: today
+date: "2025-06-06"
+callout-appearance: minimal
 ---
 
-This post implements a few measure of variable importance, interpreted as a key drivers analysis, for certain aspects of a payment card on customer satisfaction with that payment card.
+### Introduction
 
+This report analyzes the drivers of satisfaction using multiple feature importance methods, replicating the table format from Session 4, Slide 19. Techniques include correlation, linear regression, decision trees, and ensemble models.
+
+A segmentation task using the Palmer Penguins dataset applies clustering and classification logic to mirror how groups can be identified and profiled based on shared traits.
+
+### Data
 ```{python}
 #| warning: false
 #| echo: false
 import warnings
 warnings.filterwarnings("ignore")
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
 ```
 
-```{python}
-#| echo: false
-data_drivers = pd.read_csv("/Users/qqtweety/Downloads/mgta495/data_for_drivers_analysis.csv")
-data_drivers.head()
-```
 ```{python}
 #| echo: false
 penguins = pd.read_csv("/Users/qqtweety/Downloads/mgta495/palmer_penguins.csv")
 penguins.head()
 ```
+
 ```{python}
 #| echo: false
+penguins_clean = penguins[['bill_length_mm', 'flipper_length_mm']].dropna().reset_index(drop=True)
+X = penguins_clean.values
+```
+
+```{python}
+#| echo: true
+def plot_clusters(X, centroids, labels, title):
+    plt.figure(figsize=(8, 6))
+    for i in range(np.max(labels) + 1):
+        plt.scatter(X[labels == i, 0], X[labels == i, 1], label=f'Cluster {i+1}')
+    plt.scatter(centroids[:, 0], centroids[:, 1], c='black', marker='x', s=100, label='Centroids')
+    plt.xlabel('Bill Length (mm)')
+    plt.ylabel('Flipper Length (mm)')
+    plt.title(title)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+```
+
+```{python}
+#| echo: true
+# Custom K-Means Implementation
+def kmeans_custom(X, k=3, max_iters=10, plot_each_step=True):
+    np.random.seed(42)
+    initial_idx = np.random.choice(X.shape[0], k, replace=False)
+    centroids = X[initial_idx]
+
+    for iteration in range(max_iters):
+        distances = np.linalg.norm(X[:, np.newaxis] - centroids, axis=2)
+        labels = np.argmin(distances, axis=1)
+
+        if plot_each_step:
+            plot_clusters(X, centroids, labels, f'Custom KMeans - Iteration {iteration + 1}')
+
+        new_centroids = np.array([X[labels == j].mean(axis=0) for j in range(k)])
+        if np.allclose(centroids, new_centroids):
+            break
+        centroids = new_centroids
+
+    return centroids, labels
+```
+```{python}
+#| echo: true
+# Run the custom KMeans and visualize
+custom_centroids, custom_labels = kmeans_custom(X, k=3)
+```
+```{python}
+#| echo: true
+# Run the built-in KMeans for comparison
+sk_model = KMeans(n_clusters=3, random_state=42)
+sk_labels = sk_model.fit_predict(X)
+sk_centroids = sk_model.cluster_centers_
+
+# Plot result from sklearn
+plot_clusters(X, sk_centroids, sk_labels, "Built-in KMeans Final Result")
+```
+```{python}
+#| echo: true
+# Show centroid comparison
+print("Custom Centroids:\n", custom_centroids)
+print("\nBuilt-in Centroids:\n", sk_centroids)
+```
+
+## Interpretation of Results
+
+The custom and built-in KMeans algorithms produced comparable clustering outcomes. The centroids differed by only 1–5 mm per dimension, confirming convergence to similar solutions.
+
+The built-in method placed some centroids slightly farther along the flipper-length axis, likely due to finer convergence or sensitivity to outliers.
+
+Cluster interpretation suggests:
+- Cluster 1 groups penguins with shorter bills and flippers, likely Adélie.
+- Cluster 2 includes those with the longest bills and flippers, likely Gentoo.
+- Cluster 3 covers the intermediate range, possibly Chinstrap.
+
+Despite random initialization, the small Euclidean distances between corresponding centroids reflect stable clustering across both implementations.
+
+```{python}
+#| echo: true
+from sklearn.metrics import silhouette_score
+# Store metrics for different K values
+ks = range(2, 8)
+wcss = []  # within-cluster sum of squares (inertia)
+silhouette_scores = []
+
+for k in ks:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    labels = kmeans.fit_predict(X)
+    wcss.append(kmeans.inertia_)
+    silhouette_scores.append(silhouette_score(X, labels))
+
+# Plot WCSS and Silhouette Score
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+ax1.plot(ks, wcss, marker='o')
+ax1.set_title('Within-Cluster Sum of Squares (WCSS)')
+ax1.set_xlabel('Number of Clusters (k)')
+ax1.set_ylabel('WCSS')
+ax2.plot(ks, silhouette_scores, marker='o')
+ax2.set_title('Silhouette Score')
+ax2.set_xlabel('Number of Clusters (k)')
+ax2.set_ylabel('Silhouette Score')
+plt.tight_layout()
+plt.show()
+```
+
+```{python}
+#| echo: true
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+# Fit KMeans for K=3
+kmeans_3 = KMeans(n_clusters=3, random_state=42)
+labels_3 = kmeans_3.fit_predict(X)
+centroids_3 = kmeans_3.cluster_centers_
+
+# Plotting function
+def plot_kmeans_clusters(X, labels, centroids):
+    plt.figure(figsize=(8, 6))
+    colors = ['red', 'gold', 'magenta']
+    for i in range(3):
+        plt.scatter(X[labels == i, 0], X[labels == i, 1], s=10, color=colors[i], alpha=0.7)
+        plt.scatter(centroids[i, 0], centroids[i, 1], c='black', s=100, edgecolors='black', linewidths=1.5)
+    plt.title('K-Means Clustering (K = 3)')
+    plt.xlabel('Bill Length (mm)')
+    plt.ylabel('Flipper Length (mm)')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+plot_kmeans_clusters(X, labels_3, centroids_3)
+```
+
+```{python}
+#| echo: true
+# Return the raw values for interpretation
+list(zip(ks, wcss, silhouette_scores))
+```
+
+### Evaluation of Cluster Quantity
+
+To determine the optimal number of clusters, we computed the **within-cluster sum of squares (WCSS)** and **silhouette scores** for K ranging from 2 to 7.
+
+### Metric Summary
+
+| K | WCSS     | Silhouette Score |
+|---|----------|------------------|
+| 2 | 20949.79 | **0.612**        |
+| 3 | 14269.56 | 0.456            |
+| 4 | 9587.14  | 0.445            |
+| 5 | 7597.61  | 0.410            |
+| 6 | 6326.31  | 0.414            |
+| 7 | 6030.08  | 0.370            |
+
+**Interpretation**
+
+- **WCSS** decreases with higher K, as expected, showing improved compactness.
+- **Silhouette score** peaks at **K=2**, indicating the clearest separation between clusters.
+- From **K=3 onward**, silhouette values steadily decline, suggesting diminishing cluster quality.
+
+**Recommended K**
+
+**K = 2** offers the best trade-off between compactness and separation. It is the most natural grouping for this dataset based on these metrics.
+---
+
+```{python}
 yogurt = pd.read_csv("/Users/qqtweety/Downloads/mgta495/yogurt_data.csv")
 yogurt.head()
 ```
 ```{python}
-#| echo: false
-# Define the target and driver variables
-target_var = 'satisfaction'
-non_drivers = ['brand', 'id', target_var]
-driver_vars = [col for col in data_drivers.columns if col not in non_drivers]
+# Reshape dataset to long format suitable for LC-MNL
+import numpy as np
 
-# Calculate Pearson correlations between each driver and satisfaction
-correlations = data_drivers[driver_vars].corrwith(data_drivers[target_var]).sort_values(ascending=False)
-
-print("Pearson Correlation Coefficients with 'satisfaction")
-for var, coef in correlations.items():
-    print(f"{var:<12} : {coef:.3f}")
-```
-
-## Key Driver Analysis: Pearson Correlation Summary
-
-Below is a table summarizing the linear relationship between each driver and satisfaction, based on Pearson correlation coefficients.
-
-| **Driver**   | **Pearson Corr** | **Interpretation**                                                                 |
-|--------------|------------------|-------------------------------------------------------------------------------------|
-| `trust`      | 0.256            | Strongest linear association. Users who find the brand trustworthy are more likely to report higher satisfaction. |
-| `impact`     | 0.255            | Closely tied with trust — customers who feel the brand makes an impact tend to rate it higher. |
-| `service`    | 0.251            | Good service is a clear satisfaction driver.                                       |
-| `easy`       | 0.213            | Easier experiences promote better satisfaction.                                    |
-| `appealing`  | 0.208            | Aesthetics and appeal contribute, but less than functionality.                     |
-| `rewarding`  | 0.195            | Lower but still relevant; suggests gamification or value might help.               |
-| `build`      | 0.192            | Slightly weaker — maybe users are less concerned about construction quality.       |
-| `differs`    | 0.185            | Differentiation matters but modestly.                                              |
-| `popular`    | 0.171            | Least influential of the group — social proof may not strongly sway satisfaction.  |
-:::
-
-```{python}
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import StandardScaler
-
-#| echo: false
-# Define variables
-target = 'satisfaction'
-exclude = ['brand', 'id', target]
-X = data_drivers.drop(columns=exclude)
-y = data_drivers[target]
-
-# Standardize X and y
-scaler_X = StandardScaler()
-X_scaled = scaler_X.fit_transform(X)
-
-scaler_y = StandardScaler()
-y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1)).ravel()
-
-# Fit linear regression
-model = LinearRegression()
-model.fit(X_scaled, y_scaled)
-
-# Create results table
-standardized_coefs = pd.Series(model.coef_, index=X.columns).sort_values(ascending=False)
-
-# Print formatted output
-print("Standardized Regression Coefficients (Beta Weights)")
-for var, coef in standardized_coefs.items():
-    print(f"{var:<12} : {coef:.3f}")
-```
-
-## Key Driver Analysis: Standardized Regression Coefficients (Beta Weights)
-
-Standardized coefficients represent the **unique impact** of each driver on `satisfaction`, after controlling for all other drivers. Higher values indicate a stronger, independent contribution to explaining satisfaction, even if the variables are correlated.
-
-| **Driver**   | **Beta Weight** | **Interpretation** |
-|--------------|------------------|---------------------|
-| `impact`     | 0.128            | Strongest independent predictor. Customers who perceive the brand as impactful tend to rate their satisfaction higher, even when accounting for other factors. |
-| `trust`      | 0.116            | Trust is also a significant driver — indicating it’s not just correlated, but uniquely important for satisfaction. |
-| `service`    | 0.088            | Good service contributes meaningfully to satisfaction on its own. |
-| `appealing`  | 0.034            | Visual or emotional appeal matters, but less than functional aspects. |
-| `differs`    | 0.028            | Being different adds value, though it's a minor unique driver. |
-| `easy`       | 0.022            | Ease of use plays a small but measurable role in satisfaction. |
-| `build`      | 0.020            | Build quality is not a strong independent factor in this model. |
-| `popular`    | 0.017            | Social proof has low standalone impact once other variables are considered. |
-| `rewarding`  | 0.005            | Perceived rewards offer minimal unique explanatory power in this setting. |
-
-> These weights are based on a standardized linear regression, where all variables were z-scored. Coefficients reflect the expected change in satisfaction (in standard deviations) for a one standard deviation increase in each driver.
-:::
-
-```{python}
-#| echo: false
-from sklearn.metrics import r2_score
-X = data_drivers.drop(columns=['brand', 'id', 'satisfaction'])
-y = data_drivers['satisfaction']
-
-# Standardize
-scaler_X = StandardScaler()
-X_scaled = scaler_X.fit_transform(X)
-
-scaler_y = StandardScaler()
-y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1)).ravel()
-
-# Full model R²
-model_full = LinearRegression().fit(X_scaled, y_scaled)
-r2_full = r2_score(y_scaled, model_full.predict(X_scaled))
-
-# Compute usefulness
-usefulness = {}
-for col in X.columns:
-    X_reduced = X.drop(columns=[col])
-    X_reduced_scaled = StandardScaler().fit_transform(X_reduced)
-    r2_reduced = r2_score(y_scaled, LinearRegression().fit(X_reduced_scaled, y_scaled).predict(X_reduced_scaled))
-    usefulness[col] = r2_full - r2_reduced
-
-usefulness_series = pd.Series(usefulness).sort_values(ascending=False)
-print(" Usefulness (Drop in R² when removed):")
-for var, delta_r2 in usefulness_series.items():
-    print(f"{var:<12} : {delta_r2:.4f}")
-```
-
-## Key Driver Analysis: Usefulness (Drop in R² When Removed)
-
-The **usefulness metric** quantifies the unique contribution of each driver to the overall explanatory power (R²) of the regression model. A higher drop in R² when a driver is removed indicates that the variable is more **indispensable** for predicting satisfaction.
-
-| **Driver**   | **ΔR² (Usefulness)** | **Interpretation** |
-|--------------|----------------------|---------------------|
-| `impact`     | 0.0112               | Most essential driver. Removing it drops the model’s predictive power the most, suggesting a central role in driving satisfaction. |
-| `trust`      | 0.0082               | Also critical. Trust uniquely enhances the model’s explanatory strength. |
-| `service`    | 0.0047               | Makes a moderate contribution, reinforcing the importance of good service. |
-| `appealing`  | 0.0007               | Plays a minor role — adds some value to the model but not decisively. |
-| `differs`    | 0.0006               | Suggests a weak but measurable influence on satisfaction. |
-| `easy`       | 0.0003               | Contributes very little when considered independently. |
-| `build`      | 0.0003               | Like ease of use, has minimal stand-alone predictive power. |
-| `popular`    | 0.0002               | Popularity is not a meaningful unique driver. |
-| `rewarding`  | 0.0000               | No measurable unique contribution to satisfaction in this model. |
-
-> These values are computed by measuring the drop in R² when each variable is removed from the standardized linear regression. It answers the question: “How much worse would the model perform if we left this out?”
-:::
-
-```{python}
-#| echo: false
-from sklearn.decomposition import PCA
-X = data_drivers.drop(columns=['brand', 'id', 'satisfaction'])
-y = data_drivers['satisfaction']
-
-# Standardize X and y
-X_scaled = StandardScaler().fit_transform(X)
-y_scaled = StandardScaler().fit_transform(y.values.reshape(-1, 1)).ravel()
-
-# Run PCA on X
-pca = PCA()
-Z = pca.fit_transform(X_scaled)
-
-# Regress y on PCA-transformed data
-reg = LinearRegression().fit(Z, y_scaled)
-beta_pca = reg.coef_
-
-# Calculate variance contributions
-# Square the betas and map back to original features
-phi = (pca.components_[:len(X.columns), :]**2).T @ (beta_pca[:len(X.columns)]**2)
-
-# Normalize to get proportions
-johnson_weights = pd.Series(phi, index=X.columns)
-johnson_weights = johnson_weights / johnson_weights.sum()
-
-johnson_weights = johnson_weights.sort_values(ascending=False)
-
-print(" Johnson’s Relative Weights (Proportional Contribution to R²):")
-for var, wt in johnson_weights.items():
-    print(f"{var:<12} : {wt:.4f}")
-```
-
-## Key Driver Analysis: Johnson’s Relative Weights
-
-**Johnson’s Relative Weights** estimate how much each driver contributes to the model’s total R² (explained variance), even in the presence of multicollinearity. This technique fairly distributes explanatory power across variables that may be highly correlated.
-
-| **Driver**   | **Johnson Weight** | **Interpretation** |
-|--------------|--------------------|---------------------|
-| `build`      | 0.1738             | The most influential driver overall. Build quality plays a central role in shaping satisfaction, even when correlated with other variables. |
-| `service`    | 0.1421             | A core contributor — service-related experiences are clearly impactful. |
-| `trust`      | 0.1270             | Trustworthiness of the brand is a major underlying influence on satisfaction. |
-| `rewarding`  | 0.1233             | Suggests that when customers feel rewarded, it meaningfully enhances satisfaction. |
-| `impact`     | 0.1185             | Impact has slightly less unique variance than in previous metrics, but still ranks highly. |
-| `appealing`  | 0.0979             | The emotional or aesthetic appeal contributes meaningfully, though less than functional traits. |
-| `easy`       | 0.0909             | Ease of use plays a supporting but important role. |
-| `popular`    | 0.0667             | Popularity has modest standalone influence in the presence of other drivers. |
-| `differs`    | 0.0598             | Differentiation contributes the least, suggesting it overlaps with other more dominant drivers. |
-
-> These weights represent each driver’s **share of the total R²** and collectively sum to 1. A weight of 0.17 means that variable explains 17% of the model’s total explanatory power.
-:::
-
-```{python}
-#| echo: false
-from sklearn.ensemble import RandomForestRegressor
-X = data_drivers.drop(columns=['brand', 'id', 'satisfaction'])
-y = data_drivers['satisfaction']
-
-# Train Random Forest
-rf = RandomForestRegressor(random_state=42, n_estimators=100)
-rf.fit(X, y)
-
-# Extract Gini Importance
-gini_importance = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)
-
-print(" Random Forest Gini Importances:")
-for var, imp in gini_importance.items():
-    print(f"{var:<12} : {imp:.4f}")
-```
-
-## Key Driver Analysis: Random Forest Gini Importance
-
-Random Forest Gini Importance reflects how much each variable **reduces prediction error** (Gini impurity) across all decision trees in the ensemble. A higher value means the variable was more frequently and effectively used in the model’s internal decision splits.
-
-| **Driver**   | **Gini Importance** | **Interpretation** |
-|--------------|---------------------|---------------------|
-| `trust`      | 0.1559              | Most powerful tree-based predictor. Trust is repeatedly selected at decision splits, highlighting its consistent impact on satisfaction. |
-| `impact`     | 0.1408              | A highly useful variable for nonlinear or interaction effects — central in the forest’s logic. |
-| `service`    | 0.1297              | Provides valuable splits in the model, supporting strong service as a satisfaction driver. |
-| `build`      | 0.1023              | Contributes to model accuracy, particularly in interaction-heavy paths. |
-| `rewarding`  | 0.1011              | Emerges as important in trees, more than in regression — may have nonlinear effects. |
-| `easy`       | 0.0999              | A solid secondary feature, used frequently in lower splits. |
-| `popular`    | 0.0949              | Surprisingly effective in forest models — perhaps captures interaction or contextual variance. |
-| `differs`    | 0.0899              | Plays a supporting role in many decision trees. |
-| `appealing`  | 0.0855              | Lowest of the group, yet still contributes to satisfaction prediction in complex ways. |
-
-> 🔍 **Gini importances are relative** and **do not sum to 1**. They are model-specific measures of how frequently and effectively a feature is used to split nodes across the ensemble of trees.
-:::
-
-```{python}
-#| echo: false
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.inspection import permutation_importance
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score
-X = data_drivers.drop(columns=['brand', 'id', 'satisfaction'])
-y = data_drivers['satisfaction']
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, test_size=0.25)
-
-# Train model
-rf = RandomForestRegressor(random_state=42, n_estimators=100)
-rf.fit(X_train, y_train)
-
-# Evaluate baseline performance
-baseline_r2 = r2_score(y_test, rf.predict(X_test))
-print(f"Baseline R²: {baseline_r2:.4f}")
-
-# Compute permutation importance
-perm_result = permutation_importance(rf, X_test, y_test, n_repeats=10, random_state=42)
-
-# Format results
-perm_importance = pd.Series(perm_result.importances_mean, index=X.columns).sort_values(ascending=False)
-
-# Print results
-print(" Permutation Importances (based on R² drop):")
-for feature, score in perm_importance.items():
-    print(f"{feature:<12} : {score:.4f}")
-```
-
-## Key Driver Analysis: Permutation Importance (Random Forest)
-
-Permutation Importance quantifies how much the model’s performance drops when each driver is randomly shuffled. A larger drop in R² means the variable is more important to the model’s predictive ability.
-
-> **Baseline R² on test set**: `0.0603`  
-> The model explains ~6% of the variation in satisfaction on unseen data — a modest fit, possibly due to limited feature coverage or inherent randomness in satisfaction.
-
-| **Driver**   | **ΔR² (Permutation)** | **Interpretation** |
-|--------------|------------------------|---------------------|
-| `trust`      | 0.0900                | Shuffling `trust` causes the largest drop in accuracy — it's the most critical driver in this nonlinear, test-set scenario. |
-| `service`    | 0.0842                | Strong second — customers care significantly about service quality. |
-| `rewarding`  | 0.0769                | Surprisingly influential, especially compared to its lower impact in linear models. Suggests **nonlinear or interaction effects**. |
-| `impact`     | 0.0516                | Still meaningful, though less dominant than in Gini or regression-based results. |
-| `appealing`  | 0.0475                | Contributes moderate predictive power through its aesthetic or emotional value. |
-| `differs`    | 0.0298                | Differentiation is helpful, but not essential in model prediction. |
-| `popular`    | 0.0240                | Weak unique signal; possibly redundant with other features. |
-| `build`      | 0.0077                | Minimal contribution to predictive performance in this setting. |
-| `easy`       | 0.0061                | Least influential — does not meaningfully affect satisfaction prediction when permuted. |
-
-> Unlike Johnson weights or regression coefficients, permutation importance reflects **model behavior on real test data**, capturing **nonlinear and interaction-based influence**.
-:::
-
-```{python}
-#| echo: false
-results = {
-    "pearson": correlations,
-    "std_coef": standardized_coefs,
-    "usefulness": usefulness_series,
-    "johnson": johnson_weights,
-    "gini": gini_importance,
-    "perm": perm_importance
-}
-combined = pd.DataFrame({
-    'Pearson Corr': results['pearson'],
-    'Standardized Coef': results['std_coef'],
-    'Usefulness (ΔR²)': results['usefulness'],
-    "Johnson's Weight": results['johnson'],
-    'Gini Importance': results['gini'],
-    'Permutation Importance': results['perm']
-}).round(4).sort_values(by="Johnson's Weight", ascending=False)
-```
-
-```{python}
-combined
-```
-
-```{python}
-#| echo: false
-# Melt into long format: 4 alternatives per choice set
+# Create long-format structure
 long_df = pd.DataFrame()
 
-for i in range(1, 5):  # y1 to y4
-    temp = pd.DataFrame({
-        'id': yogurt['id'],
-        'alt': i,
-        'choice': yogurt[f'y{i}'],
-        'feature': yogurt[f'f{i}'],
-        'price': yogurt[f'p{i}']
-    })
-    long_df = pd.concat([long_df, temp], axis=0)
-
-# Reset index and sort
-long_df = long_df.sort_values(['id', 'alt']).reset_index(drop=True)
-
-import statsmodels.api as sm
-from statsmodels.discrete.discrete_model import MNLogit
-
-# Create dummy variables for alt (optional: use one-hot if you want alt-specific effects)
-X = long_df[['feature', 'price']]
-X = sm.add_constant(X)  # add intercept
-y = long_df['choice']
-
-# Fit the MNL model using grouped choices (by id)
-model = MNLogit(y, X)
-result = model.fit()
-print(result.summary())
-```
-
-## Discrete Choice Modeling: Multinomial Logit Model (Yogurt Data)
-
-We estimated a **Multinomial Logit Model** (MNL) to understand what drives yogurt selection among four alternatives using `feature` and `price` as predictors.
-
-###  Model Fit Summary
-- **Log-likelihood**: –5369.8  
-- **Null log-likelihood**: –5465.9  
-- **Pseudo R²**: 0.0176  
-- **LLR p-value**: < 0.001  
-- **Convergence**: Successful after 5 iterations
-
-While the pseudo R² is modest (1.76%), the model is **statistically significant** and helps reveal directional effects of product features on consumer choice.
-
-### Coefficient Estimates and Interpretations
-
-| **Variable** | **Coefficient** | **p-value** | **Interpretation** |
-|--------------|------------------|-------------|---------------------|
-| `const`      | –2.1173          | < 0.001     | The baseline utility (log-odds of being chosen) is low when all features are zero. |
-| `feature`    | **+0.9917**      | < 0.001     | Having the feature increases the utility and thus the likelihood of this yogurt being chosen. |
-| `price`      | **+11.8761**     | < 0.001     | Surprisingly, higher price **increases** the likelihood of choice. This may suggest **premium positioning** — consumers could associate price with quality. |
----
-:::
-
-```{python}
-#| echo: false
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-# Create features to cluster on: either choices or price preferences
-choice_behavior = yogurt[['y1', 'y2', 'y3', 'y4']]
-
-# Normalize and cluster
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(choice_behavior)
-
-kmeans = KMeans(n_clusters=2, random_state=42)
-yogurt['segment'] = kmeans.fit_predict(X_scaled)
-
-# Create long format for each segment
-long_dfs = []
-
+# Loop through 4 alternatives per observation
 for i in range(1, 5):
     temp = pd.DataFrame({
         'id': yogurt['id'],
-        'segment': yogurt['segment'],
+        'alt': i,
+        'choice': yogurt[f'y{i}'],
+        'feature': yogurt[f'f{i}']
+    })
+    long_df = pd.concat([long_df, temp], ignore_index=True)
+
+# Sort by id and alt for clarity
+long_df = long_df.sort_values(by=['id', 'alt']).reset_index(drop=True)
+long_df.head(8)
+```
+
+```{python}
+#| echo: true
+from scipy.special import logsumexp
+from scipy.optimize import minimize
+# Prepare data
+df = long_df.copy()
+n_alts = df['alt'].nunique()
+n_obs = df['id'].nunique()
+
+# Pivot to get feature matrix per choice set
+X = df.pivot(index='id', columns='alt', values='feature').values  # shape: (n_obs, 4)
+Y = df.pivot(index='id', columns='alt', values='choice').values   # shape: (n_obs, 4)
+
+# Log-likelihood function for latent-class MNL with 2 segments
+def latent_class_loglik(params):
+    beta1, beta2, lamb = params[:1], params[1:2], params[2]
+    pi1 = np.exp(lamb) / (1 + np.exp(lamb))
+    pi2 = 1 - pi1
+
+    # Utilities for each segment
+    V1 = X * beta1
+    V2 = X * beta2
+
+    # Choice probabilities
+    P1 = np.exp(V1 - logsumexp(V1, axis=1, keepdims=True))
+    P2 = np.exp(V2 - logsumexp(V2, axis=1, keepdims=True))
+
+    # Segment-level likelihoods
+    LL1 = np.sum(Y * np.log(P1 + 1e-12), axis=1)
+    LL2 = np.sum(Y * np.log(P2 + 1e-12), axis=1)
+
+    # Full log-likelihood (marginalizing over segments)
+    LL = np.log(pi1 * np.exp(LL1) + pi2 * np.exp(LL2) + 1e-12)
+    return -np.sum(LL)
+
+# Initial parameter guess: [β1, β2, λ]
+init_params = np.array([0.1, 0.1, 0.0])
+result = minimize(latent_class_loglik, init_params, method='BFGS')
+
+# Output
+estimated_params = result.x
+beta1_hat, beta2_hat, lambda_hat = estimated_params[0], estimated_params[1], estimated_params[2]
+pi1_hat = np.exp(lambda_hat) / (1 + np.exp(lambda_hat))
+pi2_hat = 1 - pi1_hat
+
+beta1_hat, beta2_hat, pi1_hat, pi2_hat
+```
+
+## Latent-Class MNL Estimation (Kamakura & Russell, 1989)
+
+We estimate a two-segment latent-class MNL model using the Yogurt dataset. Each segment has its own utility sensitivity parameter (β), and segment membership is probabilistic via a logistic transformation of λ:
+
+\[
+\pi_1 = \frac{e^{\lambda}}{1 + e^{\lambda}}, \quad \pi_2 = 1 - \pi_1
+\]
+
+The unconditional choice probability is a weighted sum over segment-specific MNL probabilities:
+
+\[
+P_i(j) = \sum_{s=1}^{2} \pi_s \cdot P_i(j \mid s)
+\]
+
+---
+
+## Dataset Structure
+
+Each observation includes four alternatives per choice set. Data is reshaped into long format with:
+
+- `id`: choice occasion  
+- `alt`: alternative (1–4)  
+- `feature`: product attribute  
+- `choice`: binary indicator of selection
+
+## Estimation Results
+```{python}
+print(f"β₁ = {beta1_hat:.3f}")
+print(f"β₂ = {beta2_hat:.3f}")
+print(f"π₁ = {pi1_hat:.3f}")
+print(f"π₂ = {pi2_hat:.3f}")
+```
+---
+
+```{python}
+#| echo: true
+# Create long-format structure
+long_data = pd.DataFrame()
+
+for i in range(1, 5):  # 4 products
+    temp = pd.DataFrame({
+        'id': yogurt['id'],
         'alt': i,
         'choice': yogurt[f'y{i}'],
         'feature': yogurt[f'f{i}'],
         'price': yogurt[f'p{i}']
     })
-    long_dfs.append(temp)
+    long_data = pd.concat([long_data, temp], ignore_index=True)
 
-long_df = pd.concat(long_dfs, axis=0).sort_values(['segment', 'id', 'alt']).reset_index(drop=True)
+long_data = long_data.sort_values(['id', 'alt']).reset_index(drop=True)
+long_data.head(8)
+```
+```{python}
+#| echo: true
+# Prepare matrices
+X_price = long_data.pivot(index='id', columns='alt', values='price').values
+X_feature = long_data.pivot(index='id', columns='alt', values='feature').values
+Y = long_data.pivot(index='id', columns='alt', values='choice').values
 
-import statsmodels.api as sm
-from statsmodels.discrete.discrete_model import MNLogit
+# Log-likelihood function for LC-MNL with 2 variables per segment
+def log_likelihood(params):
+    beta1 = params[0:2]   # [price, feature] for segment 1
+    beta2 = params[2:4]   # [price, feature] for segment 2
+    lamb = params[4]
 
-# Fit MNL model per segment
-segments = long_df['segment'].unique()
-results_by_segment = {}
+    pi1 = np.exp(lamb) / (1 + np.exp(lamb))
+    pi2 = 1 - pi1
 
-for seg in segments:
-    df_seg = long_df[long_df['segment'] == seg]
-    X = sm.add_constant(df_seg[['feature', 'price']])
-    y = df_seg['choice']
-    
-    model = MNLogit(y, X)
-    result = model.fit(disp=False)
-    results_by_segment[seg] = result
-    print(f"Segment {seg} Results:")
-    print(result.summary())
+    # Utilities for each segment
+    V1 = beta1[0] * X_price + beta1[1] * X_feature
+    V2 = beta2[0] * X_price + beta2[1] * X_feature
+
+    # Choice probabilities
+    P1 = np.exp(V1 - logsumexp(V1, axis=1, keepdims=True))
+    P2 = np.exp(V2 - logsumexp(V2, axis=1, keepdims=True))
+
+    # Segment-level likelihood
+    LL1 = np.sum(Y * np.log(P1 + 1e-12), axis=1)
+    LL2 = np.sum(Y * np.log(P2 + 1e-12), axis=1)
+
+    LL_total = np.log(pi1 * np.exp(LL1) + pi2 * np.exp(LL2) + 1e-12)
+    return -np.sum(LL_total)
+
+# Initial guess: [β1_price, β1_feature, β2_price, β2_feature, lambda]
+init = np.array([-10, 1, -10, 1, 0])  # negative price sensitivity, positive feature
+
+# Estimate
+result = minimize(log_likelihood, init, method='BFGS')
+beta1_est = result.x[0:2]
+beta2_est = result.x[2:4]
+lambda_est = result.x[4]
+pi1_est = np.exp(lambda_est) / (1 + np.exp(lambda_est))
+pi2_est = 1 - pi1_est
+
+beta1_est, beta2_est, pi1_est, pi2_est
 ```
 
-## Latent Segments via K-Means + Multinomial Logit Modeling
+## Latent-Class Multinomial Logit (LC-MNL) Estimation
 
-We clustered individuals based on their yogurt choice behavior and estimated **separate MNL models** per segment. Each segment represents a distinct preference pattern.
+The yogurt dataset includes anonymized consumer IDs (`id`), binary indicators of purchased products (`y1`–`y4`), whether products were advertised in-store (`f1`–`f4`), and price-per-ounce values (`p1`–`p4`).
 
-### Model Fit Overview
+Each row represents a consumer's single purchase occasion across four yogurt options. For example, consumer 1 selected yogurt 4 at a price of 0.079/oz, with no items advertised. Consumers 2–7 all chose yogurt 2.
 
-| Segment | Obs | Log-Likelihood | Pseudo R² | Interpretation |
-|---------|-----|----------------|-----------|----------------|
-| Segment 0 | 6396 | –3563.2        | 0.0093    | Weak fit, minor variation in choice explained — behavior is more uniform or driven by unmeasured factors. |
-| Segment 1 | 3324 | –1375.3        | 0.2642    | Strong model fit — clearer, more structured choice patterns in this segment. |
+To estimate a latent-class multinomial logit model, the dataset was reshaped from **wide** to **long** format, creating one row per consumer–product pair. Key variables used were:
+- `choice`: 1 if the product was selected, 0 otherwise
+- `price`: per-ounce price
+- `feature`: whether the item was advertised
+
+We estimated a two-segment LC-MNL model using price and feature as predictors of utility.
+
+**Segment-Level Estimates**
+
+| Segment | β<sub>price</sub> | β<sub>feature</sub> | π (Share) |
+|:--------|------------------:|--------------------:|----------:|
+| 1       | 12.91             | 14.64               | 42.7%     |
+| 2       | 9.18              | −12.17              | 57.3%     |
+
+**Interpretation**
+
+- **Segment 1** is highly responsive to both lower prices and in-store advertising.
+- **Segment 2** exhibits lower price sensitivity and reacts negatively to advertising.
+- Segment proportions (42.7% vs. 57.3%) indicate heterogeneous preference patterns among consumers.
+
+These results suggest the presence of two distinct market segments: one promotion-sensitive, the other resistant to marketing signals.
 
 ---
-
-### Segment-Specific Coefficients
-
-| Segment | Intercept | Feature Coef | Price Coef | Interpretation |
-|---------|-----------|---------------|-------------|----------------|
-| **0**   | –0.47     | **+0.565**    | **–8.259**  | Very **price-sensitive** consumers. Slightly prefer featured products but will strongly avoid high prices. |
-| **1**   | –7.37     | **+2.076**    | **+71.86**  | **Premium-seekers**: strong preference for both featured products and higher prices — possibly due to perceived quality or exclusivity. |
-
----
-
-### Insights for Targeting
-
-- **Segment 0** buyers behave like **budget-conscious deal seekers**. Appeal to them with **discounts**, **price promotions**, or **value packs**.
-- **Segment 1** represents **quality-focused or brand-loyal consumers**. For this group, highlight **product benefits**, **premium packaging**, and **brand trust** — they are willing to pay more.
-
-> These results show clear **heterogeneity in consumer preferences**, which would be missed in a single pooled MNL model. Segment-specific strategies could significantly improve targeting and conversion.
-:::
-
-```{python}
-#| echo: false
-# For each segment, manually pull feature and price coefficients
-wtp_results = {
-    "Segment 0": {
-        "feature_coef": 0.5650,
-        "price_coef": -8.2590
-    },
-    "Segment 1": {
-        "feature_coef": 2.0764,
-        "price_coef": 71.8603
-    }
-}
-
-# Calculate WTP
-for segment, coefs in wtp_results.items():
-    wtp = coefs["feature_coef"] / coefs["price_coef"]
-    print(f"{segment}: Willingness to Pay for 'feature' = {wtp:.4f} units of price")
-```
-
-## Willingness-to-Pay (WTP) by Segment
-
-Willingness-to-Pay (WTP) estimates how much of a price difference consumers are willing to accept for getting the featured version of a yogurt product.
-
-| **Segment** | **WTP (Δprice per feature)** | **Interpretation** |
-|-------------|-------------------------------|---------------------|
-| Segment 0   | –0.0684                       | **Price-sensitive** consumers: this group values the feature modestly but only accepts it when paired with a lower price. They effectively require a discount to choose featured options. |
-| Segment 1   | +0.0289                       | **Premium-oriented** consumers: this segment is willing to pay slightly more for products with the feature — possibly due to perceived quality, prestige, or brand signaling. |
-
-> These WTP values are calculated as:
-> \[
-> \text{WTP} = \frac{\beta_{\text{feature}}}{\beta_{\text{price}}}
-> \]
-> and expressed in **relative price units**. A positive value means the feature increases perceived value; negative implies the opposite.
-:::
-
-## Product Features that Most Influence Choice
-
-Based on discrete choice modeling:
-
-| **Feature** | **Effect (Pooled Model)** | **Segment 0**         | **Segment 1**         | **Interpretation** |
-|-------------|---------------------------|------------------------|------------------------|---------------------|
-| Price       | +11.88                    | **–8.26**              | **+71.86**             | Highly influential but varies: price is negative for value-seekers, positive for premium-seekers. |
-| Feature     | +0.99                     | **+0.57**              | **+2.08**              | Consistently preferred across both segments. |
-| Brand       | TBD                       | Add if available       | Add if available       | Include if you add brand-specific effects. |
-| Flavor      | TBD                       | Add if available       | Add if available       | Include if present in the dataset. |
-
->  The most influential features are **price** and **feature**, with **segment-specific preferences** highlighting the need for **targeted product strategies**.
-:::
-
-```{python}
-#| echo: false
-# Drop rows with missing values
-penguins = penguins.dropna()
-
-# Select physical features only
-features = ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g']
-X = penguins[features]
-
-# Standardize
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-# Run K-Means
-kmeans = KMeans(n_clusters=3, random_state=42)
-penguins['cluster'] = kmeans.fit_predict(X_scaled)
-
-from sklearn.mixture import GaussianMixture
-
-gmm = GaussianMixture(n_components=3, random_state=42)
-penguins['gmm_cluster'] = gmm.fit_predict(X_scaled)
-```
-
-```{python}
-import seaborn as sns
-# Compare clusters vs true species
-sns.pairplot(penguins, hue='cluster', vars=features, palette='Set1')
-plt.suptitle("K-Means Clustering of Penguins (by Physical Features)", y=1.02)
-plt.show()
-
-# Confusion matrix
-from sklearn.metrics import confusion_matrix
-import numpy as np
-
-print("KMeans vs Actual Species:")
-print(pd.crosstab(penguins['cluster'], penguins['species']))
-```
-
-## Unsupervised Clustering of Penguins Using K-Means
-
-We applied **K-Means clustering** to group penguins based on physical features: `bill length`, `bill depth`, `flipper length`, and `body mass`. The algorithm formed 3 clusters, which we compared to actual species labels.
-
-### Confusion Matrix: KMeans Cluster vs Species
-
-| **Cluster** | **Adelie** | **Chinstrap** | **Gentoo** |
-|-------------|------------|----------------|-------------|
-| 0           | 124        | 5              | 0           |
-| 1           | 0          | 0              | 119         |
-| 2           | 22         | 63             | 0           |
-
----
-
-### Interpretation
-
-- **Cluster 0** → Dominated by **Adelie** penguins. This cluster likely reflects small-to-medium birds with deeper bills.
-- **Cluster 1** → Pure **Gentoo** cluster. These penguins are larger with longer flippers and heavier bodies, which K-Means cleanly isolates.
-- **Cluster 2** → Mixed cluster of **Chinstrap** and some misclassified **Adelie** penguins. This group shows overlapping traits — suggesting that **Chinstrap** features are less distinct from some Adelies.
-
----
-
-### Insights
-
-- **K-Means recovered species structure** remarkably well from physical measurements alone.
-- **Gentoo penguins** are easiest to separate due to distinctive size.
-- **Adelie vs Chinstrap** overlap more, which may require additional features (e.g., location, nesting patterns) for better separation.
-
-> This analysis demonstrates how **unsupervised learning** can reveal meaningful biological segmentation — even without species labels.
-:::
-
-```{python}
-#| echo: false
-from sklearn.metrics import classification_report, confusion_matrix
-
-# Features and target
-features = ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g']
-X = penguins[features]
-y = penguins['species']
-
-# Train/test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-# Scale features (especially for SVM)
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-from sklearn.tree import DecisionTreeClassifier
-
-tree = DecisionTreeClassifier(random_state=42)
-tree.fit(X_train, y_train)
-y_pred_tree = tree.predict(X_test)
-```
-```{python}
-print(" Decision Tree Results")
-print(confusion_matrix(y_test, y_pred_tree))
-print(classification_report(y_test, y_pred_tree))
-```
-
-```{python}
-from sklearn.svm import SVC
-
-svm = SVC(kernel='rbf', C=1.0, gamma='scale')
-svm.fit(X_train_scaled, y_train)
-y_pred_svm = svm.predict(X_test_scaled)
-
-print(" SVM Results")
-print(confusion_matrix(y_test, y_pred_svm))
-print(classification_report(y_test, y_pred_svm))
-```
-
-
-## Classification of Penguin Species
-
-We trained two classification models to predict penguin species from body measurements:
-
-- `bill_length_mm`
-- `bill_depth_mm`
-- `flipper_length_mm`
-- `body_mass_g`
-
-### Model Accuracy
-
-| Model           | Accuracy | Macro Precision | Macro Recall |
-|-----------------|----------|------------------|---------------|
-| Decision Tree   | 0.96     | 0.96             | 0.95          |
-| SVM (RBF)       | 0.98     | 0.99             | 0.97          |
-
-### Confusion Matrices
-
-**SVM (RBF kernel)**
-
-| Actual \ Pred | Adelie | Chinstrap | Gentoo |
-|---------------|--------|-----------|--------|
-| Adelie        | 48     | 0         | 0      |
-| Chinstrap     | 2      | 21        | 0      |
-| Gentoo        | 0      | 0         | 29     |
-
-**Decision Tree**
-
-| Actual \ Pred | Adelie | Chinstrap | Gentoo |
-|---------------|--------|-----------|--------|
-| Adelie        | 47     | 1         | 0      |
-| Chinstrap     | 3      | 20        | 0      |
-| Gentoo        | 0      | 0         | 29     |
-
-### Interpretation
-
-- Both models perform well with high accuracy.
-- Gentoo penguins are classified perfectly by both.
-- SVM slightly outperforms the decision tree, especially in distinguishing Chinstrap.
-- Decision Trees offer interpretable rules; SVM handles overlapping boundaries better.
-
-### Conclusion
-
-Body size features alone are effective for species prediction. These models can support biological research, field classification, or educational tools.
-:::
