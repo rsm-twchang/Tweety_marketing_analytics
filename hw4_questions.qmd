@@ -57,6 +57,7 @@ penguins.head()
 penguins_clean = penguins[['bill_length_mm', 'flipper_length_mm']].dropna().reset_index(drop=True)
 X = penguins_clean.values
 ```
+
 ::::
 
 :::: {.callout-note collapse="true"}
@@ -95,6 +96,7 @@ def kmeans_custom(X, k=3, max_iters=10, plot_each_step=True):
 
     return centroids, labels
 ```
+
 :::: 
 ```{python}
 #| echo: true
@@ -128,6 +130,7 @@ plot_clusters(X, sk_centroids, sk_labels, "Built-in KMeans Final Result")
 print("Custom Centroids:\n", custom_centroids)
 print("\nBuilt-in Centroids:\n", sk_centroids)
 ```
+
 :::
 
 **Interpretation of Results**
@@ -162,6 +165,7 @@ for k in ks:
     wcss.append(kmeans.inertia_)
     silhouette_scores.append(silhouette_score(X, labels))
 ```
+
 :::: 
 
 ### WCSS
@@ -221,6 +225,7 @@ plot_kmeans_clusters(X, labels_3, centroids_3)
 # Return the raw values for interpretation
 list(zip(ks, wcss, silhouette_scores))
 ```
+
 :::: 
 
 **Evaluation of Cluster Quantity**
@@ -266,6 +271,7 @@ y = (x2 > boundary).astype(int)
 dat = pd.DataFrame({'x1': x1, 'x2': x2, 'y': y})
 dat.head()
 ```
+
 :::: 
 
 **Synthetic Dataset for K-Nearest Neighbors**
@@ -315,6 +321,7 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 ```
+
 :::: 
 ---
 
@@ -354,6 +361,7 @@ y_test = pd.Series((x2_test > boundary_test).astype(int), dtype='category')
 test_dat = pd.DataFrame({'x1': x1_test, 'x2': x2_test, 'y': y_test})
 test_dat.head()
 ```
+
 :::: 
 
 ### Sample Data
@@ -393,6 +401,7 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 ```
+
 :::: 
 
 ### Manual KNN Implementation and Validation
@@ -441,6 +450,7 @@ sklearn_accuracy = np.mean(sklearn_preds == y_test)
 
 manual_accuracy, sklearn_accuracy
 ```
+
 :::: 
 
 We implemented the K-Nearest Neighbors algorithm from scratch using Euclidean distance and a majority vote among the `k = 5` nearest neighbors.
@@ -487,6 +497,8 @@ k_values = range(1, 31)
 accuracies = [np.mean(knn_predict(X_train, y_train, X_test, k) == y_test) for k in k_values]
 ```
 
+:::: 
+
 We evaluated classification accuracy on the test dataset for `k = 1` to `k = 30` using our custom KNN function.
 
 :::: {.callout-note collapse="true"}
@@ -504,7 +516,10 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 ```
+
 :::: 
+
+-----------
 
 ### Yogurt Data
 
@@ -526,6 +541,7 @@ This dataset is commonly used for analyzing consumer choice behavior, price sens
 yogurt = pd.read_csv("/Users/qqtweety/Downloads/mgta495/yogurt_data.csv")
 yogurt.head()
 ```
+
 :::: 
 
 :::: {.callout-note collapse="true"}
@@ -553,6 +569,7 @@ for i in range(1, 5):
 long_df = long_df.sort_values(by=['id', 'alt']).reset_index(drop=True)
 long_df.head(8)
 ```
+
 :::: 
 
 :::: {.callout-note collapse="true"}
@@ -606,6 +623,7 @@ pi2_hat = 1 - pi1_hat
 
 beta1_hat, beta2_hat, pi1_hat, pi2_hat
 ```
+
 :::: 
 
 **Latent-Class MNL Estimation (Kamakura & Russell, 1989)**
@@ -621,7 +639,7 @@ The unconditional choice probability is a weighted sum over segment-specific MNL
 \[
 P_i(j) = \sum_{s=1}^{2} \pi_s \cdot P_i(j \mid s)
 \]
----
+
 
 :::: {.callout-note collapse="true"}
 ### Create long-format structure
@@ -643,6 +661,7 @@ for i in range(1, 5):  # 4 products
 long_data = long_data.sort_values(['id', 'alt']).reset_index(drop=True)
 long_data.head(8)
 ```
+
 :::: 
 
 :::: {.callout-note collapse="true"}
@@ -691,6 +710,7 @@ pi2_est = 1 - pi1_est
 
 beta1_est, beta2_est, pi1_est, pi2_est
 ```
+
 :::: 
 
 **Latent-Class Multinomial Logit (LC-MNL) Estimation**
