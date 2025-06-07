@@ -54,19 +54,28 @@ from sklearn.cluster import KMeans
 ```
 
 ```{python}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 penguins = pd.read_csv("/Users/qqtweety/Downloads/mgta495/palmer_penguins.csv")
 penguins.head()
 ```
 
 ```{python}
-#| echo: false
+#| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 penguins_clean = penguins[['bill_length_mm', 'flipper_length_mm']].dropna().reset_index(drop=True)
 X = penguins_clean.values
 ```
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 def plot_clusters(X, centroids, labels, title):
     plt.figure(figsize=(8, 6))
     for i in range(np.max(labels) + 1):
@@ -82,6 +91,9 @@ def plot_clusters(X, centroids, labels, title):
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Custom K-Means Implementation
 def kmeans_custom(X, k=3, max_iters=10, plot_each_step=True):
     np.random.seed(42)
@@ -104,11 +116,17 @@ def kmeans_custom(X, k=3, max_iters=10, plot_each_step=True):
 ```
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Run the custom KMeans and visualize
 custom_centroids, custom_labels = kmeans_custom(X, k=3)
 ```
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Run the built-in KMeans for comparison
 sk_model = KMeans(n_clusters=3, random_state=42)
 sk_labels = sk_model.fit_predict(X)
@@ -119,6 +137,9 @@ plot_clusters(X, sk_centroids, sk_labels, "Built-in KMeans Final Result")
 ```
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Show centroid comparison
 print("Custom Centroids:\n", custom_centroids)
 print("\nBuilt-in Centroids:\n", sk_centroids)
@@ -139,6 +160,9 @@ Despite random initialization, the small Euclidean distances between correspondi
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 from sklearn.metrics import silhouette_score
 # Store metrics for different K values
 ks = range(2, 8)
@@ -167,6 +191,9 @@ plt.show()
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
@@ -193,6 +220,9 @@ plot_kmeans_clusters(X, labels_3, centroids_3)
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Return the raw values for interpretation
 list(zip(ks, wcss, silhouette_scores))
 ```
@@ -225,6 +255,9 @@ To determine the optimal number of clusters, we computed the **within-cluster su
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Set seed and parameters
 np.random.seed(42)
 n = 100
@@ -265,6 +298,9 @@ This creates a wiggly decision boundary ideal for testing non-linear classifiers
 ### Visualization
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Plot the synthetic data with decision boundary
 plt.figure(figsize=(8, 6))
 colors = ['red' if label == 0 else 'blue' for label in dat['y']]
@@ -285,6 +321,9 @@ plt.show()
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Generate a test dataset using a different random seed
 np.random.seed(24)
 n_test = 100
@@ -329,6 +368,9 @@ This boundary creates a wavy separation ideal for testing flexible classifiers l
 **Interpretation of the Plot**
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 plt.figure(figsize=(8, 6))
 
 # Color-coded test points
@@ -352,6 +394,9 @@ plt.show()
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 from collections import Counter
 
 # Step-by-step manual KNN implementation (k=5)
@@ -410,6 +455,9 @@ Both methods produced identical results, confirming the correctness of the custo
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Manual KNN function
 def knn_predict(X_train, y_train, X_test, k=5):
     predictions = []
@@ -435,6 +483,10 @@ accuracies = [np.mean(knn_predict(X_train, y_train, X_test, k) == y_test) for k 
 We evaluated classification accuracy on the test dataset for `k = 1` to `k = 30` using our custom KNN function.
 
 ```{python}
+#| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 #| fig-cap: "Test accuracy of manual KNN for k = 1 to 30."
 plt.plot(k_values, accuracies, marker='o')
 plt.title("KNN Accuracy on Test Data for k = 1 to 30")
@@ -460,10 +512,15 @@ Key variables include:
 This dataset is commonly used for analyzing consumer choice behavior, price sensitivity, and brand preference using models like multinomial logit or KNN classification.
 
 ```{python}
+#| echo: true
 yogurt = pd.read_csv("/Users/qqtweety/Downloads/mgta495/yogurt_data.csv")
 yogurt.head()
 ```
 ```{python}
+#| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Reshape dataset to long format suitable for LC-MNL
 import numpy as np
 
@@ -487,6 +544,9 @@ long_df.head(8)
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 from scipy.special import logsumexp
 from scipy.optimize import minimize
 # Prepare data
@@ -560,6 +620,10 @@ Each observation includes four alternatives per choice set. Data is reshaped int
 
 ## Estimation Results
 ```{python}
+#| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 print(f"β₁ = {beta1_hat:.3f}")
 print(f"β₂ = {beta2_hat:.3f}")
 print(f"π₁ = {pi1_hat:.3f}")
@@ -569,6 +633,9 @@ print(f"π₂ = {pi2_hat:.3f}")
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Create long-format structure
 long_data = pd.DataFrame()
 
@@ -587,6 +654,9 @@ long_data.head(8)
 ```
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+#| code-overflow: wrap
 # Prepare matrices
 X_price = long_data.pivot(index='id', columns='alt', values='price').values
 X_feature = long_data.pivot(index='id', columns='alt', values='feature').values
@@ -659,27 +729,3 @@ We estimated a two-segment LC-MNL model using price and feature as predictors of
 These results suggest the presence of two distinct market segments: one promotion-sensitive, the other resistant to marketing signals.
 
 ---
-```{python}
-long_data = pd.DataFrame({
-    "id": [1, 1, 1, 1, 2, 2, 2, 2],
-    "alt": [1, 2, 3, 4, 1, 2, 3, 4],
-    "choice": [0, 0, 0, 1, 0, 1, 0, 0],
-    "feature": [0, 0, 0, 0, 0, 0, 0, 0],
-    "price": [0.108, 0.081, 0.061, 0.079, 0.108, 0.098, 0.064, 0.075]
-})
-
-# Add intercept (required for statsmodels MNLogit)
-long_data['intercept'] = 1
-
-# Define predictors and response
-X = long_data[['intercept', 'price']]
-y = long_data['choice']
-
-# Fit the Multinomial Logit Model
-model = sm.MNLogit(y, X)
-mnl_result = model.fit(disp=False)
-
-# Extract and show coefficient summary
-mnl_summary = mnl_result.summary()
-mnl_summary.tables[1]  # Coefficients table only
-```
