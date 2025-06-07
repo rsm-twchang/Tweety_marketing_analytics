@@ -12,11 +12,8 @@ This analysis applies the **K-Means clustering algorithm** to the *Palmer Pengui
 
 Unlike supervised learning, clustering is an **unsupervised machine learning method**, meaning it identifies structure in the data without relying on labeled outcomes. K-Means is one of the most common techniques for this purpose, partitioning observations into `k` clusters based on feature similarity.
 
-In this project, we:
-- Implement K-Means both **from scratch** and using **scikit-learn**,
-- Visualize the clustering process across iterations,
-- Compare our custom implementation to the built-in version,
-- Evaluate different values of `k` using **WCSS** and **silhouette scores** to identify the optimal number of clusters.
+In this project, we implement K-Means both **from scratch** and using **scikit-learn**,
+visualize the clustering process across iterations, compare our custom implementation to the built-in version, evaluate different values of `k` using **WCSS** and **silhouette scores** to identify the optimal number of clusters.
 
 This exercise provides both technical practice in unsupervised learning and biological insight into how penguin species differ morphologically.
 
@@ -35,13 +32,9 @@ Each row in the dataset corresponds to a single penguin and includes variables s
 - `sex`: biological sex (if known)
 - `year`: year of observation
 
-For this analysis, we focus on two numerical features:
-- **Bill Length (`bill_length_mm`)**
-- **Flipper Length (`flipper_length_mm`)**
+For this analysis, we focus on two numerical features: **Bill Length (`bill_length_mm`)** , **Flipper Length (`flipper_length_mm`)**
 
 These measurements are used as inputs to clustering algorithms to explore natural groupings in the data without relying on species labels.
-
-### Data
 ```{python}
 #| warning: false
 #| echo: false
@@ -53,21 +46,18 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 ```
 
+:::: {.callout-note collapse="true"}
+### Data
 ```{python}
 #| echo: true
 #| warning: false
 penguins = pd.read_csv("/Users/qqtweety/Downloads/mgta495/palmer_penguins.csv")
 penguins.head()
-```
 
-```{python}
-#| echo: true
-#| message: false
-#| warning: false
-#| code-overflow: wrap
 penguins_clean = penguins[['bill_length_mm', 'flipper_length_mm']].dropna().reset_index(drop=True)
 X = penguins_clean.values
 ```
+::::
 
 ```{python}
 #| echo: true
