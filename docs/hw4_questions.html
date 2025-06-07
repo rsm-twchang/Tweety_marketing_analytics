@@ -200,15 +200,13 @@ window.Quarto = {
   <li><a href="#palmer-penguins" id="toc-palmer-penguins" class="nav-link" data-scroll-target="#palmer-penguins">Palmer Penguins</a></li>
   <li><a href="#wcss-1" id="toc-wcss-1" class="nav-link" data-scroll-target="#wcss-1">WCSS</a></li>
   <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering">K-Means Clustering</a></li>
-  <li><a href="#test-dataset-synthetic-data-for-knn-evaluation" id="toc-test-dataset-synthetic-data-for-knn-evaluation" class="nav-link" data-scroll-target="#test-dataset-synthetic-data-for-knn-evaluation">Test Dataset: Synthetic Data for KNN Evaluation</a>
-  <ul class="collapse">
+  <li><a href="#synthetic-data-for-knn-evaluation" id="toc-synthetic-data-for-knn-evaluation" class="nav-link" data-scroll-target="#synthetic-data-for-knn-evaluation">Synthetic Data for KNN Evaluation</a></li>
   <li><a href="#sample-data" id="toc-sample-data" class="nav-link" data-scroll-target="#sample-data">Sample Data</a></li>
   <li><a href="#manual-knn-implementation-and-validation" id="toc-manual-knn-implementation-and-validation" class="nav-link" data-scroll-target="#manual-knn-implementation-and-validation">Manual KNN Implementation and Validation</a></li>
-  </ul></li>
-  <li><a href="#tuning-k-in-k-nearest-neighbors" id="toc-tuning-k-in-k-nearest-neighbors" class="nav-link" data-scroll-target="#tuning-k-in-k-nearest-neighbors">Tuning K in K-Nearest Neighbors</a>
-  <ul class="collapse">
+  <li><a href="#tuning-k-in-k-nearest-neighbors" id="toc-tuning-k-in-k-nearest-neighbors" class="nav-link" data-scroll-target="#tuning-k-in-k-nearest-neighbors">Tuning K in K-Nearest Neighbors</a></li>
   <li><a href="#yogurt-data" id="toc-yogurt-data" class="nav-link" data-scroll-target="#yogurt-data">Yogurt Data</a></li>
-  </ul></li>
+  <li><a href="#latent-class-mnl-estimation" id="toc-latent-class-mnl-estimation" class="nav-link" data-scroll-target="#latent-class-mnl-estimation">Latent-Class MNL Estimation</a></li>
+  <li><a href="#latent-class-multinomial-logit-lc-mnl" id="toc-latent-class-multinomial-logit-lc-mnl" class="nav-link" data-scroll-target="#latent-class-multinomial-logit-lc-mnl">Latent-Class Multinomial Logit (LC-MNL)</a></li>
   </ul>
 </nav>
     </div>
@@ -281,7 +279,7 @@ Data
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="7ccd2205" class="cell" data-execution_count="2">
+<div id="a05372aa" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> pd.read_csv(<span class="st">"/Users/qqtweety/Downloads/mgta495/palmer_penguins.csv"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>penguins.head()</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -303,7 +301,7 @@ Def plot clusters
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="710e9c31" class="cell" data-execution_count="3">
+<div id="476ecc26" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_clusters(X, centroids, labels, title):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(np.<span class="bu">max</span>(labels) <span class="op">+</span> <span class="dv">1</span>):</span>
@@ -338,7 +336,7 @@ Def plot clusters
 </div>
 </div>
 </div>
-<div id="b4733f59" class="cell" data-message="false" data-execution_count="4">
+<div id="2c1ecc94" class="cell" data-message="false" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the custom KMeans and visualize</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>custom_centroids, custom_labels <span class="op">=</span> kmeans_custom(X, k<span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -412,7 +410,7 @@ Def plot clusters
 </div>
 </div>
 </div>
-<div id="bdd66532" class="cell" data-message="false" data-execution_count="5">
+<div id="d80ce6a1" class="cell" data-message="false" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the built-in KMeans for comparison</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sk_model <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sk_labels <span class="op">=</span> sk_model.fit_predict(X)</span>
@@ -440,7 +438,7 @@ Show centroid comparison
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="f52596d6" class="cell" data-message="false" data-execution_count="6">
+<div id="50bc5732" class="cell" data-message="false" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Custom Centroids:</span><span class="ch">\n</span><span class="st">"</span>, custom_centroids)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Built-in Centroids:</span><span class="ch">\n</span><span class="st">"</span>, sk_centroids)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -475,7 +473,7 @@ WCSS
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="038308cd" class="cell" data-message="false" data-execution_count="7">
+<div id="01ac1a1e" class="cell" data-message="false" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_score</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Store metrics for different K values</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ks <span class="op">=</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">8</span>)</span>
@@ -491,10 +489,11 @@ WCSS
 </div>
 </div>
 </div>
+<hr>
 </section>
 <section id="wcss-1" class="level3">
 <h3 class="anchored" data-anchor-id="wcss-1">WCSS</h3>
-<div id="c7596582" class="cell" data-execution_count="8">
+<div id="30dae5af" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot WCSS and Silhouette Score</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ax1.plot(ks, wcss, marker<span class="op">=</span><span class="st">'o'</span>)</span>
@@ -518,7 +517,7 @@ WCSS
 </section>
 <section id="k-means-clustering" class="level3">
 <h3 class="anchored" data-anchor-id="k-means-clustering">K-Means Clustering</h3>
-<div id="8d1e63bf" class="cell" data-message="false" data-execution_count="9">
+<div id="fa9e6e12" class="cell" data-message="false" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -561,10 +560,10 @@ Raw values
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="6ea8a385" class="cell" data-message="false" data-execution_count="10">
+<div id="168dcf6d" class="cell" data-message="false" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return the raw values for interpretation</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">zip</span>(ks, wcss, silhouette_scores))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="54">
 <pre><code>[(2, 20949.785311278196, np.float64(0.6117940477662409)),
  (3, 14269.555284121907, np.float64(0.45576101830851007)),
  (4, 9587.135276652694, np.float64(0.4448839684032104)),
@@ -641,7 +640,7 @@ Set seed and parameters
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="144da4f6" class="cell" data-execution_count="11">
+<div id="3dc77154" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate features</span></span>
@@ -653,7 +652,7 @@ Set seed and parameters
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DataFrame</span></span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>dat <span class="op">=</span> pd.DataFrame({<span class="st">'x1'</span>: x1, <span class="st">'x2'</span>: x2, <span class="st">'y'</span>: y})</span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>dat.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="55">
 <div>
 
 
@@ -765,7 +764,7 @@ Visualization
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="43bbfde0" class="cell" data-message="false" data-execution_count="12">
+<div id="f5442306" class="cell" data-message="false" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the synthetic data with decision boundary</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'red'</span> <span class="cf">if</span> label <span class="op">==</span> <span class="dv">0</span> <span class="cf">else</span> <span class="st">'blue'</span> <span class="cf">for</span> label <span class="kw">in</span> dat[<span class="st">'y'</span>]]</span>
@@ -794,8 +793,8 @@ Visualization
 </div>
 <hr>
 </section>
-<section id="test-dataset-synthetic-data-for-knn-evaluation" class="level2">
-<h2 class="anchored" data-anchor-id="test-dataset-synthetic-data-for-knn-evaluation">Test Dataset: Synthetic Data for KNN Evaluation</h2>
+<section id="synthetic-data-for-knn-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="synthetic-data-for-knn-evaluation">Synthetic Data for KNN Evaluation</h3>
 <p>A test dataset of 100 points was generated using uniform random values for <code>x1</code> and <code>x2</code>, drawn from the range [-3, 3]. The binary label <code>y</code> was assigned based on a non-linear boundary: <span class="math display">\[
 y =
 \begin{cases}
@@ -816,7 +815,7 @@ test dataset
 </div>
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="c383160f" class="cell" data-message="false" data-execution_count="13">
+<div id="7c0caa9e" class="cell" data-message="false" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a test dataset using a different random seed</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">24</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>n_test <span class="op">=</span> <span class="dv">100</span></span>
@@ -832,7 +831,7 @@ test dataset
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the test DataFrame</span></span>
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>test_dat <span class="op">=</span> pd.DataFrame({<span class="st">'x1'</span>: x1_test, <span class="st">'x2'</span>: x2_test, <span class="st">'y'</span>: y_test})</span>
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>test_dat.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="57">
 <div>
 
 
@@ -885,6 +884,7 @@ test dataset
 </div>
 </div>
 </div>
+</section>
 <section id="sample-data" class="level3">
 <h3 class="anchored" data-anchor-id="sample-data">Sample Data</h3>
 <table class="caption-top table">
@@ -935,7 +935,7 @@ Plot
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="7d126fa5" class="cell" data-message="false" data-execution_count="14">
+<div id="658567f4" class="cell" data-message="false" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Color-coded test points</span></span>
@@ -981,7 +981,7 @@ KNN implementation
 </div>
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="fab8316b" class="cell" data-message="false" data-execution_count="15">
+<div id="6381a497" class="cell" data-message="false" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Step-by-step manual KNN implementation (k=5)</span></span>
@@ -1018,7 +1018,7 @@ KNN implementation
 <span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>sklearn_accuracy <span class="op">=</span> np.mean(sklearn_preds <span class="op">==</span> y_test)</span>
 <span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>manual_accuracy, sklearn_accuracy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="59">
 <pre><code>(np.float64(0.92), np.float64(0.92))</code></pre>
 </div>
 </div>
@@ -1049,9 +1049,8 @@ KNN implementation
 <p>Both methods produced identical results, confirming the correctness of the custom implementation. This validates our understanding of the KNN algorithm and the reproducibility of results using both custom and built-in tools.</p>
 <hr>
 </section>
-</section>
-<section id="tuning-k-in-k-nearest-neighbors" class="level2">
-<h2 class="anchored" data-anchor-id="tuning-k-in-k-nearest-neighbors">Tuning K in K-Nearest Neighbors</h2>
+<section id="tuning-k-in-k-nearest-neighbors" class="level3">
+<h3 class="anchored" data-anchor-id="tuning-k-in-k-nearest-neighbors">Tuning K in K-Nearest Neighbors</h3>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1064,7 +1063,7 @@ Manual KNN function
 </div>
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="ec75a324" class="cell" data-message="false" data-execution_count="16">
+<div id="04fe6036" class="cell" data-message="false" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> knn_predict(X_train, y_train, X_test, k<span class="op">=</span><span class="dv">5</span>):</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    predictions <span class="op">=</span> []</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> X_test:</span>
@@ -1101,7 +1100,7 @@ Test accuracy of manual KNN for k = 1 to 30
 </div>
 <div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="6bdbdb2a" class="cell" data-message="false" data-execution_count="17">
+<div id="2c6c1d48" class="cell" data-message="false" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plt.plot(k_values, accuracies, marker<span class="op">=</span><span class="st">'o'</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"KNN Accuracy on Test Data for k = 1 to 30"</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of Neighbors (k)"</span>)</span>
@@ -1120,7 +1119,7 @@ Test accuracy of manual KNN for k = 1 to 30
 </div>
 </div>
 </div>
-<hr>
+</section>
 <section id="yogurt-data" class="level3">
 <h3 class="anchored" data-anchor-id="yogurt-data">Yogurt Data</h3>
 <p>The <code>yogurt_data</code> dataset contains information on consumer yogurt purchases. Each row represents an individual shopping trip, including the quantity of yogurt purchased and prices for five different yogurt brands.</p>
@@ -1144,10 +1143,10 @@ Data
 </div>
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="6d40dfdb" class="cell" data-execution_count="18">
+<div id="19efa325" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>yogurt <span class="op">=</span> pd.read_csv(<span class="st">"/Users/qqtweety/Downloads/mgta495/yogurt_data.csv"</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>yogurt.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="62">
 <div>
 
 
@@ -1272,7 +1271,7 @@ Reshape dataset to long format suitable for LC-MNL
 </div>
 <div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="1269b4c4" class="cell" data-message="false" data-execution_count="19">
+<div id="95d80579" class="cell" data-message="false" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create long-format structure</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>long_df <span class="op">=</span> pd.DataFrame()</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1289,7 +1288,7 @@ Reshape dataset to long format suitable for LC-MNL
 <span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by id and alt for clarity</span></span>
 <span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>long_df <span class="op">=</span> long_df.sort_values(by<span class="op">=</span>[<span class="st">'id'</span>, <span class="st">'alt'</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>long_df.head(<span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="63">
 <div>
 
 
@@ -1381,7 +1380,7 @@ Output
 </div>
 <div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="0d049e55" class="cell" data-message="false" data-execution_count="20">
+<div id="05c13f0c" class="cell" data-message="false" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.special <span class="im">import</span> logsumexp</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data</span></span>
@@ -1425,7 +1424,7 @@ Output
 <span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>pi2_hat <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> pi1_hat</span>
 <span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>beta1_hat, beta2_hat, pi1_hat, pi2_hat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="64">
 <pre><code>(np.float64(0.8010362006166869),
  np.float64(0.8010362006166869),
  np.float64(0.5),
@@ -1435,7 +1434,9 @@ Output
 </div>
 </div>
 </div>
-<p><strong>Latent-Class MNL Estimation (Kamakura &amp; Russell, 1989)</strong></p>
+</section>
+<section id="latent-class-mnl-estimation" class="level3">
+<h3 class="anchored" data-anchor-id="latent-class-mnl-estimation">Latent-Class MNL Estimation</h3>
 <p>We estimate a two-segment latent-class MNL model using the Yogurt dataset. Each segment has its own utility sensitivity parameter (β), and segment membership is probabilistic via a logistic transformation of λ:</p>
 <p>[ _1 = , _2 = 1 - _1 ]</p>
 <p>The unconditional choice probability is a weighted sum over segment-specific MNL probabilities:</p>
@@ -1452,7 +1453,7 @@ Create long-format structure
 </div>
 <div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="7734a9b6" class="cell" data-execution_count="21">
+<div id="d1374f95" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>long_data <span class="op">=</span> pd.DataFrame()</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">5</span>):  <span class="co"># 4 products</span></span>
@@ -1467,7 +1468,7 @@ Create long-format structure
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>long_data <span class="op">=</span> long_data.sort_values([<span class="st">'id'</span>, <span class="st">'alt'</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>long_data.head(<span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="65">
 <div>
 
 
@@ -1568,7 +1569,7 @@ Prepare matrices
 </div>
 <div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="d64858f8" class="cell" data-execution_count="22">
+<div id="2ce1041a" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>X_price <span class="op">=</span> long_data.pivot(index<span class="op">=</span><span class="st">'id'</span>, columns<span class="op">=</span><span class="st">'alt'</span>, values<span class="op">=</span><span class="st">'price'</span>).values</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>X_feature <span class="op">=</span> long_data.pivot(index<span class="op">=</span><span class="st">'id'</span>, columns<span class="op">=</span><span class="st">'alt'</span>, values<span class="op">=</span><span class="st">'feature'</span>).values</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> long_data.pivot(index<span class="op">=</span><span class="st">'id'</span>, columns<span class="op">=</span><span class="st">'alt'</span>, values<span class="op">=</span><span class="st">'choice'</span>).values</span>
@@ -1609,7 +1610,7 @@ Prepare matrices
 <span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>pi2_est <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> pi1_est</span>
 <span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>beta1_est, beta2_est, pi1_est, pi2_est</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="66">
 <pre><code>(array([12.91301699, 14.64227543]),
  array([  9.18211689, -12.17223547]),
  np.float64(0.42723347735078737),
@@ -1619,7 +1620,9 @@ Prepare matrices
 </div>
 </div>
 </div>
-<p><strong>Latent-Class Multinomial Logit (LC-MNL) Estimation</strong></p>
+</section>
+<section id="latent-class-multinomial-logit-lc-mnl" class="level3">
+<h3 class="anchored" data-anchor-id="latent-class-multinomial-logit-lc-mnl">Latent-Class Multinomial Logit (LC-MNL)</h3>
 <p>The yogurt dataset includes anonymized consumer IDs (<code>id</code>), binary indicators of purchased products (<code>y1</code>–<code>y4</code>), whether products were advertised in-store (<code>f1</code>–<code>f4</code>), and price-per-ounce values (<code>p1</code>–<code>p4</code>).</p>
 <p>Each row represents a consumer’s single purchase occasion across four yogurt options. For example, consumer 1 selected yogurt 4 at a price of 0.079/oz, with no items advertised. Consumers 2–7 all chose yogurt 2.</p>
 <p>To estimate a latent-class multinomial logit model, the dataset was reshaped from <strong>wide</strong> to <strong>long</strong> format, creating one row per consumer–product pair. Key variables used were: - <code>choice</code>: 1 if the product was selected, 0 otherwise - <code>price</code>: per-ounce price - <code>feature</code>: whether the item was advertised</p>
@@ -1659,7 +1662,6 @@ Prepare matrices
 <hr>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
