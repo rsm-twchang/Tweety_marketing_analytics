@@ -16,6 +16,8 @@ website:
         text: MLE
       - href: hw3_questions.qmd
         text: MNL & Conjoint  
+      - href: hw4_questions.qmd
+        text: Key Drivers Analysis 
 
 
 format:
