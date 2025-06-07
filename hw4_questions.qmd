@@ -17,7 +17,7 @@ visualize the clustering process across iterations, compare our custom implement
 
 This exercise provides both technical practice in unsupervised learning and biological insight into how penguin species differ morphologically.
 
-### Dataset Description
+### Palmer Penguins
 
 The *Palmer Penguins* dataset provides biological measurements for three penguin species native to islands in the Palmer Archipelago, Antarctica: **Adélie**, **Chinstrap**, and **Gentoo**.
 
@@ -59,11 +59,11 @@ X = penguins_clean.values
 ```
 ::::
 
+:::: {.callout-note collapse="true"}
+### Def plot clusters
 ```{python}
 #| echo: true
-#| message: false
 #| warning: false
-#| code-overflow: wrap
 def plot_clusters(X, centroids, labels, title):
     plt.figure(figsize=(8, 6))
     for i in range(np.max(labels) + 1):
@@ -75,14 +75,7 @@ def plot_clusters(X, centroids, labels, title):
     plt.legend()
     plt.grid(True)
     plt.show()
-```
 
-```{python}
-#| echo: true
-#| message: false
-#| warning: false
-#| code-overflow: wrap
-# Custom K-Means Implementation
 def kmeans_custom(X, k=3, max_iters=10, plot_each_step=True):
     np.random.seed(42)
     initial_idx = np.random.choice(X.shape[0], k, replace=False)
@@ -133,19 +126,21 @@ print("Custom Centroids:\n", custom_centroids)
 print("\nBuilt-in Centroids:\n", sk_centroids)
 ```
 
-## Interpretation of Results
+**Interpretation of Results**
 
 The custom and built-in KMeans algorithms produced comparable clustering outcomes. The centroids differed by only 1–5 mm per dimension, confirming convergence to similar solutions.
 
 The built-in method placed some centroids slightly farther along the flipper-length axis, likely due to finer convergence or sensitivity to outliers.
 
 Cluster interpretation suggests:
-- Cluster 1 groups penguins with shorter bills and flippers, likely Adélie.
-- Cluster 2 includes those with the longest bills and flippers, likely Gentoo.
-- Cluster 3 covers the intermediate range, possibly Chinstrap.
+Cluster 1 groups penguins with shorter bills and flippers, likely Adélie.
+Cluster 2 includes those with the longest bills and flippers, likely Gentoo.
+Cluster 3 covers the intermediate range, possibly Chinstrap.
 
 Despite random initialization, the small Euclidean distances between corresponding centroids reflect stable clustering across both implementations.
 
+:::: {.callout-note collapse="true"}
+### WCSS
 ```{python}
 #| echo: true
 #| message: false
@@ -177,6 +172,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+:::: {.callout-note collapse="true"}
+### K-Means Clustering
 ```{python}
 #| echo: true
 #| message: false
@@ -206,6 +203,8 @@ def plot_kmeans_clusters(X, labels, centroids):
 plot_kmeans_clusters(X, labels_3, centroids_3)
 ```
 
+:::: {.callout-note collapse="true"}
+### Raw values
 ```{python}
 #| echo: true
 #| message: false
@@ -215,11 +214,11 @@ plot_kmeans_clusters(X, labels_3, centroids_3)
 list(zip(ks, wcss, silhouette_scores))
 ```
 
-### Evaluation of Cluster Quantity
+**Evaluation of Cluster Quantity**
 
 To determine the optimal number of clusters, we computed the **within-cluster sum of squares (WCSS)** and **silhouette scores** for K ranging from 2 to 7.
 
-### Metric Summary
+**Metric Summary**
 
 | K | WCSS     | Silhouette Score |
 |---|----------|------------------|
@@ -259,7 +258,7 @@ y = (x2 > boundary).astype(int)
 dat = pd.DataFrame({'x1': x1, 'x2': x2, 'y': y})
 dat.head()
 ```
-## Synthetic Dataset for K-Nearest Neighbors
+**Synthetic Dataset for K-Nearest Neighbors**
 
 We generated a synthetic dataset with two features, `x1` and `x2`, uniformly drawn from [-3, 3]. The binary outcome variable `y` is assigned based on a non-linear boundary:
 
@@ -283,6 +282,7 @@ This creates a wiggly decision boundary ideal for testing non-linear classifiers
 |  0.59    |  0.05    | 0 |
 | -2.06    |  2.45    | 1 |
 
+:::: {.callout-note collapse="true"}
 ### Visualization
 ```{python}
 #| echo: true
@@ -305,8 +305,24 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 ```
+
 ---
 
+## Test Dataset: Synthetic Data for KNN Evaluation
+
+A test dataset of 100 points was generated using uniform random values for `x1` and `x2`, drawn from the range [-3, 3]. The binary label `y` was assigned based on a non-linear boundary:
+$$
+y = 
+\begin{cases}
+1 & \text{if } x_2 > \sin(4x_1) + x_1 \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+This boundary creates a wavy separation ideal for testing flexible classifiers like K-Nearest Neighbors.
+
+:::: {.callout-note collapse="true"}
+### test dataset
 ```{python}
 #| echo: true
 #| message: false
@@ -329,20 +345,6 @@ test_dat = pd.DataFrame({'x1': x1_test, 'x2': x2_test, 'y': y_test})
 test_dat.head()
 ```
 
-## Test Dataset: Synthetic Data for KNN Evaluation
-
-A test dataset of 100 points was generated using uniform random values for `x1` and `x2`, drawn from the range [-3, 3]. The binary label `y` was assigned based on a non-linear boundary:
-
-$$
-y = 
-\begin{cases}
-1 & \text{if } x_2 > \sin(4x_1) + x_1 \\
-0 & \text{otherwise}
-\end{cases}
-$$
-
-This boundary creates a wavy separation ideal for testing flexible classifiers like K-Nearest Neighbors.
-
 ### Sample Data
 
 | x1       | x2       | y |
@@ -353,7 +355,8 @@ This boundary creates a wavy separation ideal for testing flexible classifiers l
 | -1.68    | 2.67     | 1 |
 | -0.83    | 0.86     | 1 |
 
-**Interpretation of the Plot**
+:::: {.callout-note collapse="true"}
+### Plot
 ```{python}
 #| echo: true
 #| message: false
@@ -380,6 +383,10 @@ plt.tight_layout()
 plt.show()
 ```
 
+### Manual KNN Implementation and Validation
+
+:::: {.callout-note collapse="true"}
+### KNN implementation
 ```{python}
 #| echo: true
 #| message: false
@@ -423,13 +430,11 @@ sklearn_accuracy = np.mean(sklearn_preds == y_test)
 manual_accuracy, sklearn_accuracy
 ```
 
-## Manual KNN Implementation and Validation
-
 We implemented the K-Nearest Neighbors algorithm from scratch using Euclidean distance and a majority vote among the `k = 5` nearest neighbors.
 
 To verify the implementation, we compared it with `KNeighborsClassifier` from `scikit-learn`.
 
-### Accuracy Comparison
+**Accuracy Comparison**
 
 | Method        | Accuracy |
 |---------------|----------|
@@ -441,12 +446,13 @@ Both methods produced identical results, confirming the correctness of the custo
 
 ## Tuning K in K-Nearest Neighbors
 
+:::: {.callout-note collapse="true"}
+# Manual KNN function
 ```{python}
 #| echo: true
 #| message: false
 #| warning: false
 #| code-overflow: wrap
-# Manual KNN function
 def knn_predict(X_train, y_train, X_test, k=5):
     predictions = []
     for x in X_test:
@@ -470,12 +476,13 @@ accuracies = [np.mean(knn_predict(X_train, y_train, X_test, k) == y_test) for k 
 
 We evaluated classification accuracy on the test dataset for `k = 1` to `k = 30` using our custom KNN function.
 
+:::: {.callout-note collapse="true"}
+### Test accuracy of manual KNN for k = 1 to 30
 ```{python}
 #| echo: true
 #| message: false
 #| warning: false
 #| code-overflow: wrap
-#| fig-cap: "Test accuracy of manual KNN for k = 1 to 30."
 plt.plot(k_values, accuracies, marker='o')
 plt.title("KNN Accuracy on Test Data for k = 1 to 30")
 plt.xlabel("Number of Neighbors (k)")
@@ -486,7 +493,7 @@ plt.show()
 ```
 
 
-## Dataset Description
+### Yogurt Data
 
 The `yogurt_data` dataset contains information on consumer yogurt purchases. Each row represents an individual shopping trip, including the quantity of yogurt purchased and prices for five different yogurt brands.
 
@@ -499,18 +506,21 @@ Key variables include:
 
 This dataset is commonly used for analyzing consumer choice behavior, price sensitivity, and brand preference using models like multinomial logit or KNN classification.
 
+:::: {.callout-note collapse="true"}
+### Data
 ```{python}
 #| echo: true
 yogurt = pd.read_csv("/Users/qqtweety/Downloads/mgta495/yogurt_data.csv")
 yogurt.head()
 ```
+
+:::: {.callout-note collapse="true"}
+### Reshape dataset to long format suitable for LC-MNL
 ```{python}
 #| echo: true
 #| message: false
 #| warning: false
 #| code-overflow: wrap
-# Reshape dataset to long format suitable for LC-MNL
-import numpy as np
 
 # Create long-format structure
 long_df = pd.DataFrame()
@@ -530,6 +540,8 @@ long_df = long_df.sort_values(by=['id', 'alt']).reset_index(drop=True)
 long_df.head(8)
 ```
 
+:::: {.callout-note collapse="true"}
+### Output
 ```{python}
 #| echo: true
 #| message: false
@@ -572,7 +584,6 @@ def latent_class_loglik(params):
 init_params = np.array([0.1, 0.1, 0.0])
 result = minimize(latent_class_loglik, init_params, method='BFGS')
 
-# Output
 estimated_params = result.x
 beta1_hat, beta2_hat, lambda_hat = estimated_params[0], estimated_params[1], estimated_params[2]
 pi1_hat = np.exp(lambda_hat) / (1 + np.exp(lambda_hat))
@@ -581,7 +592,7 @@ pi2_hat = 1 - pi1_hat
 beta1_hat, beta2_hat, pi1_hat, pi2_hat
 ```
 
-## Latent-Class MNL Estimation (Kamakura & Russell, 1989)
+**Latent-Class MNL Estimation (Kamakura & Russell, 1989)**
 
 We estimate a two-segment latent-class MNL model using the Yogurt dataset. Each segment has its own utility sensitivity parameter (β), and segment membership is probabilistic via a logistic transformation of λ:
 
@@ -594,37 +605,13 @@ The unconditional choice probability is a weighted sum over segment-specific MNL
 \[
 P_i(j) = \sum_{s=1}^{2} \pi_s \cdot P_i(j \mid s)
 \]
-
 ---
 
-## Dataset Structure
-
-Each observation includes four alternatives per choice set. Data is reshaped into long format with:
-
-- `id`: choice occasion  
-- `alt`: alternative (1–4)  
-- `feature`: product attribute  
-- `choice`: binary indicator of selection
-
-## Estimation Results
+:::: {.callout-note collapse="true"}
+### Create long-format structure
 ```{python}
 #| echo: true
-#| message: false
 #| warning: false
-#| code-overflow: wrap
-print(f"β₁ = {beta1_hat:.3f}")
-print(f"β₂ = {beta2_hat:.3f}")
-print(f"π₁ = {pi1_hat:.3f}")
-print(f"π₂ = {pi2_hat:.3f}")
-```
----
-
-```{python}
-#| echo: true
-#| message: false
-#| warning: false
-#| code-overflow: wrap
-# Create long-format structure
 long_data = pd.DataFrame()
 
 for i in range(1, 5):  # 4 products
@@ -640,12 +627,12 @@ for i in range(1, 5):  # 4 products
 long_data = long_data.sort_values(['id', 'alt']).reset_index(drop=True)
 long_data.head(8)
 ```
+
+:::: {.callout-note collapse="true"}
+### Prepare matrices
 ```{python}
 #| echo: true
-#| message: false
 #| warning: false
-#| code-overflow: wrap
-# Prepare matrices
 X_price = long_data.pivot(index='id', columns='alt', values='price').values
 X_feature = long_data.pivot(index='id', columns='alt', values='feature').values
 Y = long_data.pivot(index='id', columns='alt', values='choice').values
@@ -688,7 +675,7 @@ pi2_est = 1 - pi1_est
 beta1_est, beta2_est, pi1_est, pi2_est
 ```
 
-## Latent-Class Multinomial Logit (LC-MNL) Estimation
+**Latent-Class Multinomial Logit (LC-MNL) Estimation**
 
 The yogurt dataset includes anonymized consumer IDs (`id`), binary indicators of purchased products (`y1`–`y4`), whether products were advertised in-store (`f1`–`f4`), and price-per-ounce values (`p1`–`p4`).
 
