@@ -55,9 +55,7 @@ from sklearn.cluster import KMeans
 
 ```{python}
 #| echo: true
-#| message: false
 #| warning: false
-#| code-overflow: wrap
 penguins = pd.read_csv("/Users/qqtweety/Downloads/mgta495/palmer_penguins.csv")
 penguins.head()
 ```
