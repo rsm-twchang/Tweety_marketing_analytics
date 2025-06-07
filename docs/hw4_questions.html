@@ -285,7 +285,7 @@ window.Quarto = {
 </section>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
-<div id="213a1d58" class="cell" data-execution_count="2">
+<div id="7087d0fc" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> pd.read_csv(<span class="st">"/Users/qqtweety/Downloads/mgta495/palmer_penguins.csv"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
@@ -368,11 +368,11 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="6e26ac96" class="cell" data-message="false" data-execution_count="3">
+<div id="37f660a8" class="cell" data-message="false" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>penguins_clean <span class="op">=</span> penguins[[<span class="st">'bill_length_mm'</span>, <span class="st">'flipper_length_mm'</span>]].dropna().reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> penguins_clean.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="35ae066e" class="cell" data-message="false" data-execution_count="4">
+<div id="e6b1917e" class="cell" data-message="false" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_clusters(X, centroids, labels, title):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(np.<span class="bu">max</span>(labels) <span class="op">+</span> <span class="dv">1</span>):</span>
@@ -385,7 +385,7 @@ window.Quarto = {
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    plt.grid(<span class="va">True</span>)</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0b666ed9" class="cell" data-message="false" data-execution_count="5">
+<div id="c0753a23" class="cell" data-message="false" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Custom K-Means Implementation</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kmeans_custom(X, k<span class="op">=</span><span class="dv">3</span>, max_iters<span class="op">=</span><span class="dv">10</span>, plot_each_step<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    np.random.seed(<span class="dv">42</span>)</span>
@@ -406,7 +406,7 @@ window.Quarto = {
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> centroids, labels</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="990a705a" class="cell" data-message="false" data-execution_count="6">
+<div id="ba5dfa3b" class="cell" data-message="false" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the custom KMeans and visualize</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>custom_centroids, custom_labels <span class="op">=</span> kmeans_custom(X, k<span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -480,7 +480,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="7d010f71" class="cell" data-message="false" data-execution_count="7">
+<div id="d9c1bdff" class="cell" data-message="false" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the built-in KMeans for comparison</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sk_model <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>sk_labels <span class="op">=</span> sk_model.fit_predict(X)</span>
@@ -496,7 +496,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="4bf96115" class="cell" data-message="false" data-execution_count="8">
+<div id="4a2def7d" class="cell" data-message="false" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show centroid comparison</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Custom Centroids:</span><span class="ch">\n</span><span class="st">"</span>, custom_centroids)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Built-in Centroids:</span><span class="ch">\n</span><span class="st">"</span>, sk_centroids)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -519,7 +519,7 @@ Built-in Centroids:
 <p>The built-in method placed some centroids slightly farther along the flipper-length axis, likely due to finer convergence or sensitivity to outliers.</p>
 <p>Cluster interpretation suggests: - Cluster 1 groups penguins with shorter bills and flippers, likely Adélie. - Cluster 2 includes those with the longest bills and flippers, likely Gentoo. - Cluster 3 covers the intermediate range, possibly Chinstrap.</p>
 <p>Despite random initialization, the small Euclidean distances between corresponding centroids reflect stable clustering across both implementations.</p>
-<div id="5c398e81" class="cell" data-message="false" data-execution_count="9">
+<div id="49e59733" class="cell" data-message="false" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_score</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Store metrics for different K values</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ks <span class="op">=</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">8</span>)</span>
@@ -552,7 +552,7 @@ Built-in Centroids:
 </div>
 </div>
 </div>
-<div id="7645758f" class="cell" data-message="false" data-execution_count="10">
+<div id="dd3ba27f" class="cell" data-message="false" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -583,7 +583,7 @@ Built-in Centroids:
 </div>
 </div>
 </div>
-<div id="87448243" class="cell" data-message="false" data-execution_count="11">
+<div id="c99a0f75" class="cell" data-message="false" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return the raw values for interpretation</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">zip</span>(ks, wcss, silhouette_scores))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
@@ -651,7 +651,7 @@ Built-in Centroids:
 <p><strong>Recommended K</strong></p>
 <p><strong>K = 2</strong> offers the best trade-off between compactness and separation. It is the most natural grouping for this dataset based on these metrics.</p>
 <hr>
-<div id="eb141aac" class="cell" data-message="false" data-execution_count="12">
+<div id="1ade80f5" class="cell" data-message="false" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed and parameters</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
@@ -766,7 +766,7 @@ y =
 </table>
 <section id="visualization" class="level3">
 <h3 class="anchored" data-anchor-id="visualization">Visualization</h3>
-<div id="d0aaafe6" class="cell" data-message="false" data-execution_count="13">
+<div id="33bedadf" class="cell" data-message="false" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the synthetic data with decision boundary</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'red'</span> <span class="cf">if</span> label <span class="op">==</span> <span class="dv">0</span> <span class="cf">else</span> <span class="st">'blue'</span> <span class="cf">for</span> label <span class="kw">in</span> dat[<span class="st">'y'</span>]]</span>
@@ -791,7 +791,7 @@ y =
 </div>
 </div>
 <hr>
-<div id="55fa61af" class="cell" data-message="false" data-execution_count="14">
+<div id="eb7c4471" class="cell" data-message="false" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a test dataset using a different random seed</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">24</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>n_test <span class="op">=</span> <span class="dv">100</span></span>
@@ -909,7 +909,7 @@ y =
 </tbody>
 </table>
 <p><strong>Interpretation of the Plot</strong></p>
-<div id="3447761c" class="cell" data-message="false" data-execution_count="15">
+<div id="c4d45d7d" class="cell" data-message="false" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Color-coded test points</span></span>
@@ -937,7 +937,7 @@ y =
 </div>
 </div>
 </div>
-<div id="2cbb2ade" class="cell" data-message="false" data-execution_count="16">
+<div id="b5b6450f" class="cell" data-message="false" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Step-by-step manual KNN implementation (k=5)</span></span>
@@ -1010,7 +1010,7 @@ y =
 </section>
 <section id="tuning-k-in-k-nearest-neighbors" class="level2">
 <h2 class="anchored" data-anchor-id="tuning-k-in-k-nearest-neighbors">Tuning K in K-Nearest Neighbors</h2>
-<div id="995057bb" class="cell" data-message="false" data-execution_count="17">
+<div id="70130c93" class="cell" data-message="false" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual KNN function</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> knn_predict(X_train, y_train, X_test, k<span class="op">=</span><span class="dv">5</span>):</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    predictions <span class="op">=</span> []</span>
@@ -1033,7 +1033,7 @@ y =
 <span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>accuracies <span class="op">=</span> [np.mean(knn_predict(X_train, y_train, X_test, k) <span class="op">==</span> y_test) <span class="cf">for</span> k <span class="kw">in</span> k_values]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We evaluated classification accuracy on the test dataset for <code>k = 1</code> to <code>k = 30</code> using our custom KNN function.</p>
-<div id="79a3e5a0" class="cell" data-message="false" data-execution_count="18">
+<div id="f22fdd31" class="cell" data-message="false" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plt.plot(k_values, accuracies, marker<span class="op">=</span><span class="st">'o'</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"KNN Accuracy on Test Data for k = 1 to 30"</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of Neighbors (k)"</span>)</span>
@@ -1062,7 +1062,7 @@ y =
 <li><code>quantity</code>: number of yogurt units purchased</li>
 </ul>
 <p>This dataset is commonly used for analyzing consumer choice behavior, price sensitivity, and brand preference using models like multinomial logit or KNN classification.</p>
-<div id="fa17661a" class="cell" data-execution_count="19">
+<div id="dfc1447a" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>yogurt <span class="op">=</span> pd.read_csv(<span class="st">"/Users/qqtweety/Downloads/mgta495/yogurt_data.csv"</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>yogurt.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
@@ -1175,7 +1175,7 @@ y =
 </div>
 </div>
 </div>
-<div id="3d8aad32" class="cell" data-message="false" data-execution_count="20">
+<div id="f6d0fff2" class="cell" data-message="false" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape dataset to long format suitable for LC-MNL</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1272,7 +1272,7 @@ y =
 </div>
 </div>
 </div>
-<div id="86b510f7" class="cell" data-message="false" data-execution_count="21">
+<div id="1578a73e" class="cell" data-message="false" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.special <span class="im">import</span> logsumexp</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data</span></span>
@@ -1348,7 +1348,7 @@ y =
 </section>
 <section id="estimation-results" class="level2">
 <h2 class="anchored" data-anchor-id="estimation-results">Estimation Results</h2>
-<div id="f1b6700b" class="cell" data-message="false" data-execution_count="22">
+<div id="0093bc17" class="cell" data-message="false" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"β₁ = </span><span class="sc">{</span>beta1_hat<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"β₂ = </span><span class="sc">{</span>beta2_hat<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"π₁ = </span><span class="sc">{</span>pi1_hat<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
@@ -1361,7 +1361,7 @@ y =
 </div>
 </div>
 <hr>
-<div id="22b3724e" class="cell" data-message="false" data-execution_count="23">
+<div id="10e3748b" class="cell" data-message="false" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create long-format structure</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>long_data <span class="op">=</span> pd.DataFrame()</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1463,7 +1463,7 @@ y =
 </div>
 </div>
 </div>
-<div id="65baaa6c" class="cell" data-message="false" data-execution_count="24">
+<div id="5cd2a16b" class="cell" data-message="false" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-overflow-wrap code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare matrices</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>X_price <span class="op">=</span> long_data.pivot(index<span class="op">=</span><span class="st">'id'</span>, columns<span class="op">=</span><span class="st">'alt'</span>, values<span class="op">=</span><span class="st">'price'</span>).values</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>X_feature <span class="op">=</span> long_data.pivot(index<span class="op">=</span><span class="st">'id'</span>, columns<span class="op">=</span><span class="st">'alt'</span>, values<span class="op">=</span><span class="st">'feature'</span>).values</span>
