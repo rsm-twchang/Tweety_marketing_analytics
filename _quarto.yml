@@ -3,6 +3,9 @@ project:
   output-dir: docs
   resources:
     - figures/
+  render:
+    - "*.qmd"
+    - "!resume.qmd"
 
 execute:
   python: .venv/bin/python
