@@ -16,8 +16,6 @@ website:
     left:
       - href: about.qmd
         text: About
-      - href: resume.qmd
-        text: Resume
       - href: credit_card_fraud_detection.qmd
         text: Fraud Detection
       - href: Intuit_Quickbooks_Upgrade.qmd
